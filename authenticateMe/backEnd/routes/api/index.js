@@ -1,9 +1,13 @@
 // backend/routes/api/index.js
+
+const session = require('./session')
+const user = require('./session')
 const router = require('express').Router();
 
 // backend/routes/api/index.js
 // ...
-
+router.use('/session',session)
+router.use('/user',user)
 router.post('/test', function(req, res) {
     res.json({ requestBody: req.body });
   });
@@ -42,11 +46,6 @@ router.get(
   }
 );
 // backend/routes/api/index.js
-// ...
-
-router.use(restoreUser);
-
-// ...
 
 // GET /api/require-auth
 const { requireAuth } = require('../../utils/auth.js');
