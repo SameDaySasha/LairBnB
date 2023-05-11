@@ -1,48 +1,56 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;  // define your schema in options object
+  options.schema = process.env.SCHEMA; // define your schema in options object
 }
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Users", {
+    return queryInterface.createTable('Users', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+      },
+      firstName: {
+        type: Sequelize.STRING, // Add firstName attribute
+        allowNull: false,
+      },
+      lastName: {
+        type: Sequelize.STRING, // Add lastName attribute
+        allowNull: false,
       },
       username: {
         type: Sequelize.STRING(30),
         allowNull: false,
-        unique: true
+        unique: true,
       },
       email: {
         type: Sequelize.STRING(256),
         allowNull: false,
-        unique: true
+        unique: true,
       },
       hashedPassword: {
         type: Sequelize.STRING.BINARY,
-        allowNull: false
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
-      }
-    }, options);
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+    });
   },
   down: async (queryInterface, Sequelize) => {
-    options.tableName = "Users";
-    return queryInterface.dropTable(options);
-  }
+    return queryInterface.dropTable('Users');
+  },
 };

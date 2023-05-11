@@ -10,6 +10,20 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init(
     {
+      firstName: {
+        type: DataTypes.STRING, // Add firstName attribute
+        allowNull: false,
+        validate: {
+          len: [1, 50] // Adjust the length validation as needed
+        }
+      },
+      lastName: {
+        type: DataTypes.STRING, // Add lastName attribute
+        allowNull: false,
+        validate: {
+          len: [1, 50] // Adjust the length validation as needed
+        }
+      },
       username: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -17,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
           len: [4, 30],
           isNotEmail(value) {
             if (Validator.isEmail(value)) {
-              throw new Error("Cannot be an email.");
+              throw new Error('Cannot be an email.');
             }
           }
         }
@@ -40,13 +54,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: 'User',
       defaultScope: {
         attributes: {
-          exclude: ["hashedPassword", "email", "createdAt", "updatedAt"]
+          exclude: ['hashedPassword', 'email', 'createdAt', 'updatedAt']
         }
       }
     }
   );
+
   return User;
 };
