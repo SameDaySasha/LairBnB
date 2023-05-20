@@ -83,6 +83,7 @@ module.exports = {
           lng: 22.345,
           name: "Merrydale's Haven",
           description: `test`,
+          price: 550,
           createdAt: new Date(),
           updatedAt: new Date(),
           // previewImage: 'https://example.com/merrydales-haven.jpg',
