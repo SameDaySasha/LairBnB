@@ -1,9 +1,9 @@
 // backend/config/database.js
-const config = require('./index');
-
+let config = require('./index.js');
+const dbFile = '/Users/alexflorea/Desktop/Classwork/Project_Alpha/LairBnB/backend/db/dev.db';
 module.exports = {
   development: {
-    storage: config.dbFile,
+    storage: dbFile,
     dialect: "sqlite",
     seederStorage: "sequelize",
     logQueryParameters: true,

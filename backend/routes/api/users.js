@@ -33,10 +33,16 @@ router.post(
   '/',
   validateSignup,
   async (req, res) => {
+    // Extract the required user information from the request body
     const { email, password, username, firstName, lastName } = req.body;
+
+    // Hash the password using bcrypt
     const hashedPassword = bcrypt.hashSync(password);
+
+    // Create a new user in the database with the provided information
     const user = await User.create({ email, username, firstName, lastName, hashedPassword });
 
+    // Create a safeUser object with the user's information to be sent in the response
     const safeUser = {
       id: user.id,
       email: user.email,
@@ -45,12 +51,48 @@ router.post(
       lastName: user.lastName, // Include lastName attribute
     };
 
+    // Set the authentication token cookie in the response
     await setTokenCookie(res, safeUser);
 
+    // Return the safeUser object in the response JSON
     return res.json({
       user: safeUser
     });
   }
 );
+
+// Get Current User
+router.get('/', requireAuth, async (req, res) => {
+  try {
+    const { id, email, username, firstName, lastName } = req.user;
+
+    const currentUser = await User.findByPk(id, {
+      attributes: ['id', 'email', 'username', 'firstName', 'lastName']
+    });
+
+    if (currentUser) {
+      const safeUser = {
+        id: currentUser.id,
+        email: currentUser.email,
+        username: currentUser.username,
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName
+      };
+
+      return res.status(200).json({
+        user: safeUser
+      });
+    } else {
+      return res.status(404).json({
+        message: 'User not found'
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: 'Internal server error'
+    });
+  }
+});
 
 module.exports = router;
