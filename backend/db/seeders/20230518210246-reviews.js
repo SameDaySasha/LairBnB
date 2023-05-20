@@ -3,12 +3,13 @@
 const bcrypt = require('bcryptjs');
 
 let options = {};
+options.tableName = 'Reviews'
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('reviews', [
+    await queryInterface.bulkInsert(options, [
       {
         id: 1,
         userId: 1,
@@ -58,6 +59,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('reviews', null, {});
+    await queryInterface.bulkDelete(options);
   }
 };

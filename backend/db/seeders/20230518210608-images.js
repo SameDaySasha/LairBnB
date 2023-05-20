@@ -3,12 +3,13 @@
 const bcrypt = require('bcryptjs');
 
 let options = {};
+options.tableName = 'Images'
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Images', [
+    await queryInterface.bulkInsert(options, [
       {
         id: 1,
         url: '/Users/alexflorea/Desktop/Classwork/Project_Alpha/LairBnB/backend/Images/BeachCave.png',
@@ -113,6 +114,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Images', null, {});
+    await queryInterface.bulkDelete(options);
   }
 };
