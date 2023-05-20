@@ -22,13 +22,7 @@ module.exports = {
           lat: 39.123,
           lng: 98.456,
           name: "Flamescale's Lair",
-          description: `
-            Welcome to Flamescale's Lair, the ultimate dragon retreat located at the breathtaking Dragon's Peak in the heart of Firehold. This majestic cave offers an unparalleled living experience amidst the ancient volcanic landscapes of Volcania.
-            Immerse yourself in the fiery ambiance as you bask in the warmth of molten lava streams that cascade down the cavern walls. The spacious chamber is adorned with gleaming stalactites, casting an ethereal glow that dances across the chamber floor.
-            The lair features a luxurious sleeping alcove nestled within an obsidian outcrop, providing you with the perfect resting spot to dream of conquests and treasure. Soar to new heights with the panoramic views of Draconia from the lair's private balcony, where you can witness breathtaking sunsets that paint the sky in hues of crimson and gold.
-            Embark on epic adventures as you explore the surrounding volcanic landscapes, teeming with hidden caverns and ancient dragon hoards. Unleash your inner fire-breathing prowess and engage in friendly duels with fellow dragons in our spacious training grounds.
-            Book your stay at Flamescale's Lair now and experience the true essence of draconic luxury. Unleash your inner dragon and create unforgettable memories in this one-of-a-kind retreat.
-            Note: Guests are required to bring their own gold for treasure hoarding and fireproof accessories for safety.`,
+          description: `test`,
           price: 500,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -43,13 +37,7 @@ module.exports = {
           lat: 22.789,
           lng: 57.321,
           name: "Shadowclaw's Den",
-          description: `
-            Welcome to Shadowclaw's Den, an enchanting hideaway nestled deep within the mysterious Dark Forest of Shadowdale. This secluded den offers an immersive experience in the heart of nature, where the moonlight dances through the dense canopy and whispers of ancient magic permeate the air.
-            As you step into the den, you'll be greeted by a mesmerizing interplay of shadow and moonlight. The spacious chamber boasts intricately carved obsidian walls, adorned with mystical runes that evoke a sense of arcane power. The soft moss-covered floor invites you to rest and rejuvenate in tranquility.
-            The den features a hidden alcove with a plush dragon-scale bed, providing the perfect sanctuary for restful slumber. Relax on the balcony and savor the ethereal beauty of the forest, where you can witness the nocturnal creatures emerge from their hiding places and gaze at the shimmering starlit sky.
-            Embark on magical adventures as you traverse the enchanted forest, where ancient secrets and hidden treasures await. Unleash your arcane talents in the den's dedicated spellcasting area, where you can practice your most potent incantations in privacy.
-            Book your stay at Shadowclaw's Den now and immerse yourself in the captivating allure of this mystical retreat. Discover the untamed wonders of the Dark Forest and forge lasting memories in this haven of magic and tranquility.
-            Note: Guests are advised to bring their own enchanted artifacts for enhanced magical experiences.`,
+          description: `test`,
           price: 400,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -64,12 +52,7 @@ module.exports = {
           lat: 53.456,
           lng: 8.123,
           name: "Auroradus' Sanctuary",
-          description: `Welcome to Auroradus' Sanctuary, an ethereal retreat nestled high in the Misty Peaks of Cloudhaven. This enchanting haven offers a celestial experience amidst the serene beauty of Aetheria, where clouds embrace the mountaintops and the gentle breeze carries whispers of celestial secrets.
-                 As you enter the sanctuary, you'll be captivated by the iridescent glow emanating from the walls, adorned with shimmering crystals that refract celestial light. The spacious chamber is adorned with floating platforms, suspended in mid-air, providing a unique and magical living space.
-                 The sanctuary features a celestial sleeping pod, enveloped in a nebula-like cocoon, offering unparalleled comfort as you float amidst the stars. Step onto the celestial terrace and marvel at the breathtaking panoramic views of Celestria, where you can witness celestial phenomena and shooting stars painting the night sky.
-                  Embark on celestial adventures as you explore the mystic realms of Aetheria, where ancient celestial artifacts and cosmic wonders await. Engage in celestial meditations and harness the power of the stars in the sanctuary's tranquil meditation area.
-                 Book your stay at Auroradus' Sanctuary now and experience celestial serenity and celestial wonders in this transcendent retreat. Awaken your inner celestial being and create memories that will shine eternally.
-                   Note: Guests are advised to bring their own star maps for celestial navigation and ethereal robes for enhanced cosmic experiences.`,
+          description: `test`,
           price: 600,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -84,12 +67,7 @@ module.exports = {
           lat: 67.890,
           lng: 35.678,
           name: "Frostbite's Domain",
-          description: `Welcome to Frostbite's Domain, an icy refuge nestled within the treacherous Frozen Tundra of Glacieria. This frigid retreat offers an immersive experience amidst the breathtaking winter landscapes of Frosthold, where ice and snow weave a tapestry of serene beauty.
-        Step into the domain and be greeted by shimmering ice formations that reflect the ambient light, creating a mesmerizing spectacle. The spacious chamber is adorned with icicle chandeliers, casting a soft, ethereal glow that illuminates the ice-carved walls.
-        The domain features a cozy ice bed, adorned with luxurious fur blankets, providing the perfect sanctuary to rest and rejuvenate amidst the frozen beauty. Step outside onto the icy balcony and marvel at the awe-inspiring vistas of Frosthold, where towering ice peaks and frozen lakes stretch as far as the eye can see.
-        Embark on thrilling adventures as you traverse the treacherous Frozen Tundra, where hidden ice caves and ancient frozen treasures await discovery. Engage in ice elemental training in the domain's dedicated ice arena, where you can harness the power of frost and sharpen your combat skills.
-        Book your stay at Frostbite's Domain now and immerse yourself in the enchanting embrace of ice and snow. Experience the tranquility of the frozen realm and forge unforgettable memories amidst the wintry wonderland.
-        Note: Guests are advised to bring their own thermally insulated clothing and gear suitable for sub-zero temperatures.`,
+          description: `test`,
           price: 550,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -104,14 +82,7 @@ module.exports = {
           lat: 39.876,
           lng: 22.345,
           name: "Merrydale's Haven",
-          description: `Welcome to Merrydale's Haven, a hidden gem nestled amidst the lush landscapes of Halfling Country. This charming retreat offers a whimsical escape in the heart of nature, where rolling hills and picturesque meadows create a serene haven for all who seek tranquility.
-        As you enter Merrydale's Haven, you'll be greeted by the sweet scent of wildflowers and the gentle melody of chirping birds. The cozy cottage stands amidst a verdant garden, where colorful blooms and vibrant foliage create a magical ambiance.
-        Step inside the cottage and be enchanted by its rustic charm. The warm and inviting interior is adorned with quaint furnishings and delightful decor, reflecting the heartwarming spirit of the halfling community. The comfortable bedroom beckons weary travelers to a restful slumber, ensuring dreams filled with joy and wonder.
-        The surrounding Halfling Country offers endless opportunities for exploration and delight. Take a leisurely stroll through the enchanting meadows, discovering hidden groves and bubbling brooks along the way. Join the halflings in their festivities and indulge in hearty meals prepared with love and a touch of halfling magic.
-        Merrydale's Haven is the perfect retreat for those seeking a respite from the bustling world. Immerse yourself in the halfling way of life, savoring moments of simple joy and embracing the whimsy that fills the air. Relax on the charming porch and savor a cup of tea while enjoying panoramic views of the idyllic Halfling Country.
-        Book your stay at Merrydale's Haven and experience the heartwarming hospitality of the halflings. Unwind, rejuvenate, and reconnect with nature in this delightful haven.
-        Note: Guests are invited to join the halflings for their daily feast, featuring delectable delights from the Halfling Country cuisine.`,
-          price: 350,
+          description: `test`,
           createdAt: new Date(),
           updatedAt: new Date(),
           // previewImage: 'https://example.com/merrydales-haven.jpg',
