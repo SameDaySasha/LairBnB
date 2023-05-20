@@ -14,7 +14,7 @@ module.exports = {
      'Spots',
       [
         {
-          ownerId: 1,
+          ownerId: 2,
           address: "Dragon's Peak",
           city: 'Firehold',
           state: 'Volcania',
