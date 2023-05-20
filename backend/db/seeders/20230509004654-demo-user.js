@@ -47,41 +47,41 @@ module.exports = {
         username: 'Falkor',
         hashedPassword: bcrypt.hashSync('password5')
       },
-      {
-        firstName: 'Viserion',
-        lastName: 'Icefire',
-        email: 'viserion@dragon.io',
-        username: 'Viserion',
-        hashedPassword: bcrypt.hashSync('password6')
-      },
-      {
-        firstName: 'Norberta',
-        lastName: 'Hagrid',
-        email: 'norberta@dragon.io',
-        username: 'Norberta',
-        hashedPassword: bcrypt.hashSync('password7')
-      },
-      {
-        firstName: 'Saphira',
-        lastName: 'Eragon',
-        email: 'saphira@dragon.io',
-        username: 'Saphira',
-        hashedPassword: bcrypt.hashSync('password8')
-      },
-      {
-        firstName: 'Mushu',
-        lastName: 'Fa Mulan',
-        email: 'mushu@dragon.io',
-        username: 'Mushu',
-        hashedPassword: bcrypt.hashSync('password9')
-      },
-      {
-        firstName: 'Charizard',
-        lastName: 'Pokemon',
-        email: 'charizard@dragon.io',
-        username: 'Charizard',
-        hashedPassword: bcrypt.hashSync('password10')
-      }
+      // {
+      //   firstName: 'Viserion',
+      //   lastName: 'Icefire',
+      //   email: 'viserion@dragon.io',
+      //   username: 'Viserion',
+      //   hashedPassword: bcrypt.hashSync('password6')
+      // },
+      // {
+      //   firstName: 'Norberta',
+      //   lastName: 'Hagrid',
+      //   email: 'norberta@dragon.io',
+      //   username: 'Norberta',
+      //   hashedPassword: bcrypt.hashSync('password7')
+      // },
+      // {
+      //   firstName: 'Saphira',
+      //   lastName: 'Eragon',
+      //   email: 'saphira@dragon.io',
+      //   username: 'Saphira',
+      //   hashedPassword: bcrypt.hashSync('password8')
+      // },
+      // {
+      //   firstName: 'Mushu',
+      //   lastName: 'Fa Mulan',
+      //   email: 'mushu@dragon.io',
+      //   username: 'Mushu',
+      //   hashedPassword: bcrypt.hashSync('password9')
+      // },
+      // {
+      //   firstName: 'Charizard',
+      //   lastName: 'Pokemon',
+      //   email: 'charizard@dragon.io',
+      //   username: 'Charizard',
+      //   hashedPassword: bcrypt.hashSync('password10')
+      // }
     ],);
   },
 
