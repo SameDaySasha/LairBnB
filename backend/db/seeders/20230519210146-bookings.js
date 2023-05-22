@@ -3,11 +3,13 @@
 const bcrypt = require('bcryptjs');
 
 let options = {};
+console.log("===================================================1")
 options.tableName = 'Bookings'
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
 
+console.log("===================================================1")
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(options,[
