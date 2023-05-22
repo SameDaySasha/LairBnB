@@ -10,18 +10,18 @@ module.exports = (sequelize) => {
       Image.belongsTo(models.Spot, {
         foreignKey: 'indexId',
         constraints: false,
-        as: 'spot',
+        as: 'Spot',
         scope: {
-          indexType: 'spot',
+          indexType: 'Spot',
         },
       });
 
       Image.belongsTo(models.Review, {
         foreignKey: 'indexId',
         constraints: false,
-        as: 'review',
+        as: 'Review',
         scope: {
-          indexType: 'review',
+          indexType: 'Review',
         },
       });
     }

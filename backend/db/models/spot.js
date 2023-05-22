@@ -5,18 +5,48 @@ const database = require('../../config/database');
 module.exports = (sequelize) => {
   class Spot extends Model {
     static associate(models) {
-      Spot.belongsTo(models.User, {
-        foreignKey: 'id',
-      
-      });
-      Spot.hasMany(models.Review, {
-        foreignKey: 'spotId',
-        otherKey:'id',
-        
-      });
-      Spot.hasMany(models.Review,{
+    Spot.hasMany(
+      models.Booking,{
         foreignKey:'spotId',
-      })
+        otherKey:'id'
+      }
+    )
+    Spot.hasMany(
+      models.Review,{
+        foreignKey:'spotId',
+        otherKey:'id'
+      }
+    )
+   Spot.hasMany(
+    models.Image, {
+      foreignKey:'indexId',
+      constraints:false,
+      scope:{
+        type:'Spot'
+      },
+      as:'SpotImages'
+    }
+   )
+  Spot.belongsTo(models.User,{
+    foreignKey:'id',
+    otherKey:'userId',
+    as:'Owner'
+  })
+
+
+
+      // Spot.belongsTo(models.User, {
+      //   foreignKey: 'id',
+      
+      // });
+      // Spot.hasMany(models.Review, {
+      //   foreignKey: 'spotId',
+      //   otherKey:'id',
+        
+      // });
+      // Spot.hasMany(models.Review,{
+      //   foreignKey:'spotId',
+      // })
       // Add any additional associations as needed
     }
   }
