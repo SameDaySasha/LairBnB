@@ -212,8 +212,8 @@ module.exports = {
         // }
         
       ],
-      {}
-    );
+      
+    ),options;
   },
 
   down: async (queryInterface, Sequelize) => {
