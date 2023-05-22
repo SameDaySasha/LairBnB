@@ -6,12 +6,12 @@ module.exports = (sequelize) => {
     static associate(models) {
       Spot.belongsTo(models.User, {
         foreignKey: 'id',
-        onDelete: 'CASCADE',
+      
       });
       Spot.hasMany(models.Review, {
         foreignKey: 'spotId',
         otherKey:'id',
-        onDelete: 'CASCADE',
+        
       });
       Spot.hasMany(models.Review,{
         foreignKey:'spotId',

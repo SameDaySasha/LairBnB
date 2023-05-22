@@ -5,7 +5,8 @@ module.exports = (sequelize) => {
     static associate(models) {
 
       Booking.belongsTo(models.Spot, {
-        foreignKey: 'id',
+        foreignKey: 'spotId',
+        otherKey:'id'
       });
       Booking.belongsTo(models.User, {
         foreignKey: 'userId',
