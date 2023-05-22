@@ -12,7 +12,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Bookings',[
       {
-        spotId: 1,
+        spotId: 4,
         userId: 1,
         startDate: new Date('2023-06-01'),
         endDate: new Date('2023-06-07'),
@@ -20,15 +20,15 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        spotId: 2,
-        userId: 2,
+        spotId: 3,
+        userId: 4,
         startDate: new Date('2023-07-10'),
         endDate: new Date('2023-07-15'),
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        spotId: 3,
+        spotId: 4,
         userId: 3,
         startDate: new Date('2023-08-20'),
         endDate: new Date('2023-08-25'),
@@ -36,8 +36,8 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        spotId: 4,
-        userId: 4,
+        spotId: 1,
+        userId: 2,
         startDate: new Date('2023-09-05'),
         endDate: new Date('2023-09-10'),
         createdAt: new Date(),
