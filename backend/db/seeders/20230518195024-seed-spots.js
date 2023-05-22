@@ -4,14 +4,16 @@
 const bcrypt = require('bcryptjs');
 
 let options = {};
+options.tableName = 'Spots'
+console.log('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ')
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
-
+console.log('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert(
-     'Spots',
+     options.tableName,
       [
         {
           ownerId: 1,
@@ -216,6 +218,6 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
    
-    return queryInterface.bulkDelete('Spots');
+    return queryInterface.bulkDelete(options.tableName);
   },
 };
