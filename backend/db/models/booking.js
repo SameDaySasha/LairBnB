@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
         onDelete: 'CASCADE',
       });
       Booking.belongsTo(models.User, {
-        foreignKey: 'userId',
+        foreignKey: 'id',
         onDelete: 'CASCADE',
       });
       // Add any additional associations as needed
