@@ -1,5 +1,6 @@
 'use strict';
 const { Model, DataTypes } = require('sequelize');
+const database = require('../../config/database');
 
 module.exports = (sequelize) => {
   class Spot extends Model {
@@ -22,6 +23,9 @@ module.exports = (sequelize) => {
 
   Spot.init(
     {
+      spotId:{type:DataTypes.INTEGER,
+      allowNull:true},
+
       ownerId: {
         type: DataTypes.INTEGER,
         allowNull: false,
