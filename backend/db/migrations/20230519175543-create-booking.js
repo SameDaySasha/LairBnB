@@ -1,11 +1,12 @@
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
 let options = {};
+console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 options.tableName = 'Bookings'
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
-
+console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(options.tableName, {
