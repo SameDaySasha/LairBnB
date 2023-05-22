@@ -16,6 +16,7 @@ module.exports = {
     console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx bookings seeder complete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ')
     return queryInterface.bulkInsert(options.tableName,[
       {
+        spotId: 1,
         userId: 1,
         startDate: new Date('2023-06-01'),
         endDate: new Date('2023-06-07'),
