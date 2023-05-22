@@ -28,8 +28,6 @@ module.exports = {
           name: "Flamescale's Lair",
           description: "test",
           price: 500,
-          createdAt: new Date(),
-          updatedAt: new Date(),
           // previewImage: 'https://example.com/flamescale-lair.jpg',
         },
         {
@@ -43,8 +41,6 @@ module.exports = {
           name: "Shadowclaw's Den",
           description: "test",
           price: 400,
-          createdAt: new Date(),
-          updatedAt: new Date(),
           // previewImage: 'https://example.com/shadowclaw-den.jpg',
         },
         {
@@ -58,8 +54,6 @@ module.exports = {
           name: "Auroradus' Sanctuary",
           description: "test",
           price: 600,
-          createdAt: new Date(),
-          updatedAt: new Date(),
           // previewImage: 'https://example.com/auroradus-sanctuary.jpg',
         },
         {
@@ -73,8 +67,6 @@ module.exports = {
           name: "Frostbite's Domain",
           description: "test",
           price: 550,
-          createdAt: new Date(),
-          updatedAt: new Date(),
           // previewImage: 'https://example.com/frostbites-domain.jpg',
         },
         {
@@ -88,8 +80,6 @@ module.exports = {
           name: "Merrydale's Haven",
           description: "test",
           price: 550,
-          createdAt: new Date(),
-          updatedAt: new Date(),
           // previewImage: 'https://example.com/merrydales-haven.jpg',
         },
         // {
@@ -214,12 +204,12 @@ module.exports = {
         // }
         
       ],
-      
-    ),options;
+      options
+    );
   },
 
   down: async (queryInterface, Sequelize) => {
    
-    return queryInterface.bulkDelete(options);
+    return queryInterface.bulkDelete(options, null, options);
   },
 };
