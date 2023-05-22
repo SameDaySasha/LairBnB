@@ -5,11 +5,11 @@ module.exports = (sequelize) => {
   class Review extends Model {
     static associate(models) {
       Review.belongsTo(models.User, {
-        foreignKey: 'userId',
+        foreignKey: 'id',
         onDelete: 'CASCADE',
       });
       Review.belongsTo(models.Spot, {
-        foreignKey: 'spotId',
+        foreignKey: 'id',
         onDelete: 'CASCADE',
       });
     }
