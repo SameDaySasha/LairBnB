@@ -3,7 +3,7 @@ let config = require('./index.js');
 const dbFile = '/Users/alexflorea/Desktop/Classwork/Project_Alpha/LairBnB/backend/db/dev.db';
 module.exports = {
   development: {
-    storage: dbFile,
+    storage: config.dbFile,
     dialect: "sqlite",
     seederStorage: "sequelize",
     logQueryParameters: true,
