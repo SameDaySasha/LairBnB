@@ -13,7 +13,7 @@ console.log('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx spots async complete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ')
-    console.log(`${Spots}`)
+    // console.log(`${Spots}`)
     return queryInterface.bulkInsert(
      options.tableName,
       [

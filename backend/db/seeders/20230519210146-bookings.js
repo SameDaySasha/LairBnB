@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 let options = {};
 console.log("===================================================1")
 options.tableName = 'Bookings'
-console.log(`${Bookings}`)
+// console.log(`${Bookings}`)
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
@@ -16,7 +16,6 @@ module.exports = {
     console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx bookings seeder complete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ')
     return queryInterface.bulkInsert(options.tableName,[
       {
-        spotId: 1,
         userId: 1,
         startDate: new Date('2023-06-01'),
         endDate: new Date('2023-06-07'),
