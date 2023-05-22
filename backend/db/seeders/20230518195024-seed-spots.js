@@ -33,7 +33,7 @@ module.exports = {
           // previewImage: 'https://example.com/flamescale-lair.jpg',
         },
         {
-          ownerId: 2,
+          ownerId: 1,
           address: 'Dark Forest',
           city: 'Shadowdale',
           state: 'Gloomhaven',
@@ -48,7 +48,7 @@ module.exports = {
           // previewImage: 'https://example.com/shadowclaw-den.jpg',
         },
         {
-          ownerId: 3,
+          ownerId: 1,
           address: 'Misty Peaks',
           city: 'Cloudhaven',
           state: 'Aetheria',
@@ -63,7 +63,7 @@ module.exports = {
           // previewImage: 'https://example.com/auroradus-sanctuary.jpg',
         },
         {
-          ownerId: 4,
+          ownerId: 1,
           address: 'Frozen Tundra',
           city: 'Icefang',
           state: 'Glacieria',
@@ -78,7 +78,7 @@ module.exports = {
           // previewImage: 'https://example.com/frostbites-domain.jpg',
         },
         {
-          ownerId: 5,
+          ownerId: 1,
           address: 'Halfling Hills',
           city: 'Shiretown',
           state: 'Halflingshire',
