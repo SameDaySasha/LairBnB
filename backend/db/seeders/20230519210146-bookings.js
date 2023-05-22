@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 console.log("===================================================1")
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert(options,[
+    return queryInterface.bulkInsert(options.tableName,[
       {
         spotId: 5,
         userId: 1,
@@ -57,6 +57,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete(options);
+    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx bookings async complete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ')
+    return queryInterface.bulkDelete(options.tableName);
   }
 };
