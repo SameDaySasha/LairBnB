@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 console.log('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx spots async complete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ')
+    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx spots seeding complete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ')
     // console.log(`${Spots}`)
     return queryInterface.bulkInsert(
      options,
@@ -205,7 +205,7 @@ module.exports = {
         
       ],
       options
-    );
+    )
   },
 
   down: async (queryInterface, Sequelize) => {
