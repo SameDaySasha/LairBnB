@@ -12,6 +12,7 @@ if (process.env.NODE_ENV === 'production') {
 console.log('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ')
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx spots async complete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ')
     return queryInterface.bulkInsert(
      options.tableName,
       [
