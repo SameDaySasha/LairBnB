@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert(options.tableName, [
+    await queryInterface.bulkInsert(options, [
       {
         id: 1,
         url: '/Users/alexflorea/Desktop/Classwork/Project_Alpha/LairBnB/backend/Images/BeachCave.png',
@@ -114,6 +114,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete(options.tableName);
+    await queryInterface.bulkDelete(options);
   }
 };

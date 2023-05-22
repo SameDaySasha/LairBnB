@@ -15,7 +15,7 @@ module.exports = {
     console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx spots async complete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ')
     // console.log(`${Spots}`)
     return queryInterface.bulkInsert(
-     options.tableName,
+     options,
       [
         {
           ownerId: 1,
@@ -220,6 +220,6 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
    
-    return queryInterface.bulkDelete(options.tableName);
+    return queryInterface.bulkDelete(options);
   },
 };

@@ -14,7 +14,7 @@ console.log("===================================================1")
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx bookings seeder complete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ')
-    return queryInterface.bulkInsert(options.tableName,[
+    return queryInterface.bulkInsert(options,[
       {
         spotId: 1,
         userId: 1,
@@ -60,6 +60,6 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx bookings async complete xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ')
-    return queryInterface.bulkDelete(options.tableName);
+    return queryInterface.bulkDelete(options);
   }
 };
