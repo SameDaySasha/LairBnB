@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 let options = {};
 console.log("===================================================1")
 options.tableName = 'Bookings'
+console.log(`${Booking}`)
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // define your schema in options object
 }
