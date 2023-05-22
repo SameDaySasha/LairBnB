@@ -6,11 +6,9 @@ module.exports = (sequelize) => {
     static associate(models) {
       Review.belongsTo(models.User, {
         foreignKey: 'id',
-        onDelete: 'CASCADE',
       });
       Review.belongsTo(models.Spot, {
         foreignKey: 'id',
-        onDelete: 'CASCADE',
       });
     }
   }
