@@ -210,6 +210,6 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
    
-    return queryInterface.bulkDelete(options, null, options);
+    return queryInterface.bulkDelete(options, null, {});
   },
 };
