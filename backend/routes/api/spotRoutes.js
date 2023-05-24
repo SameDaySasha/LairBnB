@@ -6,7 +6,7 @@ const { requireAuth } = require('../../utils/auth');
 // GET /spots - Retrieve all spots with average rating
 router.get('/', async (req, res, next) => {
   try {
-    // Retrieve all spots from the database along with their average rating
+    // Retrieve all spots from the database
     const spots = await Spot.findAll({
       attributes: [
         'id',
@@ -21,34 +21,38 @@ router.get('/', async (req, res, next) => {
         'description',
         'price',
         'createdAt',
-        'updatedAt',
-        [sequelize.fn('AVG', sequelize.col('reviews.stars')), 'avgRating'],
-      ],
-      include: [
-        {
-          model: Review,
-          attributes: [],
-        },
-      ],
-      group: ['Spot.id'], // Group by Spot.id to calculate average per spot
+        'updatedAt'
+      ]
     });
 
     // Prepare the response data
-    const spotData = spots.map((spot) => ({
-      id: spot.id,
-      ownerId: spot.ownerId,
-      address: spot.address,
-      city: spot.city,
-      state: spot.state,
-      country: spot.country,
-      lat: spot.lat,
-      lng: spot.lng,
-      name: spot.name,
-      description: spot.description,
-      price: spot.price,
-      createdAt: spot.createdAt,
-      updatedAt: spot.updatedAt,
-      avgRating: parseFloat(spot.dataValues.avgRating || 0), // Default to 0 if avgRating is null
+    const spotData = await Promise.all(spots.map(async (spot) => {
+      // Load the reviews for this spot
+      const reviews = await spot.getReviews();
+      
+      // Calculate the average rating
+      let avgRating = 0;
+      if (reviews.length > 0) {
+        const totalStars = reviews.reduce((total, review) => total + review.stars, 0);
+        avgRating = totalStars / reviews.length;
+      }
+
+      return {
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: spot.createdAt,
+        updatedAt: spot.updatedAt,
+        avgRating: parseFloat(avgRating || 0), // Default to 0 if avgRating is null
+      };
     }));
 
     // Send the successful response with the spot data
@@ -58,6 +62,7 @@ router.get('/', async (req, res, next) => {
     return next(error);
   }
 });
+
 // Get all Spots owned by the Current User
 router.get('/user', requireAuth, async (req, res) => {
   // Check if the user is logged in
@@ -85,16 +90,8 @@ router.get('/user', requireAuth, async (req, res) => {
         'description',
         'price',
         'createdAt',
-        'updatedAt',
-        [sequelize.fn('AVG', sequelize.col('reviews.stars')), 'avgRating'],
-      ],
-      include: [ // image preview goes here
-        {
-          model: Review,
-          attributes: [],
-        },
-      ],
-      group: ['Spot.id'], // Group by Spot.id to calculate average per spot
+        'updatedAt'
+      ]
     });
 
     // Check if any spots were found
@@ -105,21 +102,33 @@ router.get('/user', requireAuth, async (req, res) => {
     }
 
     // Prepare the response data
-    const spotData = spots.map((spot) => ({
-      id: spot.id,
-      ownerId: spot.ownerId,
-      address: spot.address,
-      city: spot.city,
-      state: spot.state,
-      country: spot.country,
-      lat: spot.lat,
-      lng: spot.lng,
-      name: spot.name,
-      description: spot.description,
-      price: spot.price,
-      createdAt: spot.createdAt,
-      updatedAt: spot.updatedAt,
-      avgRating: parseFloat(spot.dataValues.avgRating || 0), // Default to 0 if avgRating is null
+    const spotData = await Promise.all(spots.map(async (spot) => {
+      // Load the reviews for this spot
+      const reviews = await spot.getReviews();
+      
+      // Calculate the average rating
+      let avgRating = 0;
+      if (reviews.length > 0) {
+        const totalStars = reviews.reduce((total, review) => total + review.stars, 0);
+        avgRating = totalStars / reviews.length;
+      }
+
+      return {
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: spot.createdAt,
+        updatedAt: spot.updatedAt,
+        avgRating: parseFloat(avgRating || 0), // Default to 0 if avgRating is null
+      };
     }));
 
     return res.status(200).json({
@@ -132,4 +141,5 @@ router.get('/user', requireAuth, async (req, res) => {
     });
   }
 });
+
 module.exports = router;
