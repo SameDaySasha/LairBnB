@@ -212,6 +212,79 @@ router.post('/', requireAuth, [
   }
 });
 
+// PUT /spots/:id - Edit a spot
+router.put('/:id', requireAuth, async (req, res, next) => {
+  // Extract the ID of the spot from the request parameters
+  const spotId = req.params.id;
+
+  // Extract the new spot data from the request body
+  const {
+    address, 
+    city, 
+    state, 
+    country, 
+    lat, 
+    lng, 
+    name, 
+    description, 
+    price
+  } = req.body;
+
+  try {
+    // Retrieve the spot from the database
+    const spot = await Spot.findByPk(spotId);
+
+    // Check if the spot exists
+    if (!spot) {
+      return res.status(404).json({ message: 'Spot not found' });
+    }
+
+    // Check if the user is the owner of the spot
+    if (spot.ownerId !== req.user.id) {
+      return res.status(403).json({ message: 'Unauthorized' });
+    }
+
+    // Update the spot in the database
+    await spot.update({
+      address, 
+      city, 
+      state, 
+      country, 
+      lat, 
+      lng, 
+      name, 
+      description, 
+      price,
+      updatedAt: new Date()
+    });
+
+    // Send the updated spot data as the response
+    return res.json({
+      id: spot.id,
+      ownerId: spot.ownerId,
+      address: spot.address,
+      city: spot.city,
+      state: spot.state,
+      country: spot.country,
+      lat: spot.lat,
+      lng: spot.lng,
+      name: spot.name,
+      description: spot.description,
+      price: spot.price,
+      createdAt: spot.createdAt,
+      updatedAt: spot.updatedAt
+    });
+  } catch (error) {
+    // Handle any errors that occur during the request
+    if (error.name === 'SequelizeValidationError') {
+      return res.status(400).json({
+        message: error.errors.map(e => e.message)
+      });
+    } else {
+      return next(error);
+    }
+  }
+});
 
 
 
