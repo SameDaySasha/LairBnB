@@ -28,7 +28,7 @@ module.exports = {
           name: "Flamescale's Lair",
           description: "test",
           price: 500,
-          // previewImage: 'https://example.com/flamescale-lair.jpg',
+          previewImage: 'https://example.com/flamescale-lair.jpg',
         },
         {
           ownerId: 1,
@@ -41,7 +41,7 @@ module.exports = {
           name: "Shadowclaw's Den",
           description: "test",
           price: 400,
-          // previewImage: 'https://example.com/shadowclaw-den.jpg',
+          previewImage: 'https://example.com/shadowclaw-den.jpg',
         },
         {
           ownerId: 1,
@@ -54,7 +54,7 @@ module.exports = {
           name: "Auroradus' Sanctuary",
           description: "test",
           price: 600,
-          // previewImage: 'https://example.com/auroradus-sanctuary.jpg',
+          previewImage: 'https://example.com/auroradus-sanctuary.jpg',
         },
         {
           ownerId: 1,
@@ -67,7 +67,7 @@ module.exports = {
           name: "Frostbite's Domain",
           description: "test",
           price: 550,
-          // previewImage: 'https://example.com/frostbites-domain.jpg',
+          previewImage: 'https://example.com/frostbites-domain.jpg',
         },
         {
           ownerId: 1,
@@ -80,7 +80,7 @@ module.exports = {
           name: "Merrydale's Haven",
           description: "test",
           price: 550,
-          // previewImage: 'https://example.com/merrydales-haven.jpg',
+          previewImage: 'https://example.com/merrydales-haven.jpg',
         },
         // {
         //   ownerId: 6,
