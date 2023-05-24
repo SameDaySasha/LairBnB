@@ -111,10 +111,10 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      previewImage: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      // previewImage: {
+      //   type: DataTypes.STRING,
+      //   allowNull: false,
+      // },
     },
     {
       sequelize,
