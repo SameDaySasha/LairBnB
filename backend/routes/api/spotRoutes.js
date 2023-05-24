@@ -1,5 +1,6 @@
 const express = require('express');
 const { Op, literal } = require('sequelize');
+const { check, validationResult } = require('express-validator');
 const router = express.Router();
 const { Spot, Review, sequelize } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
@@ -141,5 +142,82 @@ router.get('/user', requireAuth, async (req, res) => {
     });
   }
 });
+
+
+
+// POST /spots - Create a new spot
+router.post('/', requireAuth, [
+  // Validate input data
+  check('address').isLength({ min: 1 }).withMessage('Address is required'),
+  check('city').isLength({ min: 1 }).withMessage('City is required'),
+  check('state').isLength({ min: 1 }).withMessage('State is required'),
+  check('country').isLength({ min: 1 }).withMessage('Country is required'),
+  check('lat').isNumeric().withMessage('Latitude must be a number'),
+  check('lng').isNumeric().withMessage('Longitude must be a number'),
+  check('name').isLength({ min: 1 }).withMessage('Name is required'),
+  check('description').isLength({ min: 1 }).withMessage('Description is required'),
+  check('price').isNumeric().withMessage('Price must be a number'),
+], async (req, res) => {
+  // Check if the user is logged in
+  if (!req.user) {
+    return res.status(401).json({
+      message: 'Authentication required'
+    });
+  }
+
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const userId = req.user.id;
+
+    // Create the new spot
+    const spot = await Spot.create({
+      ownerId: userId,
+      address: req.body.address,
+      city: req.body.city,
+      state: req.body.state,
+      country: req.body.country,
+      lat: req.body.lat,
+      lng: req.body.lng,
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+    });
+
+    // Respond with the newly created spot
+    return res.status(201).json({
+      id: spot.id,
+      ownerId: spot.ownerId,
+      address: spot.address,
+      city: spot.city,
+      state: spot.state,
+      country: spot.country,
+      lat: spot.lat,
+      lng: spot.lng,
+      name: spot.name,
+      description: spot.description,
+      price: spot.price,
+      createdAt: spot.createdAt,
+      updatedAt: spot.updatedAt,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: 'Internal server error'
+    });
+  }
+});
+
+
+
+
+
+
+
+
 
 module.exports = router;
