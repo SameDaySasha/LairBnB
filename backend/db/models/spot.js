@@ -113,7 +113,7 @@ module.exports = (sequelize) => {
       },
       previewImage: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
