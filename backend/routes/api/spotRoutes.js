@@ -287,6 +287,73 @@ router.put('/:id', requireAuth, async (req, res, next) => {
 });
 
 
+// GET /spots/:id - Retrieve spot by id
+router.get('/:id', async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    // Retrieve the spot from the database
+    const spot = await Spot.findByPk(id);
+
+    // Handle spot not found
+    if (!spot) {
+      return res.status(404).json({
+        message: 'Spot not found',
+      });
+    }
+
+    // Load the associated data for this spot
+    const reviews = await spot.getReviews();
+    const images = await spot.getSpotImages();
+    const owner = await spot.getOwner();
+
+    // Calculate the average rating and number of reviews
+    let avgRating = 0;
+    const numReviews = reviews.length;
+    if (numReviews > 0) {
+      const totalStars = reviews.reduce((total, review) => total + review.stars, 0);
+      avgRating = totalStars / numReviews;
+    }
+
+    // Prepare the response data
+    const spotData = {
+      id: spot.id,
+      ownerId: spot.ownerId,
+      address: spot.address,
+      city: spot.city,
+      state: spot.state,
+      country: spot.country,
+      lat: spot.lat,
+      lng: spot.lng,
+      name: spot.name,
+      description: spot.description,
+      price: spot.price,
+      createdAt: spot.createdAt,
+      updatedAt: spot.updatedAt,
+      avgRating: parseFloat(avgRating || 0), // Default to 0 if avgRating is null
+      numReviews: numReviews,
+      spotImages: images.map(image => ({
+        id: image.id,
+        url: image.url,
+        preview: image.preview,
+      })),
+      owner: {
+        id: owner.id,
+        firstName: owner.firstName,
+        lastName: owner.lastName,
+      },
+    };
+
+    // Send the successful response with the spot data
+    return res.json(spotData);
+  } catch (error) {
+    // Handle any errors that occur during the request
+    return next(error);
+  }
+});
+
+
+
 
 
 
