@@ -317,25 +317,12 @@ router.get('/:id', async (req, res, next) => {
 
     // Prepare the response data
     const spotData = {
-      id: spot.id,
-      ownerId: spot.ownerId,
-      address: spot.address,
-      city: spot.city,
-      state: spot.state,
-      country: spot.country,
-      lat: spot.lat,
-      lng: spot.lng,
-      name: spot.name,
-      description: spot.description,
-      price: spot.price,
-      createdAt: spot.createdAt,
-      updatedAt: spot.updatedAt,
+      spot,
       avgRating: parseFloat(avgRating || 0), // Default to 0 if avgRating is null
       numReviews: numReviews,
       spotImages: images.map(image => ({
         id: image.id,
         url: image.url,
-        preview: image.preview,
       })),
       owner: {
         id: owner.id,
