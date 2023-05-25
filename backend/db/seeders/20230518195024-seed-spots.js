@@ -28,7 +28,7 @@ module.exports = {
           name: "Flamescale's Lair",
           description: "test",
           price: 500,
-          // previewImage: 'backend/Images/FlameCave.png',
+          previewImage: 'backend/Images/FlameCave.png',
         },
         {
           ownerId: 1,
@@ -41,7 +41,7 @@ module.exports = {
           name: "Shadowclaw's Den",
           description: "test",
           price: 400,
-          // previewImage: 'backend/Images/celestialCave.png',
+          previewImage: 'backend/Images/celestialCave.png',
         },
         {
           ownerId: 1,
@@ -54,7 +54,7 @@ module.exports = {
           name: "Auroradus' Sanctuary",
           description: "test",
           price: 600,
-          // previewImage: 'backend/Images/DruidCove.png',
+          previewImage: 'backend/Images/DruidCove.png',
         },
         {
           ownerId: 1,
@@ -67,7 +67,7 @@ module.exports = {
           name: "Frostbite's Domain",
           description: "test",
           price: 550,
-          // previewImage: 'backend/Images/frostCave.png',
+          previewImage: 'backend/Images/frostCave.png',
         },
         {
           ownerId: 1,
@@ -80,7 +80,7 @@ module.exports = {
           name: "Merrydale's Haven",
           description: "test",
           price: 550,
-          // previewImage: 'backend/Images/HalflingCave.png',
+          previewImage: 'backend/Images/HalflingCave.png',
         },
         // {
         //   ownerId: 6,

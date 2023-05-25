@@ -1,5 +1,5 @@
 // backend/config/database.js
-let config = require('./index.js');
+let config = require('./index');
 const dbFile = '/Users/alexflorea/Desktop/Classwork/Project_Alpha/LairBnB/backend/db/dev.db';
 module.exports = {
   development: {

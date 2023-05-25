@@ -69,7 +69,7 @@ module.exports = (sequelize) => {
         allowNull: true,
       },
       indexType: {
-        type: DataTypes.ENUM('spot', 'review'),
+        type: DataTypes.ENUM('Spot', 'Review'),
         allowNull: true,
       },
     },

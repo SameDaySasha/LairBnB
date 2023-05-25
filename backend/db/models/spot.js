@@ -22,16 +22,15 @@ module.exports = (sequelize) => {
       foreignKey:'indexId',
       constraints:false,
       scope:{
-        type:'Spot'
+        indexType:'Spot'
       },
       as:'SpotImages'
     }
    )
-  Spot.belongsTo(models.User,{
-    foreignKey:'id',
-    otherKey:'userId',
+   Spot.belongsTo(models.User,{
+    foreignKey:'ownerId',
     as:'Owner'
-  })
+  });
 
 
 
@@ -111,10 +110,10 @@ module.exports = (sequelize) => {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      // previewImage: {
-      //   type: DataTypes.STRING,
-      //   allowNull: false,
-      // },
+      previewImage: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       sequelize,
