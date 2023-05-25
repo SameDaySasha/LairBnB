@@ -6,6 +6,9 @@ const { Spot, Review, sequelize } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const models = require('../../db/models'); // adjust the path to point to your models directory
 // GET /spots - Retrieve all spots with average rating
+
+// to do: Make sure to have a return object with array inside, right now it's just array
+
 router.get('/', async (req, res, next) => {
   try {
     // Retrieve all spots from the database
