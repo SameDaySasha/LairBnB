@@ -267,7 +267,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// add image to spot via spot id 
+
 // POST /spots/:id/images - Add an Image to a Spot based on the Spot's id
 router.post('/:id/images', requireAuth, async (req, res) => {
   // Check if the user is logged in
@@ -367,6 +367,209 @@ router.delete('/:id', requireAuth, async (req, res) => {
   }
 });
 
+
+
+// GET /spots/:spotId/bookings - Get all bookings for a spot
+router.get('/spots/:spotId/bookings', requireAuth, async (req, res) => {
+  // Extracting the spotId from the request parameters and converting it to a number
+  const spotId = parseInt(req.params.spotId, 10);
+
+  // Trying to find a Spot with the extracted id
+  const spot = await Spot.findByPk(spotId);
+
+  // If the Spot does not exist, return a 404 error
+  if (!spot) {
+      return res.status(404).json({ message: "Spot couldn't be found" });
+  }
+
+  // Find all bookings for this spot
+  const spotBookings = await Booking.findAll({
+      where: { spotId },
+  });
+
+  // If the current user is not the owner of the spot, only return basic booking data
+  if (req.user.id !== spot.ownerId) {
+      return res.json({
+          Bookings: spotBookings.map(booking => ({
+              spotId: booking.spotId,
+              startDate: booking.startDate,
+              endDate: booking.endDate,
+          })),
+      });
+  }
+
+  // If the current user is the owner of the spot, fetch the associated User data for each booking and return it
+  for (let booking of spotBookings) {
+      booking.User = await User.findByPk(booking.userId);
+  }
+
+  // Return the Bookings with their associated User data (if the current user is the owner of the spot)
+  res.json({ Bookings: spotBookings });
+});
+
+
+
+
+// POST /spots/:spotid/bookings - Create a booking from a spot
+router.post('/:spotid/bookings', requireAuth, async (req, res) => {
+  const spotId = parseInt(req.params.spotid, 10);
+  const { startDate, endDate } = req.body;
+
+  // Fetch the spot
+  const spot = await Spot.findByPk(spotId);
+
+  // Check if spot exists
+  if (!spot) {
+      return res.status(404).json({
+          message: "Spot couldn't be found"
+      });
+  }
+
+  // Check if current user is the owner of the spot
+  if (spot.userId === req.user.id) {
+      return res.status(403).json({
+          message: "You can't book your own spot"
+      });
+  }
+
+  // Check if endDate is on or before startDate
+  if (new Date(endDate) <= new Date(startDate)) {
+      return res.status(400).json({
+          message: "Bad Request",
+          errors: {
+              endDate: "endDate cannot be on or before startDate"
+          },
+      });
+  }
+
+  // Find bookings that overlap with the new start and end dates
+  const overlappingBookings = await Booking.findAll({
+      where: {
+          spotId: spotId,
+          [Op.or]: [
+              { startDate: { [Op.between]: [startDate, endDate] } },
+              { endDate: { [Op.between]: [startDate, endDate] } }
+          ]
+      }
+  });
+
+  // If there are overlapping bookings, return an error
+  if (overlappingBookings.length > 0) {
+      return res.status(403).json({
+          message: "Sorry, this spot is already booked for the specified dates",
+          errors: {
+              startDate: "Start date conflicts with an existing booking",
+              endDate: "End date conflicts with an existing booking"
+          },
+      });
+  }
+
+  // Create the new booking
+  const newBooking = await Booking.create({
+      spotId: spotId,
+      userId: req.user.id,
+      startDate: startDate,
+      endDate: endDate
+  });
+
+  // Send the successful response with the new booking data
+  return res.status(200).json(newBooking);
+});
+
+
+// GET /spots - Return spots filtered by query parameters
+router.get('/', async (req, res) => {
+  const { page = 1, size = 20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+
+  // Validate query parameters
+  const errors = {};
+
+  // Validate page
+  if (page < 1 || page > 10) {
+    errors.page = 'Page must be between 1 and 10';
+  }
+
+  // Validate size
+  if (size < 1 || size > 20) {
+    errors.size = 'Size must be between 1 and 20';
+  }
+
+  // Validate latitude and longitude
+  if (minLat && isNaN(minLat)) {
+    errors.minLat = 'Minimum latitude is invalid';
+  }
+  if (maxLat && isNaN(maxLat)) {
+    errors.maxLat = 'Maximum latitude is invalid';
+  }
+  if (minLng && isNaN(minLng)) {
+    errors.minLng = 'Minimum longitude is invalid';
+  }
+  if (maxLng && isNaN(maxLng)) {
+    errors.maxLng = 'Maximum longitude is invalid';
+  }
+
+  // Validate price
+  if (minPrice && isNaN(minPrice)) {
+    errors.minPrice = 'Minimum price is invalid';
+  }
+  if (maxPrice && isNaN(maxPrice)) {
+    errors.maxPrice = 'Maximum price is invalid';
+  }
+
+  // If there are validation errors, return a 400 Bad Request response
+  if (Object.keys(errors).length > 0) {
+    return res.status(400).json({
+      message: 'Bad Request',
+      errors: errors
+    });
+  }
+
+  try {
+    // Set up filter object based on query parameters
+    const filter = {};
+
+    if (minLat && maxLat) {
+      filter.lat = {
+        [Op.between]: [minLat, maxLat]
+      };
+    }
+
+    if (minLng && maxLng) {
+      filter.lng = {
+        [Op.between]: [minLng, maxLng]
+      };
+    }
+
+    if (minPrice && maxPrice) {
+      filter.price = {
+        [Op.between]: [minPrice, maxPrice]
+      };
+    }
+
+    // Fetch spots based on the filter
+    const spots = await Spot.findAll({
+      where: filter,
+      offset: (page - 1) * size,
+      limit: size
+    });
+
+    // Prepare the response data
+    const responseData = {
+      Spots: spots,
+      page: parseInt(page, 10),
+      size: parseInt(size, 10)
+    };
+
+    // Send the successful response with the spots data
+    return res.status(200).json(responseData);
+  } catch (error) {
+    // Handle any errors that occur during the request
+    console.error(error);
+    return res.status(500).json({
+      message: 'Internal server error'
+    });
+  }
+});
 
 
 
