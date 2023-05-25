@@ -54,7 +54,7 @@ router.get('/user/reviews', requireAuth, async (req, res, next) => {
   });
   
 // GET all reviews by a spot's ID
-router.get('/spots/:id/reviews', asyncHandler(async (req, res, next) => {
+router.get('/spots/:id/reviews', requireAuth(async (req, res, next) => {
     // Extracting the id from the request parameters and converting it to a number
     const spotId = parseInt(req.params.id, 10);
 
