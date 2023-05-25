@@ -23,4 +23,17 @@ router.post('/test', (req, res) => {
   res.json({ requestBody: req.body });
 });
 
+// Error-handling middleware
+router.use((err, req, res, next) => {
+  // Set the status code of the response
+  res.status(err.status || 500);
+
+  // Send the error message as JSON
+  res.json({
+    message: err.message || 'Internal server error',
+    errors: err.errors || null,
+  });
+});
+
+
 module.exports = router;
