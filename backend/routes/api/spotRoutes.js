@@ -28,14 +28,14 @@ router.get('/', async (req, res, next) => {
         'price',
         'createdAt',
         'updatedAt'
-      ]
+      ], raw:true
     });
 
     // Prepare the response data
     const spotData = await Promise.all(spots.map(async (spot) => {
       // Load the reviews for this spot
       const reviews = await spot.getReviews();
-      
+      spot.previewImage = 'string'
       // Calculate the average rating
       let avgRating = 0;
       if (reviews.length > 0) {
@@ -62,7 +62,7 @@ router.get('/', async (req, res, next) => {
     }));
 
     // Send the successful response with the spot data
-    return res.json(spotData);
+    return res.json({"Spots":spotData});
   } catch (error) {
     // Handle any errors that occur during the request
     return next(error);
