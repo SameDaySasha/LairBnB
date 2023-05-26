@@ -28,9 +28,9 @@ router.get('/', async (req, res, next) => {
         'price',
         'createdAt',
         'updatedAt'
-      ], raw:true
+      ],
     });
-
+// raw:true
     // Prepare the response data
     const spotData = await Promise.all(spots.map(async (spot) => {
       // Load the reviews for this spot
