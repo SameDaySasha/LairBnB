@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
           indexType: 'Spot',
         },
       });
-
+    
       Image.belongsTo(models.Review, {
         foreignKey: 'indexId',
         constraints: false,
