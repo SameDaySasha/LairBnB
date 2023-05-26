@@ -10,7 +10,7 @@ const models = require('../../db/models'); // adjust the path to point to your m
 
 router.get('/', async (req, res, next) => {
   try {
-    // Retrieve all spots from the database
+    // Retrieve all spots from the database along with their associated preview images
     const spots = await Spot.findAll({
       attributes: [
         'id',
@@ -25,33 +25,40 @@ router.get('/', async (req, res, next) => {
         'description',
         'price',
         'createdAt',
-        'updatedAt'
+        'updatedAt',
+      ],
+      include: [
+        {
+          model: Image,
+          attributes: ['previewImage'],
+          as: 'Images', // Assuming the association alias is 'Images'
+        },
       ],
     });
 
     // Prepare the response data
-    const spotData = [];
-    for (const spot of spots) {
-      const spotJSON = spot.toJSON();
-
-      // Load the images for this spot
-      const images = await Image.findAll({
-        where: {
-          spotId: spotJSON.id
-        }
-      });
-
-      // Check if any image has a previewImage
-      const previewImage = images.find((image) => image.previewImage);
-
-      spotData.push({
-        ...spotJSON,
-        previewImage: previewImage ? previewImage.previewImage : false,
-      });
-    }
+    const spotData = spots.map((spot) => {
+      const previewImage = spot.Images.length > 0 ? spot.Images[0].previewImage : false;
+      return {
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: spot.createdAt,
+        updatedAt: spot.updatedAt,
+        previewImage: previewImage,
+      };
+    });
 
     // Send the successful response with the spot data
-    return res.json({ "Spots": spotData });
+    return res.json({ Spots: spotData });
   } catch (error) {
     // Handle any errors that occur during the request
     return next(error);
