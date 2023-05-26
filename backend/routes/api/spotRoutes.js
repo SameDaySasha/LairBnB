@@ -53,7 +53,7 @@ router.get('/', async (req, res, next) => {
         price: spot.price,
         createdAt: spot.createdAt,
         updatedAt: spot.updatedAt,
-        previewImage: previewImage,
+        previewImage: previewImage.url,
       };
     });
 
