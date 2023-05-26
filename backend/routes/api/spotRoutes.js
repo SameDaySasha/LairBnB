@@ -31,14 +31,14 @@ router.get('/', async (req, res, next) => {
         {
           model: Image,
           attributes: ['previewImage'],
-          as: 'Images', // Assuming the association alias is 'Images'
+          as: 'SpotImages', // Update the association alias here
         },
       ],
     });
 
     // Prepare the response data
     const spotData = spots.map((spot) => {
-      const previewImage = spot.Images.length > 0 ? spot.Images[0].previewImage : false;
+      const previewImage = spot.SpotImages.length > 0 ? spot.SpotImages[0].previewImage : false;
       return {
         id: spot.id,
         ownerId: spot.ownerId,
@@ -64,6 +64,7 @@ router.get('/', async (req, res, next) => {
     return next(error);
   }
 });
+
 
 
 // Get all Spots owned by the Current User
