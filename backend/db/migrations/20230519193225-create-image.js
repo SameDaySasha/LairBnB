@@ -33,7 +33,7 @@ module.exports = {
         allowNull: true,
       },
       indexType: {
-        type: Sequelize.ENUM('spot', 'review'),
+        type: Sequelize.ENUM('Spot', 'Review'),
         allowNull: true,
       },
       createdAt: {
@@ -46,9 +46,9 @@ module.exports = {
       },
     },options);
 
-    // if (process.env.NODE_ENV === 'production') {
-    //   await queryInterface.addIndex('Images', ['indexId', 'indexType']);
-    // }
+    if (process.env.NODE_ENV === 'production') {
+      await queryInterface.addIndex('Images', ['indexId', 'indexType']);
+    }
   },
 
   async down(queryInterface, Sequelize) {
