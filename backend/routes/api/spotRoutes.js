@@ -10,7 +10,7 @@ const models = require('../../db/models'); // adjust the path to point to your m
 
 router.get('/', async (req, res, next) => {
   try {
-    // Retrieve all spots from the database along with their associated preview images
+    // Retrieve all spots from the database
     const spots = await Spot.findAll({
       attributes: [
         'id',
@@ -27,18 +27,18 @@ router.get('/', async (req, res, next) => {
         'createdAt',
         'updatedAt',
       ],
-      include: [
-        {
-          model: Image,
-          attributes: ['previewImage'],
-          as: 'SpotImages', // Update the association alias here
-        },
-      ],
     });
 
     // Prepare the response data
-    const spotData = spots.map((spot) => {
-      const previewImage = spot.SpotImages.length > 0 ? spot.SpotImages[0].previewImage : false;
+    const spotData = await Promise.all(spots.map(async (spot) => {
+      const previewImage = await Image.findOne({
+        where: {
+          indexType: 'Spot',
+          indexId: spot.id,
+          previewImage: true,
+        },
+      });
+
       return {
         id: spot.id,
         ownerId: spot.ownerId,
@@ -53,9 +53,9 @@ router.get('/', async (req, res, next) => {
         price: spot.price,
         createdAt: spot.createdAt,
         updatedAt: spot.updatedAt,
-        previewImage: previewImage,
+        previewImage: previewImage ? previewImage.url : null,
       };
-    });
+    }));
 
     // Send the successful response with the spot data
     return res.json({ Spots: spotData });
@@ -64,6 +64,7 @@ router.get('/', async (req, res, next) => {
     return next(error);
   }
 });
+
 
 
 
