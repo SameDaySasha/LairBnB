@@ -66,7 +66,7 @@ router.get('/', async (req, res, next) => {
 });
 
 // GET all reviews by a spot's ID
-router.get('/spots/:id/reviews', requireAuth, async (req, res, next) => {
+router.get('/:id/reviews', requireAuth, async (req, res, next) => {
   // Extracting the id from the request parameters and converting it to a number
   const spotId = parseInt(req.params.id, 10);
 
@@ -95,7 +95,7 @@ router.get('/spots/:id/reviews', requireAuth, async (req, res, next) => {
 });
 
 // POST /spots/:id/reviews - Create a new review for a spot specified by id
-router.post('/spots/:id/reviews', requireAuth, async (req, res, next) => {
+router.post('/:id/reviews', requireAuth, async (req, res, next) => {
   // Check if the user is logged in
   if (!req.user) {
       return res.status(401).json({ message: 'Authentication required' });
@@ -367,7 +367,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
 
 
 // GET /spots/:spotId/bookings - Get all bookings for a spot
-router.get('/spots/:spotId/bookings', requireAuth, async (req, res) => {
+router.get('/:spotId/bookings', requireAuth, async (req, res) => {
   // Extracting the spotId from the request parameters and converting it to a number
   const spotId = parseInt(req.params.spotId, 10);
 

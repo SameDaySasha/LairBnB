@@ -6,7 +6,7 @@ const router = express.Router();
 
 
 // Add an Image to a Review based on the Review's id
-router.post('/reviews/:reviewId/images', requireAuth, async (req, res, next) => {
+router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
     // Extract the reviewId from the request parameters and convert it to a number
     const reviewId = parseInt(req.params.reviewId, 10);
 
@@ -69,7 +69,7 @@ router.post('/reviews/:reviewId/images', requireAuth, async (req, res, next) => 
 });
 
 // DELETE /reviews/:id - Delete an existing review
-router.delete('/reviews/:id', requireAuth, async (req, res, next) => {
+router.delete('/:id', requireAuth, async (req, res, next) => {
     // Extract the review's ID from the URL parameters
     const reviewId = parseInt(req.params.id, 10);
 

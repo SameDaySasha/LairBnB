@@ -96,7 +96,7 @@ router.get('/', requireAuth, async (req, res) => {
 
 
 // GET /user/reviews - Get all reviews of the current user
-router.get('/user/reviews', requireAuth, async (req, res, next) => {
+router.get('/reviews', requireAuth, async (req, res, next) => {
   // Check if the user is logged in
   if (!req.user) {
     return res.status(401).json({
@@ -226,7 +226,7 @@ router.get('/spots', requireAuth, async (req, res) => {
 
 
 // GET /user/bookings - Get all bookings of the current user
-router.get('/user/bookings', requireAuth, async (req, res) => {
+router.get('/bookings', requireAuth, async (req, res) => {
   // Check if the user is logged in
   if (!req.user) {
     return res.status(401).json({
