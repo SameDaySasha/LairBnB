@@ -65,87 +65,86 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// GET all reviews by a spot's ID
+router.get('/spots/:id/reviews', requireAuth, async (req, res, next) => {
+  // Extracting the id from the request parameters and converting it to a number
+  const spotId = parseInt(req.params.id, 10);
 
+  // Trying to find a Spot with the extracted id
+  const spot = await Spot.findByPk(spotId);
 
+  // If the Spot does not exist, return a 404 error
+  if (!spot) {
+      return res.status(404).json({ message: "Spot couldn't be found" });
+  }
 
-// Get all Spots owned by the Current User
-router.get('/user', requireAuth, async (req, res) => {
+  // If the Spot does exist, find all Reviews that belong to this Spot.
+  const reviews = await Review.findAll({
+      where: { spotId },
+  });
+
+  // For each Review, fetch the associated User and ReviewImage data in separate queries.
+  // This might be less efficient but avoids eager loading.
+  for (let review of reviews) {
+      review.User = await User.findByPk(review.userId);
+      review.ReviewImages = await ReviewImage.findAll({ where: { reviewId: review.id } });
+  }
+
+  // Return the Reviews with their associated User and ReviewImage data.
+  res.json({ Reviews: reviews });
+});
+
+// POST /spots/:id/reviews - Create a new review for a spot specified by id
+router.post('/spots/:id/reviews', requireAuth, async (req, res, next) => {
   // Check if the user is logged in
   if (!req.user) {
-    return res.status(401).json({
-      message: 'Authentication required'
-    });
+      return res.status(401).json({ message: 'Authentication required' });
+  }
+
+  // Extract the spot id from the request parameters
+  const spotId = parseInt(req.params.id, 10);
+
+  // Extract the review and stars from the request body
+  const { review, stars } = req.body;
+
+  // Validate the review and stars
+  if (!review || typeof review !== 'string' || review.length === 0) {
+      return res.status(400).json({ message: 'Bad Request', errors: { review: 'Review text is required' } });
+  }
+  if (!stars || typeof stars !== 'number' || stars < 1 || stars > 5) {
+      return res.status(400).json({ message: 'Bad Request', errors: { stars: 'Stars must be an integer from 1 to 5' } });
   }
 
   try {
-    const userId = req.user.id;
-
-    const spots = await Spot.findAll({
-      where: { ownerId: userId },
-      attributes: [
-        'id',
-        'ownerId',
-        'address',
-        'city',
-        'state',
-        'country',
-        'lat',
-        'lng',
-        'name',
-        'description',
-        'price',
-        'createdAt',
-        'updatedAt'
-      ]
-    });
-
-    // Check if any spots were found
-    if (spots.length === 0) {
-      return res.status(404).json({
-        message: 'No spots found for this user'
-      });
-    }
-
-    // Prepare the response data
-    const spotData = await Promise.all(spots.map(async (spot) => {
-      // Load the reviews for this spot
-      const reviews = await spot.getReviews();
-      
-      // Calculate the average rating
-      let avgRating = 0;
-      if (reviews.length > 0) {
-        const totalStars = reviews.reduce((total, review) => total + review.stars, 0);
-        avgRating = totalStars / reviews.length;
+      // Check if the spot exists
+      const spot = await Spot.findByPk(spotId);
+      if (!spot) {
+          return res.status(404).json({ message: 'Spot couldn\'t be found' });
       }
 
-      return {
-        id: spot.id,
-        ownerId: spot.ownerId,
-        address: spot.address,
-        city: spot.city,
-        state: spot.state,
-        country: spot.country,
-        lat: spot.lat,
-        lng: spot.lng,
-        name: spot.name,
-        description: spot.description,
-        price: spot.price,
-        createdAt: spot.createdAt,
-        updatedAt: spot.updatedAt,
-        avgRating: parseFloat(avgRating || 0), // Default to 0 if avgRating is null
-      };
-    }));
+      // Check if the user already has a review for this spot
+      const existingReview = await Review.findOne({ where: { spotId, userId: req.user.id } });
+      if (existingReview) {
+          return res.status(403).json({ message: 'User already has a review for this spot' });
+      }
 
-    return res.status(200).json({
-      Spots: spotData
-    });
+      // Create the new review
+      const newReview = await Review.create({
+          userId: req.user.id,
+          spotId,
+          review,
+          stars
+      });
+
+      // Return the successful response
+      return res.status(201).json(newReview.get({ plain: true }));
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      message: 'Internal server error'
-    });
+      // Handle any errors that occur during the request
+      console.error(error);
+      return res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 
 

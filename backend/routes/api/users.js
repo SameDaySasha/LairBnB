@@ -2,9 +2,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const { User, Review, Spot, Booking } = require('../../db/models');
 const router = express.Router();
-
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
@@ -94,5 +93,176 @@ router.get('/', requireAuth, async (req, res) => {
     });
   }
 });
+
+
+// GET /user/reviews - Get all reviews of the current user
+router.get('/user/reviews', requireAuth, async (req, res, next) => {
+  // Check if the user is logged in
+  if (!req.user) {
+    return res.status(401).json({
+      message: 'Authentication required'
+    });
+  }
+
+  try {
+    // Find all reviews from the current user
+    const userReviews = await Review.findAll({
+      where: {
+        userId: req.user.id
+      }
+    });
+
+    // Prepare the response data
+    const reviewData = await Promise.all(userReviews.map(async (review) => {
+      // Load the User and Spot for this review
+      const user = await User.findOne({ where: { id: review.userId }});
+      const spot = await Spot.findOne({ where: { id: review.spotId }});
+
+      // Load the review images for this review
+      const reviewImages = await Image.findAll({
+        where: {
+          indexId: review.id,
+          indexType: 'Review'
+        }
+      });
+
+      return {
+        ...review.get({ plain: true }), // Convert Sequelize instance to plain object
+        User: user.get({ plain: true }), // Convert Sequelize instance to plain object
+        Spot: spot.get({ plain: true }), // Convert Sequelize instance to plain object
+        ReviewImages: reviewImages.map(image => image.get({ plain: true })) // Convert Sequelize instances to plain objects
+      };
+    }));
+
+    // Send the successful response with the review data
+    return res.status(200).json({ Reviews: reviewData });
+  } catch (error) {
+    // Handle any errors that occur during the request
+    console.error(error);
+    return res.status(500).json({
+      message: 'Internal server error'
+    });
+  }
+});
+
+// Get all Spots owned by the Current User
+router.get('/user', requireAuth, async (req, res) => {
+  // Check if the user is logged in
+  if (!req.user) {
+    return res.status(401).json({
+      message: 'Authentication required'
+    });
+  }
+
+  try {
+    const userId = req.user.id;
+
+    const spots = await Spot.findAll({
+      where: { ownerId: userId },
+      attributes: [
+        'id',
+        'ownerId',
+        'address',
+        'city',
+        'state',
+        'country',
+        'lat',
+        'lng',
+        'name',
+        'description',
+        'price',
+        'createdAt',
+        'updatedAt'
+      ]
+    });
+
+    // Check if any spots were found
+    if (spots.length === 0) {
+      return res.status(404).json({
+        message: 'No spots found for this user'
+      });
+    }
+
+    // Prepare the response data
+    const spotData = await Promise.all(spots.map(async (spot) => {
+      // Load the reviews for this spot
+      const reviews = await spot.getReviews();
+      
+      // Calculate the average rating
+      let avgRating = 0;
+      if (reviews.length > 0) {
+        const totalStars = reviews.reduce((total, review) => total + review.stars, 0);
+        avgRating = totalStars / reviews.length;
+      }
+
+      return {
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price,
+        createdAt: spot.createdAt,
+        updatedAt: spot.updatedAt,
+        avgRating: parseFloat(avgRating || 0), // Default to 0 if avgRating is null
+      };
+    }));
+
+    return res.status(200).json({
+      Spots: spotData
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: 'Internal server error'
+    });
+  }
+});
+
+
+// GET /user/bookings - Get all bookings of the current user
+router.get('/user/bookings', requireAuth, async (req, res) => {
+  // Check if the user is logged in
+  if (!req.user) {
+    return res.status(401).json({
+      message: 'Authentication required'
+    });
+  }
+
+  try {
+    // Find all bookings from the current user
+    const userBookings = await Booking.findAll({
+      where: {
+        userId: req.user.id
+      }
+    });
+
+    // Prepare the response data
+    const bookingData = await Promise.all(userBookings.map(async (booking) => {
+      // Load the Spot for this booking
+      const spot = await Spot.findOne({ where: { id: booking.spotId }});
+
+      return {
+        ...booking.get({ plain: true }), // Convert Sequelize instance to plain object
+        Spot: spot.get({ plain: true }) // Convert Sequelize instance to plain object
+      };
+    }));
+
+    // Send the successful response with the booking data
+    return res.status(200).json({ Bookings: bookingData });
+  } catch (error) {
+    // Handle any errors that occur during the request
+    console.error(error);
+    return res.status(500).json({
+      message: 'Internal server error'
+    });
+  }
+});
+
 
 module.exports = router;

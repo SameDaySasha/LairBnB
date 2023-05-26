@@ -3,47 +3,6 @@ const { requireAuth } = require('../../utils/auth');
 const { Booking, Spot } = require('../../db/models');
 const router = express.Router();
 
-// GET /user/bookings - Get all bookings of the current user
-router.get('/user/bookings', requireAuth, async (req, res) => {
-    // Check if the user is logged in
-    if (!req.user) {
-      return res.status(401).json({
-        message: 'Authentication required'
-      });
-    }
-  
-    try {
-      // Find all bookings from the current user
-      const userBookings = await Booking.findAll({
-        where: {
-          userId: req.user.id
-        }
-      });
-  
-      // Prepare the response data
-      const bookingData = await Promise.all(userBookings.map(async (booking) => {
-        // Load the Spot for this booking
-        const spot = await Spot.findOne({ where: { id: booking.spotId }});
-  
-        return {
-          ...booking.get({ plain: true }), // Convert Sequelize instance to plain object
-          Spot: spot.get({ plain: true }) // Convert Sequelize instance to plain object
-        };
-      }));
-  
-      // Send the successful response with the booking data
-      return res.status(200).json({ Bookings: bookingData });
-    } catch (error) {
-      // Handle any errors that occur during the request
-      console.error(error);
-      return res.status(500).json({
-        message: 'Internal server error'
-      });
-    }
-});
-
-
-
 
 // PUT /bookings/:id - Update and return an existing booking
 router.put('/:id', requireAuth, async (req, res) => {
