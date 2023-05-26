@@ -2,13 +2,11 @@ const express = require('express');
 const { Op, literal } = require('sequelize');
 const { check, validationResult } = require('express-validator');
 const router = express.Router();
-const { Spot, Review, sequelize } = require('../../db/models');
+const { Spot, Review, sequelize, Image } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const { handleValidationErrors } = require('../../utils/validation');
 const models = require('../../db/models'); // adjust the path to point to your models directory
 // GET /spots - Retrieve all spots with average rating
-
-// to do: Make sure to have a return object with array inside, right now it's just array
 
 router.get('/', async (req, res, next) => {
   try {
@@ -30,46 +28,36 @@ router.get('/', async (req, res, next) => {
         'updatedAt'
       ],
     });
-// raw:true
-    // Prepare the response data
-    const spotData = await Promise.all(spots.map(async (spot) => {
-      // Load the reviews for this spot
-      const reviews = await spot.getReviews();
-      // spot = spot.toJSON()
-      // spot.previewImage = 'string'
-      // Calculate the average rating
-      let avgRating = 0;
-      if (reviews.length > 0) {
-        const totalStars = reviews.reduce((total, review) => total + review.stars, 0);
-        avgRating = totalStars / reviews.length;
-      }
 
-      return {
-        id: spot.id,
-        ownerId: spot.ownerId,
-        address: spot.address,
-        city: spot.city,
-        state: spot.state,
-        country: spot.country,
-        lat: spot.lat,
-        lng: spot.lng,
-        name: spot.name,
-        description: spot.description,
-        price: spot.price,
-        createdAt: spot.createdAt,
-        updatedAt: spot.updatedAt,
-        previewImage: spot.previewImage,
-        avgRating: parseFloat(avgRating || 0), // Default to 0 if avgRating is null
-      };
-    }));
+    // Prepare the response data
+    const spotData = [];
+    for (const spot of spots) {
+      const spotJSON = spot.toJSON();
+
+      // Load the images for this spot
+      const images = await Image.findAll({
+        where: {
+          spotId: spotJSON.id
+        }
+      });
+
+      // Check if any image has a previewImage
+      const previewImage = images.find((image) => image.previewImage);
+
+      spotData.push({
+        ...spotJSON,
+        previewImage: previewImage ? previewImage.previewImage : false,
+      });
+    }
 
     // Send the successful response with the spot data
-    return res.json({"Spots":spotData});
+    return res.json({ "Spots": spotData });
   } catch (error) {
     // Handle any errors that occur during the request
     return next(error);
   }
 });
+
 
 // Get all Spots owned by the Current User
 router.get('/user', requireAuth, async (req, res) => {
