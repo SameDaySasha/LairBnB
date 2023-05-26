@@ -35,6 +35,7 @@ router.get('/', async (req, res, next) => {
     const spotData = await Promise.all(spots.map(async (spot) => {
       // Load the reviews for this spot
       const reviews = await spot.getReviews();
+      spot = spot.toJSON()
       spot.previewImage = 'string'
       // Calculate the average rating
       let avgRating = 0;
