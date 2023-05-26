@@ -46,9 +46,9 @@ module.exports = {
       },
     },options);
 
-    if (process.env.NODE_ENV === 'production') {
-      await queryInterface.addIndex('Images', ['indexId', 'indexType']);
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //   await queryInterface.addIndex('Images', ['indexId', 'indexType']);
+    // }
   },
 
   async down(queryInterface, Sequelize) {
