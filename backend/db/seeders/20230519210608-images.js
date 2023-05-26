@@ -12,7 +12,7 @@ module.exports = {
     await queryInterface.bulkInsert(options, [
       {
         id: 1,
-        url: '/Users/alexflorea/Desktop/Classwork/Project_Alpha/LairBnB/backend/Images/BeachCave.png',
+        url: 'backend/Images/LavaCave.png',
         previewImage: true,
         type: 'png',
         indexId: 1,
@@ -22,8 +22,8 @@ module.exports = {
       },
       {
         id: 2,
-        url: '/Users/alexflorea/Desktop/Classwork/Project_Alpha/LairBnB/backend/Images/celestialCave.png',
-        previewImage: false,
+        url: 'backend/Images/smokeyCave.png',
+        previewImage: true,
         type: 'png',
         indexId: 2,
         indexType: 'Spot',
@@ -32,7 +32,7 @@ module.exports = {
       },
       {
         id: 3,
-        url: '/Users/alexflorea/Desktop/Classwork/Project_Alpha/LairBnB/backend/Images/DruidCove.png',
+        url: 'backend/Images/celestialCave.png',
         previewImage: true,
         type: 'png',
         indexId: 3,
@@ -42,8 +42,8 @@ module.exports = {
       },
       {
         id: 4,
-        url: '/images/FeyLair.png',
-        previewImage: false,
+        url: 'backend/Images/frostCave.png',
+        previewImage: true,
         type: 'png',
         indexId: 4,
         indexType: 'Spot',
@@ -52,7 +52,7 @@ module.exports = {
       },
       {
         id: 5,
-        url: 'https://example.com/image5.png',
+        url: 'backend/Images/HalflingCave.png',
         previewImage: true,
         type: 'png',
         indexId: 5,
@@ -63,7 +63,7 @@ module.exports = {
       {
         id: 6,
         url: 'https://example.com/image6.png',
-        previewImage: true,
+        previewImage: false,
         type: 'png',
         indexId: 6,
         indexType: 'Spot',
@@ -73,7 +73,7 @@ module.exports = {
       {
         id: 7,
         url: 'https://example.com/image7.png',
-        previewImage: true,
+        previewImage: false,
         type: 'png',
         indexId: 7,
         indexType: 'Spot',
@@ -83,7 +83,7 @@ module.exports = {
       {
         id: 8,
         url: 'https://example.com/image8.png',
-        previewImage: true,
+        previewImage: false,
         type: 'png',
         indexId: 8,
         indexType: 'Spot',
@@ -93,7 +93,7 @@ module.exports = {
       {
         id: 9,
         url: 'https://cdn.mage.space/generate/79b94f6f3dc94670a5998d78d58eae7a.png',
-        previewImage: true,
+        previewImage: false,
         type: 'png',
         indexId: 9,
         indexType: 'Spot',
@@ -103,7 +103,7 @@ module.exports = {
       {
         id: 10,
         url: 'https://cdn.mage.space/generate/ae20eeaef2c4467ca9ff219f9e6677f4.png',
-        previewImage: true,
+        previewImage: false,
         type: 'png',
         indexId: 10,
         indexType: 'Spot',
