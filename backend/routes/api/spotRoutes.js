@@ -58,6 +58,7 @@ router.get('/', async (req, res, next) => {
         price: spot.price,
         createdAt: spot.createdAt,
         updatedAt: spot.updatedAt,
+        previewImage: spot.previewImage,
         avgRating: parseFloat(avgRating || 0), // Default to 0 if avgRating is null
       };
     }));
