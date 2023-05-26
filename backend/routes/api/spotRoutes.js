@@ -4,6 +4,7 @@ const { check, validationResult } = require('express-validator');
 const router = express.Router();
 const { Spot, Review, sequelize } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
+const { handleValidationErrors } = require('../../utils/validation');
 const models = require('../../db/models'); // adjust the path to point to your models directory
 // GET /spots - Retrieve all spots with average rating
 
@@ -152,27 +153,21 @@ router.get('/user', requireAuth, async (req, res) => {
 // POST /spots - Create a new spot
 router.post('/', requireAuth, [
   // Validate input data
-  check('address').isLength({ min: 1 }).withMessage('Address is required'),
+  check('address').isLength({ min: 1 }).withMessage('Street address is required'),
   check('city').isLength({ min: 1 }).withMessage('City is required'),
   check('state').isLength({ min: 1 }).withMessage('State is required'),
   check('country').isLength({ min: 1 }).withMessage('Country is required'),
-  check('lat').isNumeric().withMessage('Latitude must be a number'),
-  check('lng').isNumeric().withMessage('Longitude must be a number'),
-  check('name').isLength({ min: 1 }).withMessage('Name is required'),
+  check('lat').isNumeric().withMessage('Latitude is not valid'),
+  check('lng').isNumeric().withMessage('Longitude is not valid'),
+  check('name').isLength({ min: 1, max: 50 }).withMessage('Name must be less than 50 characters'),
   check('description').isLength({ min: 1 }).withMessage('Description is required'),
-  check('price').isNumeric().withMessage('Price must be a number'),
-], async (req, res) => {
+  check('price').isNumeric().withMessage('Price per day is required'),
+], handleValidationErrors, async (req, res) => {
   // Check if the user is logged in
   if (!req.user) {
     return res.status(401).json({
       message: 'Authentication required'
     });
-  }
-
-  // Check for validation errors
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
   }
 
   try {
@@ -215,6 +210,7 @@ router.post('/', requireAuth, [
     });
   }
 });
+
 
 // PUT /spots/:id - Edit a spot
 router.get('/:id', async (req, res) => {
