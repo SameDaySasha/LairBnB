@@ -30,7 +30,7 @@ router.get('/', async (req, res, next) => {
       include: [
         {
           model: Image,
-          attributes: ['previewImage'],
+          attributes: ['url'],
           as: 'SpotImages', // Update the association alias here
         },
       ],
