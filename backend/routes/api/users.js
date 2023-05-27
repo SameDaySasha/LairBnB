@@ -172,7 +172,8 @@ router.get('/spots', requireAuth, async (req, res) => {
         'description',
         'price',
         'createdAt',
-        'updatedAt'
+        'updatedAt',
+        'previewImage' // Add 'previewImage' to the attributes
       ]
     });
 
@@ -210,6 +211,7 @@ router.get('/spots', requireAuth, async (req, res) => {
         createdAt: spot.createdAt,
         updatedAt: spot.updatedAt,
         avgRating: parseFloat(avgRating || 0), // Default to 0 if avgRating is null
+        previewImage: spot.previewImage, // Directly use the 'previewImage' attribute
       };
     }));
 
