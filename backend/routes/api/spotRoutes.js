@@ -151,67 +151,6 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-
-
-
-
-// router.get('/', async (req, res, next) => {
-//   try {
-//     // Retrieve all spots from the database
-//     const spots = await Spot.findAll({
-//       attributes: [
-//         'id',
-//         'ownerId',
-//         'address',
-//         'city',
-//         'state',
-//         'country',
-//         'lat',
-//         'lng',
-//         'name',
-//         'description',
-//         'price',
-//         'createdAt',
-//         'updatedAt',
-//       ],
-//     });
-
-//     // Prepare the response data
-//     const spotData = await Promise.all(spots.map(async (spot) => {
-//       const previewImage = await Image.findOne({
-//         where: {
-//           indexType: 'Spot',
-//           indexId: spot.id,
-//           previewImage: true,
-//         },
-//       });
-
-//       return {
-//         id: spot.id,
-//         ownerId: spot.ownerId,
-//         address: spot.address,
-//         city: spot.city,
-//         state: spot.state,
-//         country: spot.country,
-//         lat: spot.lat,
-//         lng: spot.lng,
-//         name: spot.name,
-//         description: spot.description,
-//         price: spot.price,
-//         createdAt: spot.createdAt,
-//         updatedAt: spot.updatedAt,
-//         previewImage: previewImage ? previewImage.url : null,
-//       };
-//     }));
-
-//     // Send the successful response with the spot data
-//     return res.json({ Spots: spotData });
-//   } catch (error) {
-//     // Handle any errors that occur during the request
-//     return next(error);
-//   }
-// });
-
 // GET all reviews by a spot's ID
 router.get('/:id/reviews', requireAuth, async (req, res, next) => {
   // Extracting the id from the request parameters and converting it to a number
@@ -675,6 +614,72 @@ router.post('/:spotid/bookings', requireAuth, async (req, res) => {
   // Send the successful response with the new booking data
   return res.status(200).json(newBooking);
 });
+
+
+
+
+
+// router.get('/', async (req, res, next) => {
+//   try {
+//     // Retrieve all spots from the database
+//     const spots = await Spot.findAll({
+//       attributes: [
+//         'id',
+//         'ownerId',
+//         'address',
+//         'city',
+//         'state',
+//         'country',
+//         'lat',
+//         'lng',
+//         'name',
+//         'description',
+//         'price',
+//         'createdAt',
+//         'updatedAt',
+//       ],
+//     });
+
+//     // Prepare the response data
+//     const spotData = await Promise.all(spots.map(async (spot) => {
+//       const previewImage = await Image.findOne({
+//         where: {
+//           indexType: 'Spot',
+//           indexId: spot.id,
+//           previewImage: true,
+//         },
+//       });
+
+//       return {
+//         id: spot.id,
+//         ownerId: spot.ownerId,
+//         address: spot.address,
+//         city: spot.city,
+//         state: spot.state,
+//         country: spot.country,
+//         lat: spot.lat,
+//         lng: spot.lng,
+//         name: spot.name,
+//         description: spot.description,
+//         price: spot.price,
+//         createdAt: spot.createdAt,
+//         updatedAt: spot.updatedAt,
+//         previewImage: previewImage ? previewImage.url : null,
+//       };
+//     }));
+
+//     // Send the successful response with the spot data
+//     return res.json({ Spots: spotData });
+//   } catch (error) {
+//     // Handle any errors that occur during the request
+//     return next(error);
+//   }
+// });
+
+
+
+
+
 
 
 // GET /spots - Return spots filtered by query parameters
