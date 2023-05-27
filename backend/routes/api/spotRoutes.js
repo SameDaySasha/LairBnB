@@ -433,9 +433,17 @@ console.log(preview, 'this is the first log of the preview')
 
   // If the image is a preview image, update the Spot's previewImage field
   if (preview) {
-    console.log(preview, ':  preview is true ')
-    await spot.update({ previewImage: url });
-  }
+    try {
+        console.log(`Updating spot ${spot.id} preview image with url: ${url}`);
+        await spot.update({ previewImage: url });
+        console.log(`Updated spot preview image: ${spot.previewImage}`);
+    } catch (error) {
+        console.error('Error updating spot preview image:', error);
+        return res.status(500).json({ message: "Error updating Spot's preview image" });
+    }
+}
+
+
 
   return res.status(200).json({ id: newImage.id, url: newImage.url, preview: newImage.preview });
 });
