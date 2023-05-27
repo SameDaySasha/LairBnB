@@ -479,6 +479,7 @@ router.post('/:id/images', requireAuth, async (req, res) => {
     return res.status(200).json({
       id: image.id,
       url: image.url,
+      type: req.body.type,
       preview: image.preview,
     });
   } catch (error) {
