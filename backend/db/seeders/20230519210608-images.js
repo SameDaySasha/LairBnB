@@ -11,17 +11,15 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(options, [
       {
-        id: 1,
         url: 'backend/Images/LavaCave.png',
         previewImage: true,
         // type: 'png',
         indexId: 1,
         indexType: 'Spot',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+       
       },
       {
-        id: 2,
+       
         url: 'backend/Images/smokeyCave.png',
         previewImage: true,
         // type: 'png',
@@ -30,7 +28,7 @@ module.exports = {
         
       },
       {
-        id: 3,
+   
         url: 'backend/Images/celestialCave.png',
         previewImage: true,
         // type: 'png',
