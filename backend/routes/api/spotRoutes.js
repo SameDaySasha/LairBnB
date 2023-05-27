@@ -432,7 +432,7 @@ router.post('/:id/images', requireAuth, [
   const newImage = await Image.create({ url, preview, indexId: id, indexType: 'Spot' });
 
   // If the image is a preview image, update the Spot's previewImage field
-  if (preview) {
+  if (preview === 'true') {
     await spot.update({ previewImage: url });
   }
 
