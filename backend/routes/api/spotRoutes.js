@@ -408,86 +408,86 @@ router.put('/:id', requireAuth, async (req, res) => {
 
 
 // POST /spots/:id/images - Add an Image to a Spot based on the Spot's id
-router.post('/:id/images', requireAuth, [
-  check('url')
-    .exists({ checkFalsy: true })
-    .withMessage('Please provide a URL for the image'),
-  check('preview')
-    .isBoolean()
-    .withMessage('Please indicate if the image is a preview'),
-], handleValidationErrors, async (req, res) => {
-  const { id } = req.params;
-  const { url, preview } = req.body;
+// router.post('/:id/images', requireAuth, [
+//   check('url')
+//     .exists({ checkFalsy: true })
+//     .withMessage('Please provide a URL for the image'),
+//   check('preview')
+//     .isBoolean()
+//     .withMessage('Please indicate if the image is a preview'),
+// ], handleValidationErrors, async (req, res) => {
+//   const { id } = req.params;
+//   const { url, preview } = req.body;
 
-  const spot = await Spot.findByPk(id);
+//   const spot = await Spot.findByPk(id);
 
-  if (!spot) {
-    return res.status(404).json({ message: "Spot couldn't be found" });
-  }
-
-  if (spot.ownerId !== req.user.id) {
-    return res.status(403).json({ message: "Unauthorized" });
-  }
-
-  const newImage = await Image.create({ url, preview, spotId: id });
-
-  res.status(200).json({ id: newImage.id, url: newImage.url, preview: newImage.preview });
-});
-
-
-
-
-// router.post('/:id/images', requireAuth, async (req, res) => {
-//   // Check if the user is logged in
-//   if (!req.user) {
-//     return res.status(401).json({
-//       message: 'Authentication required'
-//     });
+//   if (!spot) {
+//     return res.status(404).json({ message: "Spot couldn't be found" });
 //   }
 
-//   try {
-//     const spotId = req.params.id;
-//     const userId = req.user.id;
-//     const { url, preview } = req.body;
-
-//     // Retrieve the spot with the provided ID
-//     const spot = await Spot.findByPk(spotId);
-
-//     // If the spot doesn't exist, return an error
-//     if (!spot) {
-//       return res.status(404).json({
-//         message: 'Spot couldn\'t be found',
-//       });
-//     }
-
-//     // If the spot's owner isn't the current user, return an error
-//     if (spot.ownerId !== userId) {
-//       return res.status(403).json({
-//         message: 'Unauthorized',
-//       });
-//     }
-
-//     // Create the new Image
-//     const image = await Image.create({
-//       url,
-//       preview,
-//       indexId: spotId,
-//       indexType: 'Spot',
-//     });
-
-//     // Respond with the newly created image
-//     return res.status(200).json({
-//       id: image.id,
-//       url: image.url,
-//       preview: image.preview,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({
-//       message: 'Internal server error'
-//     });
+//   if (spot.ownerId !== req.user.id) {
+//     return res.status(403).json({ message: "Unauthorized" });
 //   }
+
+//   const newImage = await Image.create({ url, preview, spotId: id });
+
+//   res.status(200).json({ id: newImage.id, url: newImage.url, preview: newImage.preview });
 // });
+
+
+
+
+router.post('/:id/images', requireAuth, async (req, res) => {
+  // Check if the user is logged in
+  if (!req.user) {
+    return res.status(401).json({
+      message: 'Authentication required'
+    });
+  }
+
+  try {
+    const spotId = req.params.id;
+    const userId = req.user.id;
+    const { url, preview } = req.body;
+
+    // Retrieve the spot with the provided ID
+    const spot = await Spot.findByPk(spotId);
+
+    // If the spot doesn't exist, return an error
+    if (!spot) {
+      return res.status(404).json({
+        message: 'Spot couldn\'t be found',
+      });
+    }
+
+    // If the spot's owner isn't the current user, return an error
+    if (spot.ownerId !== userId) {
+      return res.status(403).json({
+        message: 'Unauthorized',
+      });
+    }
+
+    // Create the new Image
+    const image = await Image.create({
+      url,
+      preview,
+      indexId: spotId,
+      indexType: 'Spot',
+    });
+
+    // Respond with the newly created image
+    return res.status(200).json({
+      id: image.id,
+      url: image.url,
+      preview: image.preview,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: 'Internal server error'
+    });
+  }
+});
 
 
 // DELETE /spots/:id - Delete a Spot
