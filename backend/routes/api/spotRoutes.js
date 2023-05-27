@@ -448,7 +448,7 @@ router.post('/:id/images', requireAuth, async (req, res) => {
   try {
     const spotId = req.params.id;
     const userId = req.user.id;
-    const { url, preview } = req.body;
+    const { url, preview, type } = req.body;  // Include type here
 
     // Retrieve the spot with the provided ID
     const spot = await Spot.findByPk(spotId);
@@ -470,7 +470,8 @@ router.post('/:id/images', requireAuth, async (req, res) => {
     // Create the new Image
     const image = await Image.create({
       url,
-      preview,
+      previewImage: preview,  // Here, use previewImage, as per  model
+      type,  // Include type here
       indexId: spotId,
       indexType: 'Spot',
     });
@@ -479,8 +480,8 @@ router.post('/:id/images', requireAuth, async (req, res) => {
     return res.status(200).json({
       id: image.id,
       url: image.url,
-      type: req.body.type,
-      preview: image.preview,
+      type: image.type,  // Include type here
+      preview: image.previewImage,  // Here, use previewImage, as per  model
     });
   } catch (error) {
     console.error(error);
@@ -489,7 +490,6 @@ router.post('/:id/images', requireAuth, async (req, res) => {
     });
   }
 });
-
 
 // DELETE /spots/:id - Delete a Spot
 router.delete('/:id', requireAuth, async (req, res) => {
