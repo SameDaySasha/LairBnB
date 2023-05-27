@@ -357,7 +357,7 @@ router.post('/', requireAuth, [
 });
 
 
-// PUT /spots/:id - Edit a spot
+// GET /spots/:id - Get a spot by ID
 router.get('/:id', async (req, res) => {
   const spotId = req.params.id;
   try {
@@ -410,6 +410,62 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// PUT /spots/:id - Edit a spot
+router.put('/:id', requireAuth, async (req, res) => {
+  try {
+    const spotId = req.params.id;
+    const userId = req.user.id;
+
+    // Find the spot to be updated
+    const spot = await Spot.findOne({
+      where: {
+        id: spotId,
+        ownerId: userId,
+      },
+    });
+
+    // Check if the spot exists and belongs to the current user
+    if (!spot) {
+      return res.status(404).json({
+        message: "Spot couldn't be found",
+      });
+    }
+
+    // Update the spot with the new data
+    await spot.update({
+      address: req.body.address,
+      city: req.body.city,
+      state: req.body.state,
+      country: req.body.country,
+      lat: req.body.lat,
+      lng: req.body.lng,
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+    });
+
+    // Fetch the updated spot from the database
+    const updatedSpot = await Spot.findOne({
+      where: {
+        id: spotId,
+      },
+    });
+
+    // Send the successful response with the updated spot data
+    return res.status(200).json(updatedSpot);
+  } catch (error) {
+    // Handle any errors that occur during the request
+    console.error(error);
+    return res.status(500).json({
+      message: 'Internal server error',
+    });
+  }
+});
+
+
+
+
 
 
 // POST /spots/:id/images - Add an Image to a Spot based on the Spot's id
