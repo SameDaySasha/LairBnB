@@ -418,7 +418,7 @@ router.post('/:id/images', requireAuth, [
 ], handleValidationErrors, async (req, res) => {
   const { id } = req.params;
   const { url, preview } = req.body;
-
+console.log(preview, 'this is the first log of the preview')
   const spot = await Spot.findByPk(id);
 
   if (!spot) {
@@ -432,7 +432,7 @@ router.post('/:id/images', requireAuth, [
   const newImage = await Image.create({ url, preview, indexId: id, indexType: 'Spot' });
 
   // If the image is a preview image, update the Spot's previewImage field
-  if (preview === 'true') {
+  if (preview) {
     console.log(preview, ':  preview is true ')
     await spot.update({ previewImage: url });
   }
