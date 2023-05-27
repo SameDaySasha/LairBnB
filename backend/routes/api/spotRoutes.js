@@ -425,7 +425,7 @@ router.post('/:id/images', requireAuth, [
     return res.status(404).json({ message: "Spot couldn't be found" });
   }
 
-  if (spot.userId !== req.user.id) {
+  if (spot.ownerId !== req.user.id) {
     return res.status(403).json({ message: "Unauthorized" });
   }
 
