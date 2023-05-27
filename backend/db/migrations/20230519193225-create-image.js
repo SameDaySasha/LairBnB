@@ -24,10 +24,6 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
-      type: {
-        type: Sequelize.ENUM('jpg', 'jpeg', 'png'),
-        allowNull: false,
-      },
       indexId: {
         type: Sequelize.INTEGER,
         allowNull: true,

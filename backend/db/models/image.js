@@ -51,19 +51,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: false,
       },
-      type: {
-        type: DataTypes.ENUM('jpg', 'jpeg', 'png'),
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'Image type is required.',
-          },
-          isIn: {
-            args: [['jpg', 'jpeg', 'png']],
-            msg: 'Image type must be either "jpg", "jpeg", or "png".',
-          },
-        },
-      },
+    
       indexId: {
         type: DataTypes.INTEGER,
         allowNull: true,
