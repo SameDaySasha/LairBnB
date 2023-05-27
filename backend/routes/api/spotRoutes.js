@@ -433,6 +433,7 @@ router.post('/:id/images', requireAuth, [
 
   // If the image is a preview image, update the Spot's previewImage field
   if (preview === 'true') {
+    console.log(preview, ':  preview is true ')
     await spot.update({ previewImage: url });
   }
 
