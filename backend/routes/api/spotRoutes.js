@@ -415,7 +415,7 @@ router.post('/:id/images', requireAuth, [
   check('preview')
     .isBoolean()
     .withMessage('Please indicate if the image is a preview'),
-], handleValidationErrors, asyncHandler(async (req, res) => {
+], handleValidationErrors, async (req, res) => {
   const { id } = req.params;
   const { url, preview } = req.body;
 
@@ -432,7 +432,7 @@ router.post('/:id/images', requireAuth, [
   const newImage = await Image.create({ url, preview, spotId: id });
 
   res.status(200).json({ id: newImage.id, url: newImage.url, preview: newImage.preview });
-}));
+});
 
 
 
