@@ -429,7 +429,8 @@ console.log(preview, 'this is the first log of the preview')
     return res.status(403).json({ message: "Unauthorized" });
   }
 
-  const newImage = await Image.create({ url, preview, indexId: id, indexType: 'Spot' });
+  const newImage = await Image.create({ url, previewImage: preview, indexId: id, indexType: 'Spot' });
+
 
   // If the image is a preview image, update the Spot's previewImage field
   if (preview) {
@@ -445,7 +446,8 @@ console.log(preview, 'this is the first log of the preview')
 
 
 
-  return res.status(200).json({ id: newImage.id, url: newImage.url, preview: newImage.preview });
+return res.status(200).json({ id: newImage.id, url: newImage.url, preview: newImage.previewImage });
+
 });
 
 
