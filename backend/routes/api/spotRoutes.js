@@ -429,7 +429,12 @@ router.post('/:id/images', requireAuth, [
     return res.status(403).json({ message: "Unauthorized" });
   }
 
-  const newImage = await Image.create({ url, preview, spotId: id, indexType: 'Spot' });
+  const newImage = await Image.create({ url, preview, indexId: id, indexType: 'Spot' });
+
+  // If the image is a preview image, update the Spot's previewImage field
+  if (preview) {
+    await spot.update({ previewImage: url });
+  }
 
   return res.status(200).json({ id: newImage.id, url: newImage.url, preview: newImage.preview });
 });
