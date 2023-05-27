@@ -28,4 +28,16 @@ body: JSON.stringify({
 .then(res => res.json()).then(data => console.log(data));
 
 
+// login user fetch request
+fetch('/api/session', 
+{ method: 'POST', 
+headers: { "Content-Type": "application/json", 
+"XSRF-TOKEN": "MWMEA2oH-uGsK83xcHjWFh85vrsePqI-Wzy0"}, 
+body: JSON.stringify({
+ credential: 'FakeUser1',
+ password: 'password1' 
+}) })
+.then(res => res.json()).then(data => console.log(data));
 
+// logout 
+fetch('/api/session', { method: 'DELETE', headers: { "Content-Type": "application/json", "XSRF-TOKEN":  "MWMEA2oH-uGsK83xcHjWFh85vrsePqI-Wzy0"} }).then(res => res.json()).then(data => console.log(data)); 

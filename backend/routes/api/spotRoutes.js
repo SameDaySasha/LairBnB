@@ -431,7 +431,7 @@ router.post('/:id/images', requireAuth, [
 
   const newImage = await Image.create({ url, preview, spotId: id, indexType: 'Spot' });
 
-  res.status(200).json({ id: newImage.id, url: newImage.url, preview: newImage.preview });
+  return res.status(200).json({ id: newImage.id, url: newImage.url, preview: newImage.preview });
 });
 
 
