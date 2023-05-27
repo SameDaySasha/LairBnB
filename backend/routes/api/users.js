@@ -145,7 +145,7 @@ router.get('/reviews', requireAuth, async (req, res, next) => {
   }
 });
 
-// Get all Spots owned by the Current User
+// Get all Spots owned by the Current User // probably need to redo this one  
 router.get('/spots', requireAuth, async (req, res) => {
   // Check if the user is logged in
   if (!req.user) {

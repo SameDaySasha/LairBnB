@@ -6,12 +6,80 @@ const { Spot, Review, sequelize, Image } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const { handleValidationErrors } = require('../../utils/validation');
 const models = require('../../db/models'); // adjust the path to point to your models directory
-// GET /spots - Retrieve all spots with average rating
 
+
+// frankestein mosnter of the two comented out routes smushed together 
 router.get('/', async (req, res, next) => {
   try {
-    // Retrieve all spots from the database
+    const { page = 1, size = 20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+
+    // Validate query parameters
+    const errors = {};
+
+    // Validate page
+    if (page < 1 || page > 10) {
+      errors.page = 'Page must be between 1 and 10';
+    }
+
+    // Validate size
+    if (size < 1 || size > 20) {
+      errors.size = 'Size must be between 1 and 20';
+    }
+
+    // Validate latitude and longitude
+    if (minLat && isNaN(minLat)) {
+      errors.minLat = 'Minimum latitude is invalid';
+    }
+    if (maxLat && isNaN(maxLat)) {
+      errors.maxLat = 'Maximum latitude is invalid';
+    }
+    if (minLng && isNaN(minLng)) {
+      errors.minLng = 'Minimum longitude is invalid';
+    }
+    if (maxLng && isNaN(maxLng)) {
+      errors.maxLng = 'Maximum longitude is invalid';
+    }
+
+    // Validate price
+    if (minPrice && isNaN(minPrice)) {
+      errors.minPrice = 'Minimum price is invalid';
+    }
+    if (maxPrice && isNaN(maxPrice)) {
+      errors.maxPrice = 'Maximum price is invalid';
+    }
+
+    // If there are validation errors, return a 400 Bad Request response
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({
+        message: 'Bad Request',
+        errors: errors
+      });
+    }
+
+    // Set up filter object based on query parameters
+    const filter = {};
+
+    if (minLat && maxLat) {
+      filter.lat = {
+        [Op.between]: [minLat, maxLat]
+      };
+    }
+
+    if (minLng && maxLng) {
+      filter.lng = {
+        [Op.between]: [minLng, maxLng]
+      };
+    }
+
+    if (minPrice && maxPrice) {
+      filter.price = {
+        [Op.between]: [minPrice, maxPrice]
+      };
+    }
+
+    // Fetch spots based on the filter
     const spots = await Spot.findAll({
+      where: filter,
       attributes: [
         'id',
         'ownerId',
@@ -39,6 +107,16 @@ router.get('/', async (req, res, next) => {
         },
       });
 
+      // Load the reviews for this spot
+      const reviews = await spot.getReviews();
+      
+      // Calculate the average rating
+      let avgRating = 0;
+      if (reviews.length > 0) {
+        const totalStars = reviews.reduce((total, review) => total + review.stars, 0);
+        avgRating = totalStars / reviews.length;
+      }
+
       return {
         id: spot.id,
         ownerId: spot.ownerId,
@@ -54,16 +132,85 @@ router.get('/', async (req, res, next) => {
         createdAt: spot.createdAt,
         updatedAt: spot.updatedAt,
         previewImage: previewImage ? previewImage.url : null,
+        avgRating: parseFloat(avgRating || 0), // Default to 0 if avgRating is null
       };
     }));
 
     // Send the successful response with the spot data
-    return res.json({ Spots: spotData });
+    return res.status(200).json({
+      Spots: spotData,
+      page: parseInt(page, 10),
+      size: parseInt(size, 10),
+    });
   } catch (error) {
     // Handle any errors that occur during the request
-    return next(error);
+    console.error(error);
+    return res.status(500).json({
+      message: 'Internal server error'
+    });
   }
 });
+
+
+
+
+
+// router.get('/', async (req, res, next) => {
+//   try {
+//     // Retrieve all spots from the database
+//     const spots = await Spot.findAll({
+//       attributes: [
+//         'id',
+//         'ownerId',
+//         'address',
+//         'city',
+//         'state',
+//         'country',
+//         'lat',
+//         'lng',
+//         'name',
+//         'description',
+//         'price',
+//         'createdAt',
+//         'updatedAt',
+//       ],
+//     });
+
+//     // Prepare the response data
+//     const spotData = await Promise.all(spots.map(async (spot) => {
+//       const previewImage = await Image.findOne({
+//         where: {
+//           indexType: 'Spot',
+//           indexId: spot.id,
+//           previewImage: true,
+//         },
+//       });
+
+//       return {
+//         id: spot.id,
+//         ownerId: spot.ownerId,
+//         address: spot.address,
+//         city: spot.city,
+//         state: spot.state,
+//         country: spot.country,
+//         lat: spot.lat,
+//         lng: spot.lng,
+//         name: spot.name,
+//         description: spot.description,
+//         price: spot.price,
+//         createdAt: spot.createdAt,
+//         updatedAt: spot.updatedAt,
+//         previewImage: previewImage ? previewImage.url : null,
+//       };
+//     }));
+
+//     // Send the successful response with the spot data
+//     return res.json({ Spots: spotData });
+//   } catch (error) {
+//     // Handle any errors that occur during the request
+//     return next(error);
+//   }
+// });
 
 // GET all reviews by a spot's ID
 router.get('/:id/reviews', requireAuth, async (req, res, next) => {
@@ -475,98 +622,98 @@ router.post('/:spotid/bookings', requireAuth, async (req, res) => {
 
 
 // GET /spots - Return spots filtered by query parameters
-router.get('/', async (req, res) => {
-  const { page = 1, size = 20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+// router.get('/', async (req, res) => {
+//   const { page = 1, size = 20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
 
-  // Validate query parameters
-  const errors = {};
+//   // Validate query parameters
+//   const errors = {};
 
-  // Validate page
-  if (page < 1 || page > 10) {
-    errors.page = 'Page must be between 1 and 10';
-  }
+//   // Validate page
+//   if (page < 1 || page > 10) {
+//     errors.page = 'Page must be between 1 and 10';
+//   }
 
-  // Validate size
-  if (size < 1 || size > 20) {
-    errors.size = 'Size must be between 1 and 20';
-  }
+//   // Validate size
+//   if (size < 1 || size > 20) {
+//     errors.size = 'Size must be between 1 and 20';
+//   }
 
-  // Validate latitude and longitude
-  if (minLat && isNaN(minLat)) {
-    errors.minLat = 'Minimum latitude is invalid';
-  }
-  if (maxLat && isNaN(maxLat)) {
-    errors.maxLat = 'Maximum latitude is invalid';
-  }
-  if (minLng && isNaN(minLng)) {
-    errors.minLng = 'Minimum longitude is invalid';
-  }
-  if (maxLng && isNaN(maxLng)) {
-    errors.maxLng = 'Maximum longitude is invalid';
-  }
+//   // Validate latitude and longitude
+//   if (minLat && isNaN(minLat)) {
+//     errors.minLat = 'Minimum latitude is invalid';
+//   }
+//   if (maxLat && isNaN(maxLat)) {
+//     errors.maxLat = 'Maximum latitude is invalid';
+//   }
+//   if (minLng && isNaN(minLng)) {
+//     errors.minLng = 'Minimum longitude is invalid';
+//   }
+//   if (maxLng && isNaN(maxLng)) {
+//     errors.maxLng = 'Maximum longitude is invalid';
+//   }
 
-  // Validate price
-  if (minPrice && isNaN(minPrice)) {
-    errors.minPrice = 'Minimum price is invalid';
-  }
-  if (maxPrice && isNaN(maxPrice)) {
-    errors.maxPrice = 'Maximum price is invalid';
-  }
+//   // Validate price
+//   if (minPrice && isNaN(minPrice)) {
+//     errors.minPrice = 'Minimum price is invalid';
+//   }
+//   if (maxPrice && isNaN(maxPrice)) {
+//     errors.maxPrice = 'Maximum price is invalid';
+//   }
 
-  // If there are validation errors, return a 400 Bad Request response
-  if (Object.keys(errors).length > 0) {
-    return res.status(400).json({
-      message: 'Bad Request',
-      errors: errors
-    });
-  }
+//   // If there are validation errors, return a 400 Bad Request response
+//   if (Object.keys(errors).length > 0) {
+//     return res.status(400).json({
+//       message: 'Bad Request',
+//       errors: errors
+//     });
+//   }
 
-  try {
-    // Set up filter object based on query parameters
-    const filter = {};
+//   try {
+//     // Set up filter object based on query parameters
+//     const filter = {};
 
-    if (minLat && maxLat) {
-      filter.lat = {
-        [Op.between]: [minLat, maxLat]
-      };
-    }
+//     if (minLat && maxLat) {
+//       filter.lat = {
+//         [Op.between]: [minLat, maxLat]
+//       };
+//     }
 
-    if (minLng && maxLng) {
-      filter.lng = {
-        [Op.between]: [minLng, maxLng]
-      };
-    }
+//     if (minLng && maxLng) {
+//       filter.lng = {
+//         [Op.between]: [minLng, maxLng]
+//       };
+//     }
 
-    if (minPrice && maxPrice) {
-      filter.price = {
-        [Op.between]: [minPrice, maxPrice]
-      };
-    }
+//     if (minPrice && maxPrice) {
+//       filter.price = {
+//         [Op.between]: [minPrice, maxPrice]
+//       };
+//     }
 
-    // Fetch spots based on the filter
-    const spots = await Spot.findAll({
-      where: filter,
-      offset: (page - 1) * size,
-      limit: size
-    });
+//     // Fetch spots based on the filter
+//     const spots = await Spot.findAll({
+//       where: filter,
+//       offset: (page - 1) * size,
+//       limit: size
+//     });
 
-    // Prepare the response data
-    const responseData = {
-      Spots: spots,
-      page: parseInt(page, 10),
-      size: parseInt(size, 10)
-    };
+//     // Prepare the response data
+//     const responseData = {
+//       Spots: spots,
+//       page: parseInt(page, 10),
+//       size: parseInt(size, 10)
+//     };
 
-    // Send the successful response with the spots data
-    return res.status(200).json(responseData);
-  } catch (error) {
-    // Handle any errors that occur during the request
-    console.error(error);
-    return res.status(500).json({
-      message: 'Internal server error'
-    });
-  }
-});
+//     // Send the successful response with the spots data
+//     return res.status(200).json(responseData);
+//   } catch (error) {
+//     // Handle any errors that occur during the request
+//     console.error(error);
+//     return res.status(500).json({
+//       message: 'Internal server error'
+//     });
+//   }
+// });
 
 
 
