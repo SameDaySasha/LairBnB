@@ -29,11 +29,6 @@ module.exports = (sequelize) => {
 
   Image.init(
     {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-      },
       url: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -51,7 +46,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         defaultValue: false,
       },
-    
+     
       indexId: {
         type: DataTypes.INTEGER,
         allowNull: true,
