@@ -15,7 +15,7 @@ router.use(restoreUser);
 
 router.use('/bookings', bookingsRouter);
 router.use('/session', sessionRouter);
-router.use('/users', usersRouter);
+router.use('/user', usersRouter);
 router.use('/spots', spotsRouter); 
 router.use('/reviews', reviewsRouter); // Mount the reviews router
 router.use('/images', imagesRouter); // Mount the images router

@@ -2,10 +2,10 @@ const express = require('express');
 const { Op, literal } = require('sequelize');
 const { check, validationResult } = require('express-validator');
 const router = express.Router();
-const { Spot, Review, sequelize, Image } = require('../../db/models');
+const { Spot, Review, sequelize, Image, User } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const { handleValidationErrors } = require('../../utils/validation');
-const models = require('../../db/models'); // adjust the path to point to your models directory
+const models = require('../../db/models'); 
 
 
 // frankestein mosnter of the two comented out routes smushed together 
@@ -296,7 +296,7 @@ router.post('/', requireAuth, [
 });
 
 
-// GET /spots/:id - Get a spot by ID
+// GET /spots/:id - Get Spot Details by ID
 router.get('/:id', async (req, res) => {
   const spotId = req.params.id;
   try {
@@ -313,14 +313,16 @@ router.get('/:id', async (req, res) => {
     const owner = await models.User.findOne({
       where: {
         id: spot.ownerId
-      }
+      },
+      attributes: { exclude: ['username'] } // Exclude username
     });
 
     const images = await models.Image.findAll({
       where: {
         indexId: spot.id,
         indexType: 'Spot'
-      }
+      },
+      attributes: ['id', 'url', 'previewImage'] // Only include id, url, previewImage
     });
 
     const reviews = await models.Review.findAll({
