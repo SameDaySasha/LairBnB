@@ -16,7 +16,8 @@ module.exports = {
         spotId: 1,
         review: "Fantastic experience! The spot exceeded my expectations.",
         stars: 5,
-       
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 2,
@@ -24,7 +25,8 @@ module.exports = {
         spotId: 2,
         review: "Great location and amenities. Highly recommend it.",
         stars: 4,
-      
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 3,
@@ -33,7 +35,7 @@ module.exports = {
         review: "Average experience. The spot could use some improvements.",
         stars: 3,
         createdAt: new Date(),
-
+        updatedAt: new Date()
       },
       {
         id: 4,
@@ -41,7 +43,8 @@ module.exports = {
         spotId: 4,
         review: "Disappointing stay. The spot did not meet my expectations.",
         stars: 2,
-      
+        createdAt: new Date(),
+        updatedAt: new Date()
       },
       {
         id: 5,
@@ -49,6 +52,8 @@ module.exports = {
         spotId: 5,
         review: "Terrible experience. I do not recommend this spot.",
         stars: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ], options);
   },
