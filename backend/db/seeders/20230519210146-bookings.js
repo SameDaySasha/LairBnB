@@ -22,31 +22,31 @@ module.exports = {
         endDate: new Date('2023-06-07'),
       
       },
-      // {
-      //   spotId: 2,
-      //   userId: 2,
-      //   startDate: new Date('2023-07-10'),
-      //   endDate: new Date('2023-07-15'),
-      // },
-      // {
-      //   spotId: 3,
-      //   userId: 3,
-      //   startDate: new Date('2023-08-20'),
-      //   endDate: new Date('2023-08-25'),
-      // },
-      // {
-      //   spotId: 4,
-      //   userId: 4,
-      //   startDate: new Date('2023-09-05'),
-      //   endDate: new Date('2023-09-10'),
-      // },
-      // {
-      //   spotId: 5,
-      //   userId: 5,
-      //   startDate: new Date('2023-10-15'),
-      //   endDate: new Date('2023-10-20'),
+      {
+        spotId: 2,
+        userId: 2,
+        startDate: new Date('2023-07-10'),
+        endDate: new Date('2023-07-15'),
+      },
+      {
+        spotId: 3,
+        userId: 3,
+        startDate: new Date('2023-08-20'),
+        endDate: new Date('2023-08-25'),
+      },
+      {
+        spotId: 4,
+        userId: 4,
+        startDate: new Date('2023-09-05'),
+        endDate: new Date('2023-09-10'),
+      },
+      {
+        spotId: 5,
+        userId: 5,
+        startDate: new Date('2023-10-15'),
+        endDate: new Date('2023-10-20'),
 
-      // },
+      },
     ],options);
   },
 
