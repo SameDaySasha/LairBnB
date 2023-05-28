@@ -11,13 +11,13 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(options, [
       {
-        id: 1,
+        // id: 1,
         userId: 1,
         spotId: 1,
         review: "Fantastic experience! The spot exceeded my expectations.",
         stars: 5,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        // createdAt: new Date(),
+        // updatedAt: new Date()
       },
       {
         id: 2,
