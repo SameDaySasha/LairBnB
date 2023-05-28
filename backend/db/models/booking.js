@@ -82,30 +82,6 @@ module.exports = (sequelize) => {
           },
         },
       },
-      createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'Created date is required.',
-          },
-          isDate: {
-            msg: 'Created date must be a valid date.',
-          },
-        },
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        validate: {
-          notNull: {
-            msg: 'Updated date is required.',
-          },
-          isDate: {
-            msg: 'Updated date must be a valid date.',
-          },
-        },
-      },
     },
     {
       sequelize,
