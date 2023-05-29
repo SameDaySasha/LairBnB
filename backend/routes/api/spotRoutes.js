@@ -364,6 +364,7 @@ router.put('/:id', requireAuth, async (req, res) => {
         id: spotId,
         ownerId: userId,
       },
+      attributes:{exclude:['previewImage']}
     });
 
     // Check if the spot exists and belongs to the current user
