@@ -47,6 +47,31 @@ if (maxPrice && !isNaN(maxPrice)) {
     errors.maxPrice = "Maximum price must be greater than or equal to 0"
   } else {where.price = {[Op.lte]: +maxPrice}}
   }
+  if(maxLat && !isNaN(maxLat)) {
+    if(maxLat <-90 || maxLat > 90){
+      errors.maxLat = "Maximum latitude is invalid";
+    } else {
+      if (!where.lat) where.lat = {};
+      where.lat[Op.lte] = +maxLat;
+    }
+  }
+  
+  if(minLng && !isNaN(minLng)) {
+    if(minLng <-180 || minLng > 180){
+      errors.minLng = "Minimum longitude is invalid";
+    } else {
+      where.lng = {[Op.gte]: +minLng};
+    }
+  }
+  
+  if(maxLng && !isNaN(maxLng)) {
+    if(maxLng <-180 || maxLng > 180){
+      errors.maxLng = "Maximum longitude is invalid";
+    } else {
+      if (!where.lng) where.lng = {};
+      where.lng[Op.lte] = +maxLng;
+    }
+  }
   
   if (Object.keys(errors).length !== 0){
     err = new Error ()
