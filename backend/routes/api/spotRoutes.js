@@ -1,5 +1,5 @@
 const express = require('express');
-const { Op, literal } = require('sequelize');
+const { Op} = require('sequelize');
 const { check, validationResult } = require('express-validator');
 const router = express.Router();
 const { Spot, Review, sequelize, Image, User, Booking } = require('../../db/models');
@@ -7,9 +7,43 @@ const { requireAuth } = require('../../utils/auth');
 const { handleValidationErrors } = require('../../utils/validation');
 const models = require('../../db/models'); 
 
-
-// frankestein mosnter of the two comented out routes smushed together 
-router.get('/', async (req, res, next) => {
+const validateQuery = [
+  check('page')
+    .optional()
+    .isInt({ min: 1, max: 10 })
+    .withMessage('Page must be between 1 and 10'),
+  check('size')
+    .optional()
+    .isInt({ min: 1, max: 20 })
+    .withMessage('Size must be between 1 and 20'),
+  check('minLat')
+    .optional()
+    .isDecimal()
+    .withMessage('Minimum latitude is invalid'),
+  check('maxLat')
+    .optional()
+    .isDecimal()
+    .withMessage('Maximum latitude is invalid'),
+  check('minLng')
+    .optional()
+    .isDecimal()
+    .withMessage('Minimum longitude is invalid'),
+  check('maxLng')
+    .optional()
+    .isDecimal()
+    .withMessage('Maximum longitude is invalid'),
+  check('minPrice')
+    .optional()
+    .isDecimal()
+    .withMessage('Minimum price is invalid'),
+  check('maxPrice')
+    .optional()
+    .isDecimal()
+    .withMessage('Maximum price is invalid'),
+  handleValidationErrors
+];
+// // frankestein mosnter of the two comented out routes smushed together 
+router.get('/',validateQuery, async (req, res, next) => {
   try {
     const { page = 1, size = 20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
 
@@ -155,7 +189,6 @@ router.get('/', async (req, res, next) => {
 router.get('/:id/reviews', requireAuth, async (req, res, next) => {
   // Extracting the id from the request parameters and converting it to a number
   const spotId = parseInt(req.params.id, 10);
-console.log('TECHNICAL CONSOLE.LOG : ', spotId)
   // Trying to find a Spot with the extracted id
   const spot = await Spot.findByPk(spotId);
 
@@ -166,12 +199,12 @@ console.log('TECHNICAL CONSOLE.LOG : ', spotId)
 
   // If the Spot does exist, find all Reviews that belong to this Spot.
   const reviews = await Review.findAll({
-      where: { spotId },
+      where: { spotId }, raw:true
   });
 
   for (let review of reviews) {
-      review.User = await User.findByPk(review.userId);
-      review.ReviewImages = await Image.findAll({ where: { indexId: review.id } });
+      review.User = await User.findOne({where:{ id: review.userId},attributes:{exclude:['username']}});
+      review.ReviewImages = await Image.findAll({ where: { indexId: review.id },attributes:['id','url'] });
   }
 
   // Return the Reviews with their associated User and ReviewImage data.
@@ -205,7 +238,7 @@ router.post('/:id/reviews', requireAuth, async (req, res, next) => {
       if (!spot) {
           return res.status(404).json({ message: 'Spot couldn\'t be found' });
       }
-
+      
       // Check if the user already has a review for this spot
       const existingReview = await Review.findOne({ where: { spotId, userId: req.user.id } });
       if (existingReview) {
@@ -600,63 +633,80 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
 // POST /spots/:spotid/bookings - Create a booking from a spot
 router.post('/:spotid/bookings', requireAuth, async (req, res) => {
   const spotId = parseInt(req.params.spotid, 10);
-  const { startDate, endDate } = req.body;
+  let { startDate, endDate } = req.body;
+  startDate = new Date(startDate);
+  endDate = new Date(endDate);
+
+  // Check if start and end dates are valid
+  if (isNaN(startDate) || isNaN(endDate)) {
+    return res.status(400).json({
+      message: "Bad Request",
+      errors: {
+        startDate: "Invalid start date",
+        endDate: "Invalid end date",
+      },
+    });
+  }
 
   // Fetch the spot
   const spot = await Spot.findByPk(spotId);
 
   // Check if spot exists
   if (!spot) {
-      return res.status(404).json({
-          message: "Spot couldn't be found"
-      });
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+    });
   }
 
   // Check if current user is the owner of the spot
-  if (spot.userId === req.user.id) {
-      return res.status(403).json({
-          message: "You can't book your own spot"
-      });
+  if (spot.ownerId === req.user.id) {
+    return res.status(403).json({
+      message: "You can't book your own spot",
+    });
   }
 
   // Check if endDate is on or before startDate
-  if (new Date(endDate) <= new Date(startDate)) {
-      return res.status(400).json({
-          message: "Bad Request",
-          errors: {
-              endDate: "endDate cannot be on or before startDate"
-          },
-      });
+  if (endDate <= startDate) {
+    return res.status(400).json({
+      message: "Bad Request",
+      errors: {
+        endDate: "endDate cannot be on or before startDate",
+      },
+    });
   }
 
   // Find bookings that overlap with the new start and end dates
   const overlappingBookings = await Booking.findAll({
-      where: {
-          spotId: spotId,
-          [Op.or]: [
-              { startDate: { [Op.between]: [startDate, endDate] } },
-              { endDate: { [Op.between]: [startDate, endDate] } }
-          ]
-      }
+    where: {
+      spotId: spotId,
+      [Op.or]: [
+        { startDate: { [Op.between]: [startDate, endDate] } },
+        { endDate: { [Op.between]: [startDate, endDate] } },
+        {
+          startDate: { [Op.lte]: startDate },
+          endDate: { [Op.gte]: endDate },
+        },
+      ],
+    },
   });
 
   // If there are overlapping bookings, return an error
   if (overlappingBookings.length > 0) {
-      return res.status(403).json({
-          message: "Sorry, this spot is already booked for the specified dates",
-          errors: {
-              startDate: "Start date conflicts with an existing booking",
-              endDate: "End date conflicts with an existing booking"
-          },
-      });
+    return res.status(403).json({
+      message: "Sorry, this spot is already booked for the specified dates",
+      errors: {
+        startDate: "Start date conflicts with an existing booking",
+        endDate: "End date conflicts with an existing booking",
+      },
+    });
   }
 
   // Create the new booking
   const newBooking = await Booking.create({
-      spotId: spotId,
-      userId: req.user.id,
-      startDate: startDate,
-      endDate: endDate
+    spotId: spotId,
+    userId: req.user.id,
+    startDate: startDate,
+    endDate: endDate,
   });
 
   // Send the successful response with the new booking data
@@ -666,163 +716,72 @@ router.post('/:spotid/bookings', requireAuth, async (req, res) => {
 
 
 
+//legacy 
+// router.post('/:spotid/bookings', requireAuth, async (req, res) => {
+//   const spotId = parseInt(req.params.spotid, 10);
+//   const { startDate, endDate } = req.body;
 
-// router.get('/', async (req, res, next) => {
-//   try {
-//     // Retrieve all spots from the database
-//     const spots = await Spot.findAll({
-//       attributes: [
-//         'id',
-//         'ownerId',
-//         'address',
-//         'city',
-//         'state',
-//         'country',
-//         'lat',
-//         'lng',
-//         'name',
-//         'description',
-//         'price',
-//         'createdAt',
-//         'updatedAt',
-//       ],
-//     });
+//   // Fetch the spot
+//   const spot = await Spot.findByPk(spotId);
 
-//     // Prepare the response data
-//     const spotData = await Promise.all(spots.map(async (spot) => {
-//       const previewImage = await Image.findOne({
-//         where: {
-//           indexType: 'Spot',
-//           indexId: spot.id,
-//           previewImage: true,
-//         },
+//   // Check if spot exists
+//   if (!spot) {
+//       return res.status(404).json({
+//           message: "Spot couldn't be found"
 //       });
-
-//       return {
-//         id: spot.id,
-//         ownerId: spot.ownerId,
-//         address: spot.address,
-//         city: spot.city,
-//         state: spot.state,
-//         country: spot.country,
-//         lat: spot.lat,
-//         lng: spot.lng,
-//         name: spot.name,
-//         description: spot.description,
-//         price: spot.price,
-//         createdAt: spot.createdAt,
-//         updatedAt: spot.updatedAt,
-//         previewImage: previewImage ? previewImage.url : null,
-//       };
-//     }));
-
-//     // Send the successful response with the spot data
-//     return res.json({ Spots: spotData });
-//   } catch (error) {
-//     // Handle any errors that occur during the request
-//     return next(error);
 //   }
+
+//   // Check if current user is the owner of the spot
+//   if (spot.ownerId === req.user.id) {
+//       return res.status(403).json({
+//           message: "You can't book your own spot"
+//       });
+//   }
+
+//   // Check if endDate is on or before startDate
+//   if (new Date(endDate) <= new Date(startDate)) {
+//       return res.status(400).json({
+//           message: "Bad Request",
+//           errors: {
+//               endDate: "endDate cannot be on or before startDate"
+//           },
+//       });
+//   }
+
+//   // Find bookings that overlap with the new start and end dates
+//   const overlappingBookings = await Booking.findAll({
+//       where: {
+//           spotId: spotId,
+//           [Op.or]: [
+//               { startDate: { [Op.between]: [startDate, endDate] } },
+//               { endDate: { [Op.between]: [startDate, endDate] } }
+//           ]
+//       }
+//   });
+
+//   // If there are overlapping bookings, return an error
+//   if (overlappingBookings.length > 0) {
+//       return res.status(403).json({
+//           message: "Sorry, this spot is already booked for the specified dates",
+//           errors: {
+//               startDate: "Start date conflicts with an existing booking",
+//               endDate: "End date conflicts with an existing booking"
+//           },
+//       });
+//   }
+
+//   // Create the new booking
+//   const newBooking = await Booking.create({
+//       spotId: spotId,
+//       userId: req.user.id,
+//       startDate: startDate,
+//       endDate: endDate
+//   });
+
+//   // Send the successful response with the new booking data
+//   return res.status(200).json(newBooking);
 // });
 
-
-
-
-
-
-
-// GET /spots - Return spots filtered by query parameters
-// router.get('/', async (req, res) => {
-//   const { page = 1, size = 20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
-
-//   // Validate query parameters
-//   const errors = {};
-
-//   // Validate page
-//   if (page < 1 || page > 10) {
-//     errors.page = 'Page must be between 1 and 10';
-//   }
-
-//   // Validate size
-//   if (size < 1 || size > 20) {
-//     errors.size = 'Size must be between 1 and 20';
-//   }
-
-//   // Validate latitude and longitude
-//   if (minLat && isNaN(minLat)) {
-//     errors.minLat = 'Minimum latitude is invalid';
-//   }
-//   if (maxLat && isNaN(maxLat)) {
-//     errors.maxLat = 'Maximum latitude is invalid';
-//   }
-//   if (minLng && isNaN(minLng)) {
-//     errors.minLng = 'Minimum longitude is invalid';
-//   }
-//   if (maxLng && isNaN(maxLng)) {
-//     errors.maxLng = 'Maximum longitude is invalid';
-//   }
-
-//   // Validate price
-//   if (minPrice && isNaN(minPrice)) {
-//     errors.minPrice = 'Minimum price is invalid';
-//   }
-//   if (maxPrice && isNaN(maxPrice)) {
-//     errors.maxPrice = 'Maximum price is invalid';
-//   }
-
-//   // If there are validation errors, return a 400 Bad Request response
-//   if (Object.keys(errors).length > 0) {
-//     return res.status(400).json({
-//       message: 'Bad Request',
-//       errors: errors
-//     });
-//   }
-
-//   try {
-//     // Set up filter object based on query parameters
-//     const filter = {};
-
-//     if (minLat && maxLat) {
-//       filter.lat = {
-//         [Op.between]: [minLat, maxLat]
-//       };
-//     }
-
-//     if (minLng && maxLng) {
-//       filter.lng = {
-//         [Op.between]: [minLng, maxLng]
-//       };
-//     }
-
-//     if (minPrice && maxPrice) {
-//       filter.price = {
-//         [Op.between]: [minPrice, maxPrice]
-//       };
-//     }
-
-//     // Fetch spots based on the filter
-//     const spots = await Spot.findAll({
-//       where: filter,
-//       offset: (page - 1) * size,
-//       limit: size
-//     });
-
-//     // Prepare the response data
-//     const responseData = {
-//       Spots: spots,
-//       page: parseInt(page, 10),
-//       size: parseInt(size, 10)
-//     };
-
-//     // Send the successful response with the spots data
-//     return res.status(200).json(responseData);
-//   } catch (error) {
-//     // Handle any errors that occur during the request
-//     console.error(error);
-//     return res.status(500).json({
-//       message: 'Internal server error'
-//     });
-//   }
-// });
 
 
 

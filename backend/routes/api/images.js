@@ -1,6 +1,6 @@
 const express = require('express');
 const { requireAuth } = require('../../utils/auth');
-const { Spot, Image } = require('../../db/models');
+const { Spot, Image, Review } = require('../../db/models');
 const router = express.Router();
 
 
@@ -23,7 +23,7 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
     let parent;
     if (image.indexType === 'Spot') {
       parent = await Spot.findByPk(image.indexId);
-      if (!parent || parent.ownerId !== req.user.id) {
+      if (!parent || parent.userId !== req.user.id) {
         return res.status(403).json({
           message: "You don't have permission to delete this Spot Image"
         });
@@ -68,9 +68,9 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
 
 
 // I'm apprehensive to delete anything and therefore am a code hoarder 
-// // DELETE /images/:imageId - Delete an existing image for a Spot
+// DELETE /images/:imageId - Delete an existing image for a Spot
 // router.delete('/:imageId', requireAuth, async (req, res) => {
-//   const imageId = parseInt(req.params.indexId, 10);
+//   const imageId = parseInt(req.params.imageId);
 
 //   try {
 //     // Find the image to be deleted
@@ -79,19 +79,14 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
 //     // Check if the image exists
 //     if (!image) {
 //       return res.status(404).json({
-//         message: "Spot Image couldn't be found"
+//         message: "Review Image couldn't be found"
 //       });
 //     }
+// if (image.userid !== req.user.id) {
+//   throw new Error('Review must belong to the current user')
+// }
 
-//     // Fetch the corresponding spot
-//     const spot = await Spot.findByPk(image.spotId);
-
-//     // Check if the spot exists and belongs to the current user
-//     if (!spot || spot.ownerId !== req.user.id) {
-//       return res.status(403).json({
-//         message: "You don't have permission to delete this Spot Image"
-//       });
-//     }
+    
 
 //     // Delete the image
 //     await image.destroy();

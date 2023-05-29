@@ -25,7 +25,6 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
         const review = await Review.findOne({
             where: {
                 id: reviewId,
-                userId: req.user.id
             }
         });
 
@@ -37,14 +36,14 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
         }
 
         // Check if the review already has the maximum number of images (10)
-        const existingImagesCount = await Image.count({
+        const existingImagesCount = await Image.findAndCountAll({
             where: {
                 indexId: reviewId,
                 indexType: 'Review'
             }
         });
-
-        if (existingImagesCount >= 10) {
+const {count} = existingImagesCount
+        if (count >= 9) {
             return res.status(403).json({
                 message: 'Maximum number of images for this resource was reached'
             });
@@ -67,6 +66,41 @@ router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
         });
     }
 });
+
+// Edit a Review based on the Review's id
+
+router.put('/:id', requireAuth, async (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+  
+    // Extract the review and stars from the request body
+    const { review, stars } = req.body;
+  
+    // Validate the review and stars
+    if (!review || typeof review !== 'string' || review.length === 0) {
+      return res.status(400).json({ message: 'Bad Request', errors: { review: 'Review text is required' } });
+    }
+    if (!stars || typeof stars !== 'number' || stars < 1 || stars > 5) {
+      return res.status(400).json({ message: 'Bad Request', errors: { stars: 'Stars must be an integer from 1 to 5' } });
+    }
+  
+    // Retrieve the review to be updated
+    const reviewToBeUpdated = await Review.findOne({ where: { id: req.params.id, userId: req.user.id } });
+    
+    if (!reviewToBeUpdated) {
+      return res.status(404).json({ message: "Review couldn't be found" });
+    }
+    
+    // Update the review and return the new review data
+    const updatedReview = await reviewToBeUpdated.update({
+      review,
+      stars
+    }, { returning: true });
+    
+    return res.status(200).json(updatedReview);
+  });
+  
 
 // DELETE /reviews/:id - Delete an existing review
 router.delete('/:id', requireAuth, async (req, res, next) => {

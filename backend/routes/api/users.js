@@ -2,20 +2,22 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User, Review, Spot, Booking } = require('../../db/models');
+const { User, Review, Spot, Booking , Image} = require('../../db/models');
 const router = express.Router();
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
+const { Op } = require('sequelize');
 
+// new validateSignup
 const validateSignup = [
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()
-    .withMessage('Please provide a valid email.'),
+    .withMessage('Invalid email'),
   check('username')
     .exists({ checkFalsy: true })
     .isLength({ min: 4 })
-    .withMessage('Please provide a username with at least 4 characters.'),
+    .withMessage('Username is required'),
   check('username')
     .not()
     .isEmail()
@@ -24,46 +26,128 @@ const validateSignup = [
     .exists({ checkFalsy: true })
     .isLength({ min: 6 })
     .withMessage('Password must be 6 characters or more.'),
+  check('firstName')  // Add this
+    .exists({ checkFalsy: true })
+    .withMessage('First Name is required'),
+  check('lastName')  // Add this
+    .exists({ checkFalsy: true })
+    .withMessage('Last Name is required'),
   handleValidationErrors
 ];
-
-// Sign up
-
-
-
-
-// old school method (just in case, I'm a code hoarder remember? )
+// new sign in 
 router.post(
   '/',
   validateSignup,
   async (req, res) => {
-    // Extract the required user information from the request body
     const { email, password, username, firstName, lastName } = req.body;
 
-    // Hash the password using bcrypt
-    const hashedPassword = bcrypt.hashSync(password);
+    // Check if a user with the same email or username already exists
+    const userExists = await User.findOne({ where: { [Op.or]: { email, username } } });
 
-    // Create a new user in the database with the provided information
+    if (userExists) {
+      const errors = {};
+      if (userExists.email === email) {
+        errors.email = 'User with that email already exists';
+      }
+      if (userExists.username === username) {
+        errors.username = 'User with that username already exists';
+      }
+
+      return res.status(400).json({
+        message: 'User already exists',
+        errors: errors
+      });
+    }
+
+    const hashedPassword = bcrypt.hashSync(password);
     const user = await User.create({ email, username, firstName, lastName, hashedPassword });
 
-    // Create a safeUser object with the user's information to be sent in the response
     const safeUser = {
       id: user.id,
       email: user.email,
       username: user.username,
-      firstName: user.firstName, // Include firstName attribute
-      lastName: user.lastName, // Include lastName attribute
+      firstName: user.firstName,
+      lastName: user.lastName,
     };
 
-    // Set the authentication token cookie in the response
     await setTokenCookie(res, safeUser);
 
-    // Return the safeUser object in the response JSON
     return res.json({
       user: safeUser
     });
   }
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const validateSignup = [
+//   check('email')
+//     .exists({ checkFalsy: true })
+//     .isEmail()
+//     .withMessage('Invalid email'),
+//   check('username')
+//     .exists({ checkFalsy: true })
+//     .isLength({ min: 4 })
+//     .withMessage('Please provide a username with at least 4 characters.'),
+//   check('username')
+//     .not()
+//     .isEmail()
+//     .withMessage('Username cannot be an email.'),
+//   check('password')
+//     .exists({ checkFalsy: true })
+//     .isLength({ min: 6 })
+//     .withMessage('Password must be 6 characters or more.'),
+//   handleValidationErrors
+// ];
+
+
+
+
+
+
+// old school method (just in case, I'm a code hoarder remember? )
+// router.post(
+//   '/',
+//   validateSignup,
+//   async (req, res) => {
+//     // Extract the required user information from the request body
+//     const { email, password, username, firstName, lastName } = req.body;
+
+//     // Hash the password using bcrypt
+//     const hashedPassword = bcrypt.hashSync(password);
+
+//     // Create a new user in the database with the provided information
+//     const user = await User.create({ email, username, firstName, lastName, hashedPassword });
+
+//     // Create a safeUser object with the user's information to be sent in the response
+//     const safeUser = {
+//       id: user.id,
+//       email: user.email,
+//       username: user.username,
+//       firstName: user.firstName, // Include firstName attribute
+//       lastName: user.lastName, // Include lastName attribute
+//     };
+
+//     // Set the authentication token cookie in the response
+//     await setTokenCookie(res, safeUser);
+
+//     // Return the safeUser object in the response JSON
+//     return res.json({
+//       user: safeUser
+//     });
+//   }
+// );
 
 // Get Current User
 router.get('/', requireAuth, async (req, res) => {
@@ -120,15 +204,15 @@ router.get('/reviews', requireAuth, async (req, res, next) => {
     // Prepare the response data
     const reviewData = await Promise.all(userReviews.map(async (review) => {
       // Load the User and Spot for this review
-      const user = await User.findOne({ where: { id: review.userId }});
-      const spot = await Spot.findOne({ where: { id: review.spotId }});
+      const user = await User.findOne({ where: { id: review.userId },attributes:{exclude:['username']}});
+      const spot = await Spot.findOne({ where: { id: review.spotId },attributes:{exclude:['description','createdAt','updatedAt']}});
 
       // Load the review images for this review
       const reviewImages = await Image.findAll({
         where: {
           indexId: review.id,
           indexType: 'Review'
-        }
+        }, attributes:['id','url']
       });
 
       return {
@@ -252,7 +336,10 @@ router.get('/bookings', requireAuth, async (req, res) => {
     // Prepare the response data
     const bookingData = await Promise.all(userBookings.map(async (booking) => {
       // Load the Spot for this booking
-      const spot = await Spot.findOne({ where: { id: booking.spotId }});
+      const spot = await Spot.findOne({ 
+        where: { id: booking.spotId },
+        attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price', 'previewImage'], // Only fetch these attributes
+      });
 
       return {
         ...booking.get({ plain: true }), // Convert Sequelize instance to plain object
