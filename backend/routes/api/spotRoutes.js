@@ -155,7 +155,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:id/reviews', requireAuth, async (req, res, next) => {
   // Extracting the id from the request parameters and converting it to a number
   const spotId = parseInt(req.params.id, 10);
-
+console.log('TECHNICAL CONSOLE.LOG : ', spotId)
   // Trying to find a Spot with the extracted id
   const spot = await Spot.findByPk(spotId);
 
