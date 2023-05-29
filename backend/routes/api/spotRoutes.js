@@ -364,7 +364,7 @@ router.put('/:id', requireAuth, async (req, res) => {
         id: spotId,
         ownerId: userId,
       },
-      attributes:{exclude:['previewImage']}
+      // attributes:{exclude:['previewImage']}
     });
 
     // Check if the spot exists and belongs to the current user
@@ -391,6 +391,7 @@ router.put('/:id', requireAuth, async (req, res) => {
     const updatedSpot = await Spot.findOne({
       where: {
         id: spotId,
+      attributes:{exclude:['previewImage']}
       },
     });
 
