@@ -169,11 +169,9 @@ router.get('/:id/reviews', requireAuth, async (req, res, next) => {
       where: { spotId },
   });
 
-  // For each Review, fetch the associated User and ReviewImage data in separate queries.
-  // This might be less efficient but avoids eager loading.
   for (let review of reviews) {
       review.User = await User.findByPk(review.userId);
-      review.ReviewImages = await ReviewImage.findAll({ where: { reviewId: review.id } });
+      review.ReviewImages = await Image.findAll({ where: { indexId: review.id } });
   }
 
   // Return the Reviews with their associated User and ReviewImage data.

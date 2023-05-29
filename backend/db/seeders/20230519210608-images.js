@@ -87,7 +87,7 @@ module.exports = {
         previewImage: false,
         // type: 'png',
         indexId: 9,
-        indexType: 'Spot',
+        indexType: 'Review',
        
       },
       {
@@ -96,7 +96,7 @@ module.exports = {
         previewImage: false,
         // type: 'png',
         indexId: 10,
-        indexType: 'Spot',
+        indexType: 'Review',
        
       },
     ], {});
