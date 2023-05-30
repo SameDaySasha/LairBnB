@@ -676,16 +676,7 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
     return res.status(404).json({ message: "Spot couldn't be found" });
   }
 
-  // If the current user is the owner of the spot, fetch the associated User data for each booking and return it
-  if (req.user.id !== spot.ownerId) {
-    return res.json({
-      Bookings: spotBookings.map(booking => ({
-        spotId: booking.spotId,
-        startDate: booking.startDate,
-        endDate: booking.endDate,
-      })),
-    });
-  }
+ 
 
   // Include the User data in the Booking model query
   const spotBookings = await models.Booking.findAll({
@@ -697,6 +688,18 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
       }
     ]
   });
+
+ // If the current user is the owner of the spot, fetch the associated User data for each booking and return it
+  if (req.user.id !== spot.ownerId) {
+    return res.json({
+      Bookings: spotBookings.map(booking => ({
+        spotId: booking.spotId,
+        startDate: booking.startDate,
+        endDate: booking.endDate,
+      })),
+    });
+  }
+
 
   res.json({ Bookings: spotBookings });
 });
