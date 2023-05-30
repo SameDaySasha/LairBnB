@@ -273,7 +273,7 @@ router.get('/:id/reviews', requireAuth, async (req, res, next) => {
 
   for (let review of reviews) {
       review.User = await User.findOne({where:{ id: review.userId},attributes:{exclude:['username']}});
-      review.ReviewImages = await Image.findAll({ where: { indexId: review.id },attributes:['id','url'] });
+      review.ReviewImages = await Image.findAll({ where: { indexType: 'Review', indexId: review.id },attributes:['id','url'] });
   }
 
   // Return the Reviews with their associated User and ReviewImage data.
