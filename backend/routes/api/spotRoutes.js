@@ -294,12 +294,20 @@ router.post('/:id/reviews', requireAuth, async (req, res, next) => {
   const { review, stars } = req.body;
 
   // Validate the review and stars
+  let errors = {};
+
   if (!review || typeof review !== 'string' || review.length === 0) {
-      return res.status(400).json({ message: 'Bad Request', errors: { review: 'Review text is required' } });
+    errors.review = 'Review text is required';
   }
+  
   if (!stars || typeof stars !== 'number' || stars < 1 || stars > 5) {
-      return res.status(400).json({ message: 'Bad Request', errors: { stars: 'Stars must be an integer from 1 to 5' } });
+    errors.stars = 'Stars must be an integer from 1 to 5';
   }
+  
+  if (Object.keys(errors).length > 0) {
+    return res.status(400).json({ message: 'Bad Request', errors: errors });
+  }
+  
 
   try {
       // Check if the spot exists
@@ -327,7 +335,7 @@ router.post('/:id/reviews', requireAuth, async (req, res, next) => {
   } catch (error) {
       // Handle any errors that occur during the request
       console.error(error);
-      return res.status(500).json({ message: 'Technical Internal server error' });
+      return res.status(500).json({ message: 'Internal server error' });
   }
 });
 
