@@ -35,48 +35,48 @@ const validateSignup = [
   handleValidationErrors
 ];
 // new sign in 
-router.post(
-  '/',
-  validateSignup,
-  async (req, res) => {
-    const { email, password, username, firstName, lastName } = req.body;
+// router.post(
+//   '/',
+//   validateSignup,
+//   async (req, res) => {
+//     const { email, password, username, firstName, lastName } = req.body;
 
-    // Check if a user with the same email or username already exists
-    const userExists = await User.findOne({ where: { [Op.or]: { email, username } } });
+//     // Check if a user with the same email or username already exists
+//     const userExists = await User.findOne({ where: { [Op.or]: { email, username } } });
 
-    if (userExists) {
-      const errors = {};
-      if (userExists.email === email) {
-        errors.email = 'User with that email already exists';
-      }
-      if (userExists.username === username) {
-        errors.username = 'User with that username already exists';
-      }
+//     if (userExists) {
+//       const errors = {};
+//       if (userExists.email === email) {
+//         errors.email = 'User with that email already exists';
+//       }
+//       if (userExists.username === username) {
+//         errors.username = 'User with that username already exists';
+//       }
 
-      return res.status(400).json({
-        message: 'User already exists',
-        errors: errors
-      });
-    }
+//       return res.status(400).json({
+//         message: 'User already exists',
+//         errors: errors
+//       });
+//     }
 
-    const hashedPassword = bcrypt.hashSync(password);
-    const user = await User.create({ email, username, firstName, lastName, hashedPassword });
+//     const hashedPassword = bcrypt.hashSync(password);
+//     const user = await User.create({ email, username, firstName, lastName, hashedPassword });
 
-    const safeUser = {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
-    };
+//     const safeUser = {
+//       id: user.id,
+//       email: user.email,
+//       username: user.username,
+//       firstName: user.firstName,
+//       lastName: user.lastName,
+//     };
 
-    await setTokenCookie(res, safeUser);
+//     await setTokenCookie(res, safeUser);
 
-    return res.json({
-      user: safeUser
-    });
-  }
-);
+//     return res.json({
+//       user: safeUser
+//     });
+//   }
+// );
 
 
 
@@ -117,37 +117,37 @@ router.post(
 
 
 // old school method (just in case, I'm a code hoarder remember? )
-// router.post(
-//   '/',
-//   validateSignup,
-//   async (req, res) => {
-//     // Extract the required user information from the request body
-//     const { email, password, username, firstName, lastName } = req.body;
+router.post(
+  '/',
+  validateSignup,
+  async (req, res) => {
+    // Extract the required user information from the request body
+    const { email, password, username, firstName, lastName } = req.body;
 
-//     // Hash the password using bcrypt
-//     const hashedPassword = bcrypt.hashSync(password);
+    // Hash the password using bcrypt
+    const hashedPassword = bcrypt.hashSync(password);
 
-//     // Create a new user in the database with the provided information
-//     const user = await User.create({ email, username, firstName, lastName, hashedPassword });
+    // Create a new user in the database with the provided information
+    const user = await User.create({ email, username, firstName, lastName, hashedPassword });
 
-//     // Create a safeUser object with the user's information to be sent in the response
-//     const safeUser = {
-//       id: user.id,
-//       email: user.email,
-//       username: user.username,
-//       firstName: user.firstName, // Include firstName attribute
-//       lastName: user.lastName, // Include lastName attribute
-//     };
+    // Create a safeUser object with the user's information to be sent in the response
+    const safeUser = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      firstName: user.firstName, // Include firstName attribute
+      lastName: user.lastName, // Include lastName attribute
+    };
 
-//     // Set the authentication token cookie in the response
-//     await setTokenCookie(res, safeUser);
+    // Set the authentication token cookie in the response
+    await setTokenCookie(res, safeUser);
 
-//     // Return the safeUser object in the response JSON
-//     return res.json({
-//       user: safeUser
-//     });
-//   }
-// );
+    // Return the safeUser object in the response JSON
+    return res.json({
+      user: safeUser
+    });
+  }
+);
 
 // Get Current User
 router.get('/', requireAuth, async (req, res) => {
