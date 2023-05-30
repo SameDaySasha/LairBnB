@@ -118,11 +118,10 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
     }
 
     try {
-        // Try to find the review with the given ID that also belongs to the authenticated user
+        // Try to find the review with the given ID
         const review = await Review.findOne({
             where: {
                 id: reviewId,
-                userId: req.user.id
             }
         });
 
@@ -130,6 +129,13 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
         if (!review) {
             return res.status(404).json({
                 message: "Review couldn't be found"
+            });
+        }
+
+        // Check if the authenticated user is the owner of the review
+        if (req.user.id !== review.ownerId) {
+            return res.status(403).json({
+                message: 'Not authorized to delete this review'
             });
         }
 
