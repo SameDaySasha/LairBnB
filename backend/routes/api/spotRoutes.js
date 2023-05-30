@@ -668,41 +668,39 @@ router.delete('/:id', requireAuth, async (req, res) => {
 
 // GET /spots/:spotId/bookings - Get all bookings for a spot
 router.get('/:spotId/bookings', requireAuth, async (req, res) => {
-  // Extracting the spotId from the request parameters and converting it to a number
   const spotId = parseInt(req.params.spotId, 10);
 
-  // Trying to find a Spot with the extracted id
-  const spot = await Spot.findByPk(spotId);
+  const spot = await models.Spot.findByPk(spotId);
 
-  // If the Spot does not exist, return a 404 error
   if (!spot) {
-      return res.status(404).json({ message: "Spot couldn't be found" });
-  }
-
-  // Find all bookings for this spot
-  const spotBookings = await Booking.findAll({
-      where: { spotId },
-  });
-
-  // If the current user is not the owner of the spot, only return basic booking data
-  if (req.user.id !== spot.ownerId) {
-      return res.json({
-          Bookings: spotBookings.map(booking => ({
-              spotId: booking.spotId,
-              startDate: booking.startDate,
-              endDate: booking.endDate,
-          })),
-      });
+    return res.status(404).json({ message: "Spot couldn't be found" });
   }
 
   // If the current user is the owner of the spot, fetch the associated User data for each booking and return it
-  for (let booking of spotBookings) {
-      booking.User = await User.findByPk(booking.userId);
+  if (req.user.id !== spot.ownerId) {
+    return res.json({
+      Bookings: spotBookings.map(booking => ({
+        spotId: booking.spotId,
+        startDate: booking.startDate,
+        endDate: booking.endDate,
+      })),
+    });
   }
 
-  // Return the Bookings with their associated User data (if the current user is the owner of the spot)
+  // Include the User data in the Booking model query
+  const spotBookings = await models.Booking.findAll({
+    where: { spotId },
+    include: [
+      {
+        model: models.User,
+        attributes: ['id', 'firstName', 'lastName'], // Only get these attributes
+      }
+    ]
+  });
+
   res.json({ Bookings: spotBookings });
 });
+
 
 
 
