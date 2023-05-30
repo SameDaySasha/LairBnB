@@ -78,16 +78,19 @@ router.put('/:id', requireAuth, async (req, res, next) => {
     const { review, stars } = req.body;
   
     // Validate the review and stars
+    let errors = {};
+
     if (!review || typeof review !== 'string' || review.length === 0) {
-      return res.status(400).json({ message: 'Bad Request', errors: { review: 'Review text is required' } });
+      errors.review = 'Review text is required';
     }
-    if (!stars || typeof stars !== 'number' || stars < 1 || stars > 5) {
-      return res.status(400).json({ message: 'Bad Request', errors: { stars: 'Stars must be an integer from 1 to 5' } });
-    }
-  
-    // Retrieve the review to be updated
-    const reviewToBeUpdated = await Review.findOne({ where: { id: req.params.id, userId: req.user.id } });
     
+    if (!stars || typeof stars !== 'number' || stars < 1 || stars > 5) {
+      errors.stars = 'Stars must be an integer from 1 to 5';
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({ message: 'Bad Request', errors: errors });
+    }
     if (!reviewToBeUpdated) {
       return res.status(404).json({ message: "Review couldn't be found" });
     }
