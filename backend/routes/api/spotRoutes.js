@@ -327,7 +327,7 @@ router.post('/:id/reviews', requireAuth, async (req, res, next) => {
   } catch (error) {
       // Handle any errors that occur during the request
       console.error(error);
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: 'Technical Internal server error' });
   }
 });
 
