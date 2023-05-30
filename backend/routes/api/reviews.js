@@ -135,7 +135,7 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
         // Check if the authenticated user is the owner of the review
         if (req.user.id !== review.ownerId) {
             return res.status(403).json({
-                message: 'Not authorized to delete this review'
+                message: 'Review must belong to the current user'
             });
         }
 
