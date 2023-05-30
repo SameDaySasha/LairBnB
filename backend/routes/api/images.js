@@ -1,6 +1,6 @@
 const express = require('express');
 const { requireAuth } = require('../../utils/auth');
-const { Spot, Image, Review } = require('../../db/models');
+const { Spot, Image, Review , User} = require('../../db/models');
 const router = express.Router();
 
 
@@ -23,7 +23,7 @@ router.delete('/:imageId', requireAuth, async (req, res) => {
     let parent;
     if (image.indexType === 'Spot') {
       parent = await Spot.findByPk(image.indexId);
-      if (!parent || parent.userId !== req.user.id) {
+      if (!parent || parent.ownerId !== req.user.id) {
         return res.status(403).json({
           message: "You don't have permission to delete this Spot Image"
         });
