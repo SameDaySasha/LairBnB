@@ -1,6 +1,6 @@
 const express = require('express');
 const { requireAuth } = require('../../utils/auth');
-const { User, Review, Spot, Image } = require('../../db/models'); 
+const { Review, Image } = require('../../db/models'); 
 const router = express.Router();
 
 
@@ -76,7 +76,14 @@ router.put('/:id', requireAuth, async (req, res, next) => {
   
     // Extract the review and stars from the request body
     const { review, stars } = req.body;
-  
+
+
+
+    // find the review by ID
+    const reviewToBeUpdated = await review.findById(req.params.id);
+    
+
+
     // Validate the review and stars
     let errors = {};
 
@@ -91,7 +98,7 @@ router.put('/:id', requireAuth, async (req, res, next) => {
     if (Object.keys(errors).length > 0) {
       return res.status(400).json({ message: 'Bad Request', errors: errors });
     }
-    const reviewToBeUpdated = await Review.findById(req.params.id);
+    
     if (!reviewToBeUpdated) {
       return res.status(404).json({ message: "Review couldn't be found" });
     }
