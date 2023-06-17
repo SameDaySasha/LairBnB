@@ -91,6 +91,7 @@ router.put('/:id', requireAuth, async (req, res, next) => {
     if (Object.keys(errors).length > 0) {
       return res.status(400).json({ message: 'Bad Request', errors: errors });
     }
+    const reviewToBeUpdated = await Review.findById(req.params.id);
     if (!reviewToBeUpdated) {
       return res.status(404).json({ message: "Review couldn't be found" });
     }
@@ -133,7 +134,7 @@ router.delete('/:id', requireAuth, async (req, res, next) => {
         }
 
         // Check if the authenticated user is the owner of the review
-        if (req.user.id !== review.ownerId) {
+        if (req.user.id !== review.userId) {
             return res.status(403).json({
                 message: 'Review must belong to the current user'
             });
