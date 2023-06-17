@@ -255,7 +255,7 @@ return res.json({"Spots":resultsSpot, page, size})
 // });
 
 // GET all reviews by a spot's ID
-router.get('/:id/reviews', requireAuth, async (req, res, next) => {
+router.get('/:id/reviews', async (req, res, next) => {
   // Extracting the id from the request parameters and converting it to a number
   const spotId = parseInt(req.params.id, 10);
   // Trying to find a Spot with the extracted id
