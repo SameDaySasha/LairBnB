@@ -79,9 +79,10 @@ router.put('/:id', requireAuth, async (req, res, next) => {
 
 
 
-    // find the review by ID
-    const reviewToBeUpdated = await review.findById(req.params.id);
-    
+    // find the review by primary key
+    const reviewToBeUpdated = await Review.findByPk(req.params.id);
+
+
 
 
     // Validate the review and stars
