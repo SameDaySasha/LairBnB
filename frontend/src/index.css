@@ -1,1 +1,18 @@
-/* TODO Add site wide styles */
+*{
+  box-sizing: border-box;
+}
+#root{
+  width: 100%;
+}
+body{
+    width: 100%;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    background-image: url('/Users/alexflorea/Desktop/Classwork/Project_Alpha/LairBnB/frontend/images/newBackgroundScreen.png');
+    background-size: cover;
+    background-position: center;
+  }
+  

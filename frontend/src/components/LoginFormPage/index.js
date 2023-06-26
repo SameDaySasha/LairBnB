@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import * as sessionActions from "../../store/session";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import * as sessionActions from "../../store/session";
-import "./LoginForm.css";
+import "../SignupFormPage/SignupForm.css";
 
 function LoginFormPage() {
   const dispatch = useDispatch();
@@ -10,14 +10,6 @@ function LoginFormPage() {
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    document.body.classList.add('login-page');
-
-    return () => {
-      document.body.classList.remove('login-page');
-    }
-  }, []);
 
   if (sessionUser) return <Redirect to="/" />;
 
@@ -33,10 +25,10 @@ function LoginFormPage() {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-form-background">
+    <div className="signup-page">
+      <div className="signup-form-background">
         <h1 className="form-title">Log In</h1>
-        <form className="login-form" onSubmit={handleSubmit}>
+        <form className="signup-form" onSubmit={handleSubmit}>
           <label>
             Username or Email
             <input
