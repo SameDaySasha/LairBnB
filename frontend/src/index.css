@@ -11,7 +11,7 @@ body{
     display: flex;
     justify-content: center;
     font-family: Arial, sans-serif;
-    background-image: url('/Users/alexflorea/Desktop/Classwork/Project_Alpha/LairBnB/frontend/images/newBackgroundScreen.png');
+    background-image: url('../../images/newBackgroundScreen.png');
     background-size: cover;
     background-position: center;
   }
