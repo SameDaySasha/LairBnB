@@ -5,13 +5,16 @@ import { Route, Switch } from "react-router-dom";
 import LoginFormPage from "./components/LoginFormPage";
 import SignupFormPage from "./components/SignupFormPage";
 import * as sessionActions from "./store/session";
+import { fetchSpots } from './store/spots'; //
 import Navigation from "./components/Navigation";
+import Spots from "./components/HomePage/spots"; 
 
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
+    dispatch(fetchSpots()); 
   }, [dispatch]);
 
   return (
@@ -24,6 +27,9 @@ function App() {
           </Route>
           <Route path="/signup">
             <SignupFormPage />
+          </Route>
+          <Route path="/"> 
+            <Spots />
           </Route>
         </Switch>
       )}
