@@ -5,9 +5,10 @@ import { Route, Switch } from "react-router-dom";
 import LoginFormPage from "./components/LoginFormPage";
 import SignupFormPage from "./components/SignupFormPage";
 import * as sessionActions from "./store/session";
-import { fetchSpots } from './store/spots'; //
+import { fetchSpots } from './store/spots'; 
 import Navigation from "./components/Navigation";
-import Spots from "./components/HomePage/spots"; 
+import Spots from "./components/HomePage/spots";
+import SpotDetails from "./components/SpotDetails/spotDetails"; // New import
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +28,9 @@ function App() {
           </Route>
           <Route path="/signup">
             <SignupFormPage />
+          </Route>
+          <Route path="/spots/:id"> 
+            <SpotDetails />
           </Route>
           <Route path="/"> 
             <Spots />

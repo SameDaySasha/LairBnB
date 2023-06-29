@@ -5,7 +5,6 @@ import { fetchSpots } from '../../store/spots';
 
 function Spots() {
   const dispatch = useDispatch();
-
   // Fetch spots when the component mounts
   useEffect(() => {
     dispatch(fetchSpots());
@@ -13,14 +12,16 @@ function Spots() {
 
   // Get spots from the Redux store
   const spots = useSelector(state => state.homePage.Spots);
-console.log(`frontend console log here :::::::: ${spots}`)
   // Render a loading message if spots are not yet fetched
   if (!spots) {
     return (
       <div>Loading...</div>
     );
   }
-
+  const avgRating = (spot) => {
+    if (spot.avgRating) {return spot.avgRating } else {return "New!"}
+  }
+ 
   // Render the spots
   return (
     <div className='spotTileWireFrameContainer'>
@@ -29,6 +30,7 @@ console.log(`frontend console log here :::::::: ${spots}`)
           <img className='previewImage' src={spot.previewImage}></img>
           <p>{spot.city},{spot.state}</p>
           <p>${spot.price} night</p>
+          <p>★ {avgRating(spot)}</p>
           {/* Render other spot data here */}
         </NavLink>
       ))}
