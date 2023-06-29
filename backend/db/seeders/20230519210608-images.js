@@ -11,7 +11,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(options, [
       {
-        url: 'backend/Images/LavaCave.png',
+        url: 'https://images-ext-2.discordapp.net/external/QsdkIVtMyaHVGZ0heIQOGVAnKX2n-dmJQapGHdxWsJo/https/cdn.mage.space/generate/41e424eead3a4d598f0bf4ab1c0affa7.png?width=526&height=928',
         previewImage: true,
         // type: 'png',
         indexId: 1,

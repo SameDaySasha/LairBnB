@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
 import { fetchSpots } from '../../store/spots';
 
 function Spots() {
@@ -22,13 +23,14 @@ console.log(`frontend console log here :::::::: ${spots}`)
 
   // Render the spots
   return (
-    <div>
+    <div className='spotTileWireFrameContainer'>
       {spots.map(spot => (
-        <div key={spot.id}>
-          <h2>{spot.name}</h2>
-          <p>{spot.description}</p>
+        <NavLink to={`/spots/${spot.id}`}className='spotTileWireFrame' key={spot.id}>
+          <img className='previewImage' src={spot.previewImage}></img>
+          <p>{spot.city},{spot.state}</p>
+          <p>${spot.price} night</p>
           {/* Render other spot data here */}
-        </div>
+        </NavLink>
       ))}
     </div>
   );

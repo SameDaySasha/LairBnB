@@ -16,3 +16,20 @@ body{
     background-position: center;
   }
   
+
+  .spotTileWireFrame{
+    background: rgb(0, 255, 110);
+    height: 300px;
+    width: 200px;
+    margin: 60px;
+
+  }
+  .spotTileWireFrameContainer{
+   display: flex;
+   flex-wrap: wrap;
+  }
+
+  .previewImage{
+    height: 200px;
+    width: 200px;
+  }
