@@ -26,7 +26,7 @@ module.exports = {
           lat: 39.123,
           lng: 98.456,
           name: "Flamescale's Lair",
-          description: "test",
+          description: "deez absolute nuts",
           price: 500,
           previewImage: 'backend/Images/FlameCave.png',
         },

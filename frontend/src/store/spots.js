@@ -29,8 +29,6 @@ export const fetchSpots = () => async (dispatch) => {
 export const getOneSpot = (id) => async (dispatch) => { // New thunk action creator
   const response = await fetch(`/api/spots/${id}`);
   const details = await response.json();
-  console.log("This is the console log from the thunk +++++")
-  console.log(details)
   dispatch(setSpotDetails(details));
   return response;
 };

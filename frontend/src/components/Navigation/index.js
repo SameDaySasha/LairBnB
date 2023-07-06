@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import './Navigation.css';  // Importing the shared CSS file
+import logo from '../componentImages/logo.png';  // Import your logo
 
 // Define the Navigation component
 function Navigation({ isLoaded }){
@@ -31,8 +32,9 @@ function Navigation({ isLoaded }){
   return (
     <div className="nav-container">
       
-      <NavLink exact to="/" className="nav-link home-link">Home</NavLink>  {/* Link to the home page */}
-      
+      <NavLink exact to="/" className="nav-link home-link">
+    <img src={logo} alt="Home" className="logo" />
+</NavLink>
       {isLoaded && sessionLinks}  {/* If the page is loaded, display the session links */}
     </div>
   );
