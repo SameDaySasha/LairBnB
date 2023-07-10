@@ -10,7 +10,10 @@
     display: block;
     margin-bottom: 10px;
   }
-  
+  .CreateSpotForm label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
   .CreateSpotForm input[type="text"],
   .CreateSpotForm input[type="number"],
   .CreateSpotForm textarea {

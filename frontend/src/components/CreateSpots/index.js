@@ -64,8 +64,8 @@ function CreateSpotForm() {
 
     if (newSpot) {
       // If the spot was successfully created, redirect to its detail page
-      console.log('this is the new spot ' + newSpot)
-      // history.push(`/spots/${newSpot.id}`);
+    
+      history.push(`/spots/${newSpot.id}`);
     } else {
       // If there was an error, add it to the errors array
       setErrors(prevErrors => [...prevErrors, "An error occurred while creating the spot"]);
@@ -74,58 +74,57 @@ function CreateSpotForm() {
 
   // In your component's return statement, create the form with the necessary inputs and labels
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="CreateSpotForm" onSubmit={handleSubmit}>
       <h1>Create a New Spot</h1>
   
       {/* Display validation errors */}
       {errors.map((error, idx) => <p key={idx}>{error}</p>)}
   
-      <label>
-        Address:
+      <div>
+        <label>Address:</label>
         <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
-      </label>
-  
-      <label>
-        City:
+      </div>
+
+      <div>
+        <label>City:</label>
         <input type="text" value={city} onChange={(e) => setCity(e.target.value)} />
-      </label>
-  
-      <label>
-        State:
+      </div>
+
+      <div>
+        <label>State:</label>
         <input type="text" value={state} onChange={(e) => setState(e.target.value)} />
-      </label>
-  
-      <label>
-        Country:
+      </div>
+
+      <div>
+        <label>Country:</label>
         <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
-      </label>
-  
-      <label>
-        Name of your spot:
+      </div>
+
+      <div>
+        <label>Name of your spot:</label>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
-  
-      <label>
-        Description:
+      </div>
+
+      <div>
+        <label>Description:</label>
         <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-      </label>
-  
-      <label>
-        Price per night (USD):
+      </div>
+
+      <div>
+        <label>Price per night (USD):</label>
         <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
-      </label>
-  
-      <label>
-        Preview Image URL:
+      </div>
+
+      <div>
+        <label>Preview Image URL:</label>
         <input type="text" value={imageUrls[0]} onChange={(e) => setImageUrls([e.target.value, ...imageUrls.slice(1)])} />
-      </label>
-  
+      </div>
+
       {/* Repeat for other image URL inputs... */}
   
       <button type="submit">Create Spot</button>
     </form>
   );
-  
 }
 
 export default CreateSpotForm;
