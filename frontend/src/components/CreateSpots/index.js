@@ -16,8 +16,8 @@ function CreateSpotForm() {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
-  const [lat, setLat] = useState("");
-  const [lng, setLng] = useState("");
+  const [lat, setLat] = useState(null);
+  const [lng, setLng] = useState(null);  
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -54,8 +54,8 @@ function CreateSpotForm() {
       city,
       state,
       country,
-      lat,
-      lng,
+      lat:+lat,
+      lng:+lng,
       name,
       description,
       price,
@@ -64,7 +64,8 @@ function CreateSpotForm() {
 
     if (newSpot) {
       // If the spot was successfully created, redirect to its detail page
-      history.push(`/spots/${newSpot.id}`);
+      console.log('this is the new spot ' + newSpot)
+      // history.push(`/spots/${newSpot.id}`);
     } else {
       // If there was an error, add it to the errors array
       setErrors(prevErrors => [...prevErrors, "An error occurred while creating the spot"]);
