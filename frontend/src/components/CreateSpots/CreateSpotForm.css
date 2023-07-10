@@ -1,0 +1,49 @@
+.CreateSpotForm {
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .CreateSpotForm label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .CreateSpotForm input[type="text"],
+  .CreateSpotForm input[type="number"],
+  .CreateSpotForm textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+  
+  .CreateSpotForm input[type="text"]:focus,
+  .CreateSpotForm input[type="number"]:focus,
+  .CreateSpotForm textarea:focus {
+    outline: none;
+    border-color: #ff7f00;
+  }
+  
+  .CreateSpotForm input[type="submit"] {
+    background-color: #ff7f00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .CreateSpotForm input[type="submit"]:hover {
+    background-color: #ff5500;
+  }
+  
+  .CreateSpotForm .error {
+    color: red;
+    margin-bottom: 20px;
+  }
+  

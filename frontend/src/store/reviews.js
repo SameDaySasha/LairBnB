@@ -1,5 +1,6 @@
 // Action types
 const SET_REVIEWS = 'reviews/setReviews';
+const SET_REVIEW_SUMMARY = 'reviews/setReviewSummary'; // <-- new action type
 
 // Action creators
 const setReviews = (reviews) => {
@@ -12,20 +13,31 @@ const setReviews = (reviews) => {
 // Thunk action creators
 export const fetchReviewsForSpot = (id) => async (dispatch) => {
   const response = await fetch(`/api/spots/${id}/reviews`);
-  const reviewsData = await response.json();
-  
-  dispatch(setReviews(reviewsData.Reviews));
-  return response;
-};
+
+  if(response.ok){
+    const data = await response.json();
+    dispatch(setReviews(data.Reviews));
+  }
+}
+
+
 
 // Initial state
-const initialState = [];
+const initialState = {
+  reviews: [],
+  reviewSummary: {
+    averageRating: 0,
+    reviewCount: 0,
+  },
+};
 
 // Reducer
 const reviewsReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_REVIEWS:
-      return action.payload;
+      return { ...state, reviews: action.payload };
+    case SET_REVIEW_SUMMARY: // <-- handle new action
+      return { ...state, reviewSummary: action.payload };
     default:
       return state;
   }

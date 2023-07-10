@@ -8,15 +8,23 @@ import SignupFormModal from "../SignupFormModal";
 import "./Navigation.css";
 import { logout } from "../../store/session";
 import logo from "../componentImages/logo.png"
+
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
 
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
-        <ProfileButton user={sessionUser} />
-      </li>
+      <>
+        <li>
+          <button className="createSpotButton">
+            <NavLink to="/create-spot">Create a New Spot</NavLink>
+          </button>
+        </li>
+        <li>
+          <ProfileButton user={sessionUser} />
+        </li>
+      </>
     );
   } else {
     sessionLinks = (
@@ -37,7 +45,6 @@ function Navigation({ isLoaded }) {
     <div className="NavBar">
       <li>
         <NavLink exact to="/"><img className="logo" src={logo}></img>
-
         </NavLink>
       </li>
       {isLoaded && sessionLinks}
