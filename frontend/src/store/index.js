@@ -2,12 +2,13 @@ import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
 import spotsReducer from "./spots";
-import reviewsReducer from "./reviews";  // import your reviewsReducer
+import reviewsReducer from "./reviews";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
-  homePage: spotsReducer,
-  reviews: reviewsReducer,  // include your reviewsReducer
+  homePage: spotsReducer, // This will still be available under the 'homePage' key
+  spots: spotsReducer, // This will make the spotsReducer available under the 'spots' key
+  reviews: reviewsReducer,
 });
 
 let enhancer;
