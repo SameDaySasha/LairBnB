@@ -7,7 +7,7 @@ function ManageSpots() {
   const dispatch = useDispatch();
 
   // Select userSpots from the state
-  const spots = useSelector(state => state.spots.userSpots || {});
+  const spots = useSelector(state => state.spots.userSpots|| {});
 
   useEffect(() => {
     dispatch(fetchUserSpots());

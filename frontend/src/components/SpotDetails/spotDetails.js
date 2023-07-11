@@ -46,13 +46,17 @@ const SpotDetails = () => {
           <p>{spot.description}</p>
         </div>
         <div className="sidebar">
-          <div className="ratings-container">
-            <div className="average-rating"> ★: {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "New!"}</div>
-            <div className="dot">.</div>
-            <div className="review-container">
-              <div className="review-count">{spot.numReviews === 1 ? `${spot.numReviews} review` : `${spot.numReviews} reviews`}</div>
-            </div>
-          </div>
+        <div className="ratings-container">
+  <div className="average-rating"> ★: {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "New!"}</div>
+  {spot.numReviews > 0 && (
+    <>
+      <div className="dot">·</div>
+      <div className="review-container">
+        <div className="review-count">{spot.numReviews === 1 ? `${spot.numReviews} review` : `${spot.numReviews} reviews`}</div>
+      </div>
+    </>
+  )}
+</div>
           <div className="night-price">${spot.price} / night</div>
           <button className="reserve-button" onClick={handleReserveClick}>Reserve</button>
         </div>

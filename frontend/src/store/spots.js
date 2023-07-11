@@ -50,7 +50,7 @@ export const fetchUserSpots = () => async (dispatch) => {
   });
   if (response.ok) {
     const spots = await response.json();
-    dispatch(setUserSpots(spots)); // Dispatch setUserSpots action
+    dispatch(setUserSpots(spots.Spots)); // Dispatch setUserSpots action
     return spots; // Return the spots data
   }
 };
