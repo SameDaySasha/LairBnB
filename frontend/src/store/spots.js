@@ -7,11 +7,15 @@ const ADD_SPOT = 'spots/addSpot'; // New action type
 
 // Action creators
 const setSpots = (spots) => {
+  console.log('setSpots action', spots); // Add this line
   return {
+    
     type: SET_SPOTS,
     payload: spots,
   };
 };
+
+
 
 const setSpotDetails = (details) => {
   return {
@@ -36,19 +40,32 @@ export const fetchSpots = () => async (dispatch) => {
   return response;
 };
 
+export const fetchUserSpots = () => async (dispatch) => {
+  const response = await csrfFetch('/api/user/spots', {
+    method: 'GET',
+  });
+  if (response.ok) {
+    const spots = await response.json();
+    console.log('fetchUserSpots response', spots); // Add this line
+    dispatch(setSpots(spots.Spots));
+  }
+};
+
+
+// get one spot 
 export const getOneSpot = (id) => async (dispatch) => {
   const response = await fetch(`/api/spots/${id}`);
   const details = await response.json();
   dispatch(setSpotDetails(details));
   return response;
 };
-
+//create spot
 export const createSpot = (spot) => async (dispatch) => {
   const response =await csrfFetch('/api/spots', {
     method: 'POST',
-    // headers: {
-    //   'Content-Type': 'application/json',
-    // },
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(spot),
   });
 
@@ -64,10 +81,11 @@ export const createSpot = (spot) => async (dispatch) => {
 
 
 // Initial state
-const initialState = {};
+const initialState = {}
 
-// Reducer
+  // Reducer
 const spotsReducer = (state = initialState, action) => {
+  console.log('spotsReducer', action); // Add this line
   switch (action.type) {
     case SET_SPOTS:
       return {...state, ...action.payload};

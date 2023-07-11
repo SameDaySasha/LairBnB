@@ -49,6 +49,12 @@ function ProfileButton({ user }) {
     history.push('/'); // <-- redirect the user to home page
   };
 
+  // Function to navigate to manage spots page
+  const manageSpots = (e) => {
+    e.preventDefault();
+    history.push('/manage-spots'); // <-- redirect the user to manage spots page
+  };
+
   // String for the dropdown menu's class name, depends on whether the menu is shown or not
   // Add 'visible' class when showMenu is true to display the dropdown
   const ulClassName = "profile-dropdown" + (showMenu ? " visible" : "");
@@ -64,6 +70,9 @@ function ProfileButton({ user }) {
         <li>{user.username}</li>  {/* Display the user's username */}
         <li>{user.firstName} {user.lastName}</li>  {/* Display the user's full name */}
         <li>{user.email}</li>  {/* Display the user's email */}
+        <li>
+          <button onClick={manageSpots}>Manage Spots</button>  {/* Button to navigate to manage spots page */}
+        </li>
         <li>
           <button onClick={logout}>Log Out</button>  {/* Button to log out the user */}
         </li>
