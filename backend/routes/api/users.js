@@ -285,7 +285,12 @@ router.get('/spots', requireAuth, async (req, res) => {
         const totalStars = reviews.reduce((total, review) => total + review.stars, 0);
         avgRating = totalStars / reviews.length;
       }
-
+      const image = await Image.findOne({
+        where:{indexId:spot.id, previewImage: true},
+        attributes:["url"],
+        raw:true
+       });
+       if(image){spot.previewImage = image.url;}else  {spot.previewImage=null}
       return {
         id: spot.id,
         ownerId: spot.ownerId,
@@ -304,7 +309,7 @@ router.get('/spots', requireAuth, async (req, res) => {
         previewImage: spot.previewImage, // Directly use the 'previewImage' attribute
       };
     }));
-
+    
     return res.status(200).json({
       Spots: spotData
     });

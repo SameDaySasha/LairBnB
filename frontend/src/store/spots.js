@@ -72,7 +72,22 @@ export const createSpot = (spot) => async (dispatch) => {
   });
 
   if (response.ok) {
-    const newSpot = await response.json();
+    const newSpot = await response.json(); 
+    // grab data id, 
+    //spot forEach images > data.id
+
+    // use csrfetch to /api/spots/:spotId/images
+    ///spots/:id/images is the route we are hitting with the forEach csrf 
+    spot.images.forEach((imageUrl,i)  => {
+      csrfFetch(`/api/spots/${newSpot.id}/images`,
+      {
+        method: 'POST',
+       headers: {
+      'Content-Type': 'application/json',
+    },body: JSON.stringify({url:imageUrl,
+    preview: i === 0 ? true: false }),
+    })
+    } )
     dispatch(addSpot(newSpot));
     return newSpot;
   } else {

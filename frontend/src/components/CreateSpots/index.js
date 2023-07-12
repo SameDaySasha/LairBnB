@@ -47,7 +47,7 @@ function CreateSpotForm() {
       setErrors(prevErrors => [...prevErrors, "Description needs 30 or more characters"]);
       return;
     }
-
+     images: imageUrls.filter(url => url !== "")
     // Dispatch the createSpot action with the form data
     const newSpot = await dispatch(createSpot({
       address,
@@ -59,7 +59,7 @@ function CreateSpotForm() {
       name,
       description,
       price,
-      images: imageUrls,
+      images: imageUrls.filter(url => url !== "")
     }));
 
     if (newSpot) {
