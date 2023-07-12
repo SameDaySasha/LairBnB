@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { getOneSpot } from "../../store/spots";
 import { fetchReviewsForSpot } from "../../store/reviews";
 import './SpotDetails.css';
+import OpenModalButton from '../OpenModalButton'; // import OpenModalButton
+import ReviewForm from '../ReviewForm'; // import ReviewForm
 
 const SpotDetails = () => {
   const { id } = useParams();
@@ -26,6 +28,13 @@ const SpotDetails = () => {
     alert("Feature coming soon");
   };
 
+  // Check if the current user has already posted a review for this spot
+
+  const userIsOwner = currentUser ? currentUser?.id === spot?.Owner?.id: null
+console.log('THE USER CURRENTLY OWNS THE SPOT  ========> ' + userIsOwner)
+  const userHasPostedReview = reviews.some(review => review.userId === currentUser?.id);
+console.log("THE USER HAS POSTED A REVIEW ON THIS SPOT "  + userHasPostedReview)
+
   return (
     <div className="spot-details">
       <h1 className="spot-name">{spot.name}</h1>
@@ -46,26 +55,32 @@ const SpotDetails = () => {
           <p>{spot.description}</p>
         </div>
         <div className="sidebar">
-        <div className="ratings-container">
-  <div className="average-rating"> ★: {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "New!"}</div>
-  {spot.numReviews > 0 && (
-    <>
-      <div className="dot">·</div>
-      <div className="review-container">
-        <div className="review-count">{spot.numReviews === 1 ? `${spot.numReviews} review` : `${spot.numReviews} reviews`}</div>
-      </div>
-    </>
-  )}
-</div>
+          <div className="ratings-container">
+            <div className="average-rating"> ★: {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "New!"}</div>
+            {spot.numReviews > 0 && (
+              <>
+                <div className="dot">·</div>
+                <div className="review-container">
+                  <div className="review-count">{spot.numReviews === 1 ? `${spot.numReviews} review` : `${spot.numReviews} reviews`}</div>
+                </div>
+              </>
+            )}
+          </div>
           <div className="night-price">${spot.price} / night</div>
           <button className="reserve-button" onClick={handleReserveClick}>Reserve</button>
+          {currentUser && !userIsOwner && !userHasPostedReview && (
+             <OpenModalButton
+                modalComponent={<ReviewForm spotId={spot.id} />}
+                         buttonText="Post Your Review"
+                                             />
+                                             )}
         </div>
       </div>
       {(reviews && reviews.length > 0) ? reviews.map(review => (
-        <div key={review.id} className="review">
-          <h4 className="reviewer-name">{review.User.firstName}</h4>
-          <p className="review-date">{new Date(review.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
-          <p className="review-comment">{review.review}</p>
+        <div key={review?.id} className="review">
+          <h4 className="reviewer-name">{review.User?.firstName}</h4>
+          <p className="review-date">{new Date(review?.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+          <p className="review-comment">{review?.review}</p>
         </div>
       )) : (
         currentUser && currentUser.id !== spot.Owner.id && (
