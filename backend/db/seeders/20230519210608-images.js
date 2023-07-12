@@ -45,60 +45,6 @@ module.exports = {
         indexType: 'Spot',
        
       },
-      {
-        
-        url: 'https://cdn.mage.space/generate/79b94f6f3dc94670a5998d78d58eae7a.png',
-        previewImage: true,
-        // type: 'png',
-        indexId: 5,
-        indexType: 'Spot',
-        
-      },
-      {
-       
-        url: 'https://example.com/image6.png',
-        previewImage: false,
-        // type: 'png',
-        indexId: 6,
-        indexType: 'Spot',
-       
-      },
-      {
-       
-        url: 'https://example.com/image7.png',
-        previewImage: false,
-        // type: 'png',
-        indexId: 7,
-        indexType: 'Spot',
-       
-      },
-      {
-        
-        url: 'https://example.com/image8.png',
-        previewImage: false,
-        // type: 'png',
-        indexId: 8,
-        indexType: 'Spot',
-     
-      },
-      {
-      
-        url: 'https://images-ext-1.discordapp.net/external/gVSAvb0bgwegDY7WlgPebLzMmcj2WHNiyEqYQSW6u58/https/cdn.mage.space/generate/5539c2d6098742b782dd049f97f51e53.png?width=1638&height=928',
-        previewImage: false,
-        // type: 'png',
-        indexId: 9,
-        indexType: 'Review',
-       
-      },
-      {
-       
-        url: 'https://cdn.mage.space/generate/ae20eeaef2c4467ca9ff219f9e6677f4.png',
-        previewImage: false,
-        // type: 'png',
-        indexId: 10,
-        indexType: 'Review',
-       
-      },
     ], {});
   },
 
