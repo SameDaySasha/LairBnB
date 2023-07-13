@@ -565,61 +565,9 @@ return res.status(200).json({ id: newImage.id, url: newImage.url, preview: newIm
 
 
 
-// router.post('/:id/images', requireAuth, async (req, res) => {
-//   // Check if the user is logged in
-//   if (!req.user) {
-//     return res.status(401).json({
-//       message: 'Authentication required'
-//     });
-//   }
-
-//   try {
-//     const spotId = req.params.id;
-//     const userId = req.user.id;
-//     const { url, preview, type } = req.body;  // Include type here
-
-//     // Retrieve the spot with the provided ID
-//     const spot = await Spot.findByPk(spotId);
-
-//     // If the spot doesn't exist, return an error
-//     if (!spot) {
-//       return res.status(404).json({
-//         message: 'Spot couldn\'t be found',
-//       });
-//     }
-
-//     // If the spot's owner isn't the current user, return an error
-//     if (spot.ownerId !== userId) {
-//       return res.status(403).json({
-//         message: 'Unauthorized',
-//       });
-//     }
-
-//     // Create the new Image
-//     const image = await Image.create({
-//       url,
-//       previewImage: preview,  // Here, use previewImage, as per  model
-//       type,  // Include type here
-//       indexId: spotId,
-//       indexType: 'Spot',
-//     });
-
-//     // Respond with the newly created image
-//     return res.status(200).json({
-//       id: image.id,
-//       url: image.url,
-//       type: image.type,  // Include type here
-//       preview: image.previewImage,  // Here, use previewImage, as per  model
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({
-//       message: 'This is no longer a generic error: Internal server error'
-//     });
-//   }
-// });
 
 // DELETE /spots/:id - Delete a Spot
+
 router.delete('/:id', requireAuth, async (req, res) => {
   // Check if the user is logged in
   if (!req.user) {
