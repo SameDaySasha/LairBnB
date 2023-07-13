@@ -1,6 +1,25 @@
-.ratings-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-    
+.spot-details {
+  /* other styles... */
+  border-bottom: 1px solid #ccc; /* or any other styling you prefer */
+}
+
+.reviews-summary {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.average-rating,
+.dot,
+.review-count {
+  display: inline-block;
+  margin-right: 10px; 
+}
+
+.separator {
+  width: 100%;
+  height: 1px;
+  background-color: #000; /* Or any color you prefer */
+  margin-top: 20px;
+}

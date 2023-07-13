@@ -25,9 +25,12 @@ export const fetchReviewsForSpot = (id) => async (dispatch) => {
 
   if(response.ok){
     const data = await response.json();
-    dispatch(setReviews(data.Reviews));
+    // Sort the reviews in descending order of creation date
+    const sortedReviews = data.Reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    dispatch(setReviews(sortedReviews));
   }
 };
+
 
 export const postReview = (spotId, review, stars) => async (dispatch) => { // <-- new thunk action creator
   // console.log('THIS IS THE SPOT ID =======>    ' + spotId)
