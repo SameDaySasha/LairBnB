@@ -1,13 +1,29 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { fetchUserSpots } from '../../store/spots';
+import { fetchUserSpots, deleteSpot } from '../../store/spots';
+import { useModal } from "../../context/Modal";
+import ConfirmDeleteModal from '../ConfirmDeleteModal/index'; // Import the confirmation modal component
 
 function ManageSpots() {
   const dispatch = useDispatch();
 
   // Select userSpots from the state
-  const spots = useSelector(state => state.spots.userSpots|| {});
+  const spots = useSelector(state => state.spots.userSpots || {});
+
+  const { setModalContent } = useModal();
+
+  const handleDeleteClick = (id) => {
+    setModalContent(
+      <ConfirmDeleteModal 
+        onConfirm={async () => {
+          await dispatch(deleteSpot(id));
+          await dispatch(fetchUserSpots()); // Fetch the updated list of user spots
+          setModalContent(null); // Close the modal after the spot is deleted
+        }} 
+      />
+    );
+  };
 
   useEffect(() => {
     dispatch(fetchUserSpots());
@@ -27,7 +43,7 @@ function ManageSpots() {
             <p>★ {spot.avgRating || "New!"}</p>
           </NavLink>
           <button>Update</button>
-          <button>Delete</button>
+          <button onClick={() => handleDeleteClick(spot.id)}>Delete</button>
         </div>
       ))}
     </div>

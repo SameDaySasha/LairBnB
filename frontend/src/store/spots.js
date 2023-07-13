@@ -5,7 +5,7 @@ const SET_SPOTS = 'spots/setSpots';
 const SET_SPOT_DETAILS = 'spots/setSpotDetails';
 const ADD_SPOT = 'spots/addSpot'; // Action type for adding a new spot
 const SET_USER_SPOTS = 'spots/setUserSpots'; // Action type for setting user spots
-
+const DELETE_SPOT = 'spots/deleteSpot';
 // Action creators
 const setSpots = (spots) => {
   return {
@@ -14,6 +14,12 @@ const setSpots = (spots) => {
   };
 };
 
+const deleteSpotAction = (id) => {
+  return {
+    type: DELETE_SPOT,
+    id,
+  };
+};
 const setSpotDetails = (details) => {
   return {
     type: SET_SPOT_DETAILS,
@@ -35,7 +41,23 @@ const setUserSpots = (spots) => { // Action creator for setting user spots
   };
 };
 
-// Thunk action creators
+//////////////////////////////////////// Thunk action creators //////////////////////////////////
+
+export const deleteSpot = (id) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (response.ok) {
+    dispatch(deleteSpotAction(id));
+  } else {
+    const errorData = await response.json();
+    throw new Error(errorData.message);
+  }
+};
+
+
+
 export const fetchSpots = () => async (dispatch) => {
   const response = await fetch('/api/spots');
   const spots = await response.json();
@@ -43,7 +65,6 @@ export const fetchSpots = () => async (dispatch) => {
   return response;
 };
 
-// Thunk action creators
 export const fetchUserSpots = () => async (dispatch) => {
   const response = await csrfFetch('/api/user/spots', {
     method: 'GET',
@@ -110,9 +131,14 @@ const spotsReducer = (state = initialState, action) => {
       return {...state, spotDetails: action.payload};
     case ADD_SPOT:
       return {...state, [action.payload.id]: action.payload};
+    case DELETE_SPOT:
+      const newState = { ...state };
+      delete newState.userSpots[action.id];
+      return newState;
     default:
       return state;
   }
 };
+
 
 export default spotsReducer;
