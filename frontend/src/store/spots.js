@@ -6,11 +6,19 @@ const SET_SPOT_DETAILS = 'spots/setSpotDetails';
 const ADD_SPOT = 'spots/addSpot'; // Action type for adding a new spot
 const SET_USER_SPOTS = 'spots/setUserSpots'; // Action type for setting user spots
 const DELETE_SPOT = 'spots/deleteSpot';
+const UPDATE_SPOT = 'spots/updateSpot';
+
 // Action creators
 const setSpots = (spots) => {
   return {
     type: SET_SPOTS,
     payload: spots,
+  };
+};
+const updateSpotAction = (spot) => {
+  return {
+    type: UPDATE_SPOT,
+    payload: spot,
   };
 };
 
@@ -56,7 +64,24 @@ export const deleteSpot = (id) => async (dispatch) => {
   }
 };
 
+export const updateSpot = (spot) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${spot.id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(spot),
+  });
 
+  if (response.ok) {
+    const updatedSpot = await response.json();
+    dispatch(updateSpotAction(updatedSpot));
+    return updatedSpot;
+  } else {
+    const errorData = await response.json();
+    throw new Error(errorData.message);
+  }
+};
 
 export const fetchSpots = () => async (dispatch) => {
   const response = await fetch('/api/spots');
@@ -135,6 +160,8 @@ const spotsReducer = (state = initialState, action) => {
       const newState = { ...state };
       delete newState.userSpots[action.id];
       return newState;
+      case UPDATE_SPOT:
+      return {...state, [action.payload.id]: action.payload};
     default:
       return state;
   }

@@ -8,7 +8,7 @@ import SpotDetails from "./components/SpotDetails/spotDetails"
 import Spots from "./components/HomePage/spots";
 import CreateSpotForm from "./components/CreateSpots/index"; // Import the CreateSpotForm component
 import ManageSpots from "./components/ManageSpots/index"; // Import the ManageSpots component
-
+import UpdateSpotForm from "./components/UpdateSpotForm";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -21,6 +21,7 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
+          <Route path="/spots/update/:id" component={UpdateSpotForm} />
           <Route path="/spots/:id"> 
             <SpotDetails />
           </Route>

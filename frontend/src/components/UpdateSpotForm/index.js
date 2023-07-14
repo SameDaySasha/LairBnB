@@ -1,33 +1,49 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { createSpot } from "../../store/spots"; 
-import './CreateSpotForm.css';
-
-function CreateSpotForm() {
+import { updateSpot, getOneSpot } from "../../store/spots"; 
+import '../CreateSpots/CreateSpotForm.css';
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+function UpdateSpotForm() {
+  
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
+  const { id } = useParams();
+  const spot = useSelector(state => state.spots.spotDetails);
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [country, setCountry] = useState('');
   const [lat, setLat] = useState(null);
   const [lng, setLng] = useState(null);  
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const [price, setPrice] = useState("");
   const [imageUrls, setImageUrls] = useState(["", "", "", "", ""]);
   const [errors, setErrors] = useState([]);
 
+
+  useEffect(() => {
+    if (spot) {
+      setAddress(spot.address);
+      setCity(spot.city);
+      setState(spot.state);
+      setCountry(spot.country);
+      setName(spot.name);
+      setDescription(spot.description);
+      setPrice(spot.price);
+    } else {
+      dispatch(getOneSpot(id));
+    }
+  }, [dispatch, id, spot]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const spot = {
-        images: imageUrls.filter(url => url !== ""),
-      };
-
-   const validationErrors =[];
-
+  
+    const validationErrors =[];
+  
     if (!address || !city || !state || !country || !name || !description || !price) {
       if(!address){
         validationErrors.push('Address field must not be empty')
@@ -35,14 +51,14 @@ function CreateSpotForm() {
       setErrors(validationErrors);
       return;
     }
-
+  
     if (description.length < 30) {
       setErrors(prevErrors => [...prevErrors, "Description needs 30 or more characters"]);
       return;
     }
-
-    
-    const newSpot = await dispatch(createSpot({
+  
+    const updatedSpot = await dispatch(updateSpot({
+      id: spot.id, // Add the id of the spot to be updated
       address,
       city,
       state,
@@ -54,17 +70,17 @@ function CreateSpotForm() {
       price,
       images: imageUrls.filter(url => url !== "")
     }));
-
-    if (newSpot) {
-      history.push(`/spots/${newSpot.id}`);
+  
+    if (updatedSpot) {
+      history.push(`/spots/${updatedSpot.id}`);
     } else {
-      setErrors(prevErrors => [...prevErrors, "An error occurred while creating the spot"]);
+      setErrors(prevErrors => [...prevErrors, "An error occurred while updating the spot"]);
     }
   };
-
+  
   return (
     <form className="CreateSpotForm" onSubmit={handleSubmit}>
-      <h1>Create a New Spot</h1>
+      <h1>Update Your Spot</h1>
 
       {/* Display validation errors */}
       {errors.map((error, idx) => <p key={idx}>{error}</p>)}
@@ -117,29 +133,9 @@ function CreateSpotForm() {
         </div>
       </section>
 
-      <section>
-        <h2>Liven up your spot with photos</h2>
-        <p>Submit a link to at least one photo to publish your spot.</p>
-        {imageUrls.map((url, index) => (
-          <div key={index}>
-            <label>Image URL {index + 1}:</label>
-            <input
-              type="text"
-              value={url}
-              onChange={(e) => {
-                const newUrls = [...imageUrls];
-                newUrls[index] = e.target.value;
-                setImageUrls(newUrls);
-              }}
-              placeholder={index === 0 ? "Preview Image URL" : "Image URL"}
-            />
-          </div>
-        ))}
-      </section>
-
-      <button type="submit">Create Spot</button>
+      <button type="submit">Update Spot</button>
     </form>
   );
 }
 
-export default CreateSpotForm;
+export default UpdateSpotForm;

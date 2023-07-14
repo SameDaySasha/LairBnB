@@ -1,9 +1,10 @@
-//frontend/src/components/ReviewForm/index.js
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { postReview } from '../../store/reviews'; // import your action creator for posting a review
+import { useDispatch } from 'react-redux';
+import { postReview } from '../../store/reviews';
 import { useModal } from "../../context/Modal";
-function ReviewForm({ spotId, }) {
+import './ReviewForm.css'; // we'll add some styles here later
+
+function ReviewForm({ spotId }) {
   const { closeModal } = useModal();
   const dispatch = useDispatch();
   const [review, setReview] = useState('');
@@ -14,7 +15,6 @@ function ReviewForm({ spotId, }) {
     e.preventDefault();
     setErrors([]);
 
-    // dispatch your postReview action here
     const data = await dispatch(postReview(spotId, review, stars));
     if (!data.ok) {
       setErrors(data);
@@ -24,13 +24,15 @@ function ReviewForm({ spotId, }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="review-form">
+      <h1>How was your stay?</h1>
       <ul>
         {errors && errors?.map((error, idx) => <li key={idx}>{error}</li>)}
       </ul>
       <label>
-        Review
+        Leave your review here...
         <textarea
+          className="review-textarea"
           value={review}
           onChange={(e) => setReview(e.target.value)}
           required
@@ -39,10 +41,13 @@ function ReviewForm({ spotId, }) {
       <label>
         Stars
         <input
+          className="stars-input"
           type="number"
           value={stars}
           onChange={(e) => setStars(e.target.value)}
           required
+          min="1"
+          max="5"
         />
       </label>
       <button type="submit">Submit Your Review</button>
@@ -51,4 +56,3 @@ function ReviewForm({ spotId, }) {
 }
 
 export default ReviewForm;
-
