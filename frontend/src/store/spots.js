@@ -160,8 +160,7 @@ const spotsReducer = (state = initialState, action) => {
       const newState = { ...state };
       delete newState.userSpots[action.id];
       return newState;
-      case UPDATE_SPOT:
-      return {...state, [action.payload.id]: action.payload};
+      
     default:
       return state;
   }

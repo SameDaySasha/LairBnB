@@ -78,3 +78,7 @@ a {
     left: 10px;
   }
   
+.createSpotButton{
+  display: flex;
+  justify-content: flex-end;
+}

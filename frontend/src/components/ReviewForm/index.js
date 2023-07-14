@@ -4,7 +4,7 @@ import { postReview } from '../../store/reviews';
 import { useModal } from "../../context/Modal";
 import './ReviewForm.css'; // we'll add some styles here later
 
-function ReviewForm({ spotId }) {
+function ReviewForm({ spotId,onReviewSubmit }) {
   const { closeModal } = useModal();
   const dispatch = useDispatch();
   const [review, setReview] = useState('');
@@ -13,13 +13,9 @@ function ReviewForm({ spotId }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors([]);
-
-    const data = await dispatch(postReview(spotId, review, stars));
-    if (!data.ok) {
-      setErrors(data);
-    } else {
-      closeModal();
+    const newReview = await dispatch(postReview(spotId, review, stars));
+    if (newReview) {
+      onReviewSubmit(newReview); // call the onReviewSubmit function after a new review is submitted
     }
   };
 

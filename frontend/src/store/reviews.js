@@ -3,12 +3,19 @@ import { csrfFetch } from "./csrf";
 // Action types
 const SET_REVIEWS = 'reviews/setReviews';
 const ADD_REVIEW = 'reviews/addReview'; // <-- new action type
-
+const DELETE_REVIEW = 'reviews/deleteReview';
 // Action creators
 const setReviews = (reviews) => {
   return {
     type: SET_REVIEWS,
     payload: reviews,
+  };
+};
+
+const deleteReviewAction = (id) => {
+  return {
+    type: DELETE_REVIEW,
+    id,
   };
 };
 
@@ -30,12 +37,20 @@ export const fetchReviewsForSpot = (id) => async (dispatch) => {
     dispatch(setReviews(sortedReviews));
   }
 };
+export const deleteReview = (id) => async (dispatch) => {
+  const response = await csrfFetch(`/api/reviews/${id}`, {
+    method: 'DELETE',
+  });
 
+  if (response.ok) {
+    dispatch(deleteReviewAction(id));
+  } else {
+    const errorData = await response.json();
+    throw new Error(errorData.message);
+  }
+};
 
-export const postReview = (spotId, review, stars) => async (dispatch) => { // <-- new thunk action creator
-  // console.log('THIS IS THE SPOT ID =======>    ' + spotId)
-  // console.log('THIS IS THE REVIEW =======>    ' + review)
-  // console.log('THIS IS THE STARS =======>    ' + stars)
+export const postReview = (spotId, review, stars) => async (dispatch) => {
   const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
     method: 'POST',
     headers: {
@@ -47,7 +62,7 @@ export const postReview = (spotId, review, stars) => async (dispatch) => { // <-
   if (response.ok) {
     const data = await response.json();
     dispatch(addReview(data));
-    return response;
+    return data; // return the newly created review
   } else {
     const data = await response.json();
     console.log('THIS IS THE DATA FROM POSTREVIEW THUNK ======= > ' + data)
@@ -56,6 +71,7 @@ export const postReview = (spotId, review, stars) => async (dispatch) => { // <-
     }
   }
 };
+
 
 // Initial state
 const initialState = {
@@ -69,6 +85,8 @@ const reviewsReducer = (state = initialState, action) => {
       return { ...state, reviews: action.payload };
     case ADD_REVIEW: // <-- handle new action
       return { ...state, reviews: [action.payload, ...state.reviews] };
+      case DELETE_REVIEW:
+        return { ...state, reviews: state.reviews.filter(review => review.id !== action.id) };
     default:
       return state;
   }
