@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
@@ -6,20 +6,12 @@ import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
 import "./Navigation.css";
-import { logout } from "../../store/session";
 import logo from "../componentImages/logo.png";
 import audioFile from "../../music/DND.mp3";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
-  const [isAudioPlaying, setIsAudioPlaying] = useState(true);
   const audioRef = useRef(null);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.play();
-    }
-  }, []);
 
   let sessionLinks;
   if (sessionUser) {
@@ -58,11 +50,9 @@ function Navigation({ isLoaded }) {
         </NavLink>
       </li>
       {isLoaded && sessionLinks}
-      <audio ref={audioRef} src={audioFile} autoPlay loop />
+      <audio ref={audioRef} src={audioFile} autoPlay loop muted controls />
     </div>
   );
 }
 
 export default Navigation;
-
-// import audioFile from "../../music/DND.mp3";
