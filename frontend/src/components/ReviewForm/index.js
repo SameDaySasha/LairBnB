@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { postReview } from '../../store/reviews';
 import { useModal } from "../../context/Modal";
-import './ReviewForm.css'; // we'll add some styles here later
+import './ReviewForm.css'; 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons';
 
 function ReviewForm({ spotId,onReviewSubmit }) {
   const { closeModal } = useModal();
   const dispatch = useDispatch();
   const [review, setReview] = useState('');
   const [stars, setStars] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
   const [errors, setErrors] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -19,6 +23,18 @@ function ReviewForm({ spotId,onReviewSubmit }) {
     }
   };
 
+  const handleMouseOver = (newHoverRating) => {
+    setHoverRating(newHoverRating);
+  };
+
+  const handleMouseOut = () => {
+    setHoverRating(0);
+  };
+
+  const handleClick = (newRating) => {
+    setStars(newRating);
+  };
+
   return (
     <form onSubmit={handleSubmit} className="review-form">
       <h1>How was your stay?</h1>
@@ -26,27 +42,27 @@ function ReviewForm({ spotId,onReviewSubmit }) {
         {errors && errors?.map((error, idx) => <li key={idx}>{error}</li>)}
       </ul>
       <label>
-        Leave your review here...
         <textarea
           className="review-textarea"
           value={review}
           onChange={(e) => setReview(e.target.value)}
           required
+          placeholder="Leave your review here..."
         />
       </label>
       <label>
         Stars
-        <input
-          className="stars-input"
-          type="number"
-          value={stars}
-          onChange={(e) => setStars(e.target.value)}
-          required
-          min="1"
-          max="5"
-        />
+        {[1, 2, 3, 4, 5].map((star) => (
+          <FontAwesomeIcon
+            key={star}
+            icon={star <= (hoverRating || stars) ? solidStar : regularStar}
+            onMouseOver={() => handleMouseOver(star)}
+            onMouseOut={handleMouseOut}
+            onClick={() => handleClick(star)}
+          />
+        ))}
       </label>
-      <button type="submit">Submit Your Review</button>
+      <button type="submit" disabled={review.length < 10}>Submit Your Review</button>
     </form>
   );
 }
