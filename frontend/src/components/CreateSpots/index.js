@@ -40,6 +40,12 @@ function CreateSpotForm() {
       setErrors(prevErrors => [...prevErrors, "Description needs 30 or more characters"]);
       return;
     }
+ // Check if at least one image URL is provided and it contains at least two characters
+ const validImageUrls = imageUrls.filter(url => url.length >= 2);
+ if (validImageUrls.length === 0) {
+   setErrors(prevErrors => [...prevErrors, "At least one image URL must be provided"]);
+   return;
+ }
 
     
     const newSpot = await dispatch(createSpot({
