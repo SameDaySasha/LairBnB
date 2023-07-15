@@ -1,68 +1,103 @@
 *{
   box-sizing: border-box;
 }
+
 #root{
   width: 100%;
 }
+
 body{
-    width: 100%;
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    font-family: Arial, sans-serif;
-    background-image: url('../../images/newBackgroundScreen.png');
-    background-size: cover;
-    background-position: center;
-  }
-  
+  width: 100%;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  background-image: url('../../images/newBackgroundScreen.png');
+  background-size: cover;
+  background-position: center;
+}
 
-  .spotTileWireFrame{
-    background: rgb(0, 255, 110);
-    height: 300px;
-    width: 200px;
-    margin: 60px;
+.spotTileWireFrameContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 20px;
+}
 
-  }
-  .spotTileWireFrameContainer{
-   display: flex;
-   flex-wrap: wrap;
-  }
+.spotTileWireFrame {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  height: 300px;
+  margin: 60px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  background: rgb(0, 255, 110);
+  position: relative; /* Add this line */
+}
+.spotTileWireFrame:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
 
-  .previewImage{
-    height: 200px;
-    width: 200px;
-  }
-  .spot-details {
-    display: flex;
-    flex-direction: column;
-    width: 70%;
-    margin: auto;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-    background-color: rgba(0, 255, 0, 0.2); /* This creates a green, semi-transparent background */
-    border: 2px solid green; /* This outlines the box in green */
-  }
+.spotTileWireFrame img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.spotTileWireFrame p {
+  padding: 10px;
+  margin: 0;
+}
+
+.spotTileWireFrame p:first-child {
+  font-weight: bold;
+  order: 2; /* Add this line */
+}
+
+.spotTileWireFrame p:last-child {
+  color: #ff5a5f;
+  position: absolute; /* Add this line */
+  top: 200px; /* Add this line */
+  left: 160px; /* Add this line */
+  order: 1; /* Add this line */
   
-  .spot-images {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .bottom-section {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .spot-description {
-    flex-grow: 1; 
-    margin-right: 10px;
-  }
-  
-  .sidebar {
-    width: 25%; /* adjust this to control the size of the booking area */
-    background-color: #f7f7f7;
-    padding: 1em;
-  }
-  
+}
+
+.spot-details {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  margin: auto;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+  background-color: rgba(0, 255, 0, 0.2);
+  border: 2px solid green;
+}
+
+.spot-images {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bottom-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.spot-description {
+  flex-grow: 1; 
+  margin-right: 10px;
+}
+
+.sidebar {
+  width: 25%;
+  background-color: #f7f7f7;
+  padding: 1em;
+}
