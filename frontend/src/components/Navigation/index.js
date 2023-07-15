@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
@@ -11,7 +11,14 @@ import audioFile from "../../music/DND.mp3";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
-  const audioRef = useRef(null);
+
+  useEffect(() => {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioElement = document.querySelector('audio');
+    const track = audioContext.createMediaElementSource(audioElement);
+    track.connect(audioContext.destination);
+    audioElement.play();
+  }, []);
 
   let sessionLinks;
   if (sessionUser) {
@@ -50,7 +57,7 @@ function Navigation({ isLoaded }) {
         </NavLink>
       </li>
       {isLoaded && sessionLinks}
-      <audio ref={audioRef} src={audioFile} autoPlay loop muted controls />
+      <audio src={audioFile} loop />
     </div>
   );
 }
