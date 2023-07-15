@@ -13,8 +13,8 @@
 .average-rating,
 .dot,
 .review-count {
-  display: inline-block;
-  margin-right: 10px; 
+  display: inline-flex;
+  margin-right: 5px; 
 }
 
 .separator {
