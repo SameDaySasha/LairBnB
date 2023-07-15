@@ -24,19 +24,16 @@ a {
   background-color: #434140;
 }
 
-
 .nav-link {
   margin-right: 15px;
   font-size: 1.2em;
 }
-
 
 .profile-button {
   border: none;
   background: none;
   cursor: pointer;
 }
-
 
 .profile-dropdown {
   position: absolute;
@@ -59,26 +56,31 @@ a {
   border-bottom: none;
 }
 
-
 .profile-dropdown.visible {
   display: block;
 }
 
+.hidden {
+  display: none;
+} 
 
+.logo {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 10px; 
+  left: 10px;
+}
 
- .hidden {
-    display: none;
-  } 
-  
-  .logo {
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    top: 10px; 
-    left: 10px;
-  }
-  
-.createSpotButton{
-  display: flex;
-  justify-content: flex-end;
+.createSpotButton {
+  margin-left: 925px; /* Push the button to the right side of the navbar */
+}
+
+.audio-control-button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 0.8em;
+  cursor: pointer;
+  margin-left: 50px; /* Add some space between the logo and the button */
 }

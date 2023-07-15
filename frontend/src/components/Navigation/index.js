@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
@@ -11,14 +11,17 @@ import audioFile from "../../music/DND.mp3";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const audioRef = useRef(null);
 
-  useEffect(() => {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const audioElement = document.querySelector('audio');
-    const track = audioContext.createMediaElementSource(audioElement);
-    track.connect(audioContext.destination);
-    audioElement.play();
-  }, []);
+  const handleAudioControl = () => {
+    if (isAudioPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsAudioPlaying(!isAudioPlaying);
+  };
 
   let sessionLinks;
   if (sessionUser) {
@@ -56,8 +59,13 @@ function Navigation({ isLoaded }) {
           <img className="logo" src={logo} alt="Logo" />
         </NavLink>
       </li>
+      <li>
+        <button onClick={handleAudioControl} className="audio-control-button">
+          {isAudioPlaying ? 'Pause' : 'Play'}
+        </button>
+      </li>
       {isLoaded && sessionLinks}
-      <audio src={audioFile} loop />
+      <audio ref={audioRef} src={audioFile} loop />
     </div>
   );
 }
