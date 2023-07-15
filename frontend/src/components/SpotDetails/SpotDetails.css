@@ -23,3 +23,20 @@
   background-color: #000; /* Or any color you prefer */
   margin-top: 20px;
 }
+
+.spot-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px; /* Add some space between images */
+  max-width: 100%; /* Ensure the container doesn't exceed its parent's width */
+  overflow: hidden; /* Hide any overflowing content */
+}
+
+.large-image {
+  flex: 1 1 100%; /* Make the large image take up the full width of the container */
+}
+
+.small-image {
+  flex: 1 1 calc(33.33% - 10px); /* Make the small images take up a third of the container's width, minus the gap size */
+}
