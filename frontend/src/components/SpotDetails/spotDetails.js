@@ -52,29 +52,14 @@ const SpotDetails = () => {
       <h1 className="spot-name">{spot.name}</h1>
       <h4 className="spot-location">{spot.city}, {spot.state}, {spot.country}</h4>
       <div className="spot-images">
-        {spot.SpotImages && spot.SpotImages.map((image, index) => {
-          if (index === 0) {
-            return (
-              <img 
-                key={image.id} 
-                src={image.url} 
-                alt="Spot" 
-                className='large-image'
-              />
-            );
-          } else {
-            return (
-              <div className="small-images-container">
-                <img 
-                  key={image.id} 
-                  src={image.url} 
-                  alt="Spot" 
-                  className='small-image'
-                />
-              </div>
-            );
-          }
-        })}
+        {spot.SpotImages && spot.SpotImages.map((image, index) => (
+          <img 
+            key={image.id} 
+            src={image.url} 
+            alt="Spot" 
+            className={index === 0 ? 'large-image' : 'small-image'}
+          />
+        ))}
       </div>
       <div className="bottom-section">
         <div className="spot-description">
