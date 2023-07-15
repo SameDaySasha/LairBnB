@@ -80,7 +80,11 @@ const SpotDetails = () => {
           </div>
           <div className="night-price">${spot.price} / night</div>
           <button className="reserve-button" onClick={handleReserveClick}>Reserve</button>
-          {currentUser && !userIsOwner && !userHasPostedReview && (
+         
+        </div>
+      </div>
+      <div className="separator"></div> {/* Separator Line */}
+      {currentUser && !userIsOwner && !userHasPostedReview && (
              <OpenModalButton
              modalComponent={
                <ReviewForm 
@@ -96,9 +100,6 @@ const SpotDetails = () => {
              buttonText="Post Your Review"
            />
                                                  )}
-        </div>
-      </div>
-      <div className="separator"></div> {/* Separator Line */}
       <div className="reviews-summary"> {/* New review summary section */}
         <div className="average-rating"> ★: {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "New!"}</div>
         {spot.numReviews > 0 && (
