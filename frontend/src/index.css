@@ -62,8 +62,8 @@ body{
 }
 
 .spotTileWireFrame p:last-child {
-  color: #ff5a5f;
-  position: absolute; /* Add this line */
+  color: white;
+  position: flex; /* Add this line */
   top: 200px; /* Add this line */
   left: 160px; /* Add this line */
   order: 1; /* Add this line */

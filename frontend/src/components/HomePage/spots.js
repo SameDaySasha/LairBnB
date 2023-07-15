@@ -29,7 +29,7 @@ function Spots() {
   const avgRating = (spot) => {
     if (spot.avgRating) {
       // Return the average rating if it exists
-      return spot.avgRating;
+      return spot.avgRating.toFixed(2);
     } else {
       // Return "New!" if no average rating is available
       return "New!";
@@ -49,13 +49,13 @@ function Spots() {
             <img className='previewImage' src={spot.previewImage}></img>
             {/* Display the spot's city and state */}
             <div className='spotDetailContainer'>
-            <p>{spot.city}, {spot.state}</p>
-            {/* Display the spot's price per night */}
-            <p>${spot.price} night</p>
-            {/* Display the spot's average rating or "New!" */}
-            <p>★ {avgRating(spot)}</p>
-            {/* Render other spot data here */}
-            </div>
+  <div className="spotTitleAndRating">
+    <p>{spot.city}, {spot.state}</p>
+    <p>★ {avgRating(spot)}</p>
+   <p className="spotPrice">${spot.price} per night</p>
+  </div>
+</div>
+
           </NavLink>
         </div>
       ))}
