@@ -19,9 +19,10 @@ body{
 }
 
 .spotTileWireFrameContainer {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: grid;
   padding: 20px;
   gap: 20px;
 }
@@ -29,9 +30,9 @@ body{
 .spotTileWireFrame {
   display: flex;
   flex-direction: column;
-  width: 200px;
-  height: 300px;
-  margin: 60px;
+  width: 20vw;
+  /* height: 300px; */
+  /* margin: 60px; */
   border: 1px solid #ccc;
   border-radius: 10px;
   overflow: hidden;

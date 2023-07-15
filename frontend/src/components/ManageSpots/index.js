@@ -33,21 +33,27 @@ function ManageSpots() {
   };
 
   return (
-    <div className="spotTileWireFrameContainer">
+    <>
       <h1 className="ManageSpotsHeading">Manage Spots</h1>
-      {Object.values(spots).map(spot => (
-        <div className="spotTileWireFrame" title={spot.name} key={spot.id}>
-          <NavLink to={`/spots/${spot.id}`}>
-            <img className="previewImage" src={spot.previewImage} alt="" />
-            <p>{spot.city}, {spot.state}</p>
-            <p>${spot.price} night</p>
-            <p>★ {spot.avgRating || 'New!'}</p>
-          </NavLink>
-          <button onClick={() => handleUpdateClick(spot.id)}>Update</button>
-          <button onClick={() => handleDeleteClick(spot.id)}>Delete</button>
-        </div>
-      ))}
-    </div>
+      <div className="spotTileWireFrameContainer">
+        {Object.values(spots).map(spot => (
+          <div className="spotTileWireFrame" title={spot.name} key={spot.id}>
+            <NavLink to={`/spots/${spot.id}`}>
+              <img className="previewImage" src={spot.previewImage} alt="" />
+              <div className="spotDetailContainer">
+                <p>{spot.city}, {spot.state}</p>
+                <p>${spot.price} per night</p>
+                <p>★ {spot.avgRating || 'New!'}</p>
+              </div>
+            </NavLink>
+            <div className="button-container">
+              <button className="update-button" onClick={() => handleUpdateClick(spot.id)}>Update</button>
+              <button className="delete-button" onClick={() => handleDeleteClick(spot.id)}>Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
 

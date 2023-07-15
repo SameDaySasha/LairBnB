@@ -48,12 +48,14 @@ function Spots() {
             {/* Display the spot's preview image */}
             <img className='previewImage' src={spot.previewImage}></img>
             {/* Display the spot's city and state */}
+            <div className='spotDetailContainer'>
             <p>{spot.city}, {spot.state}</p>
             {/* Display the spot's price per night */}
             <p>${spot.price} night</p>
             {/* Display the spot's average rating or "New!" */}
             <p>★ {avgRating(spot)}</p>
             {/* Render other spot data here */}
+            </div>
           </NavLink>
         </div>
       ))}
