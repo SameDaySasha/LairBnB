@@ -11,7 +11,6 @@ function ManageSpots() {
   const spots = useSelector(state => state.spots.userSpots || {});
   const { setModalContent } = useModal();
   const history = useHistory();
-  const currentUser = useSelector(state => state.session.user); // get current user data
 
   const handleDeleteClick = id => {
     setModalContent(
@@ -26,11 +25,8 @@ function ManageSpots() {
   };
 
   useEffect(() => {
-    // Only fetch spots if the user has spots
-    if (currentUser.hasSpots) {
-      dispatch(fetchUserSpots());
-    }
-  }, [dispatch, currentUser]);
+    dispatch(fetchUserSpots());
+  }, [dispatch]);
 
   const handleUpdateClick = id => {
     history.push(`/spots/update/${id}`);
@@ -39,7 +35,7 @@ function ManageSpots() {
   return (
     <div className="spotTileWireFrameContainer">
       <h1 className="ManageSpotsHeading">Manage Spots</h1>
-      {Object.values(spots).length > 0 ? Object.values(spots).map(spot => (
+      {Object.values(spots).map(spot => (
         <div className="spotTileWireFrame" title={spot.name} key={spot.id}>
           <NavLink to={`/spots/${spot.id}`}>
             <img className="previewImage" src={spot.previewImage} alt="" />
@@ -50,11 +46,7 @@ function ManageSpots() {
           <button onClick={() => handleUpdateClick(spot.id)}>Update</button>
           <button onClick={() => handleDeleteClick(spot.id)}>Delete</button>
         </div>
-      )) : (
-        <button className="newSpotButton">
-        <NavLink to="/create-spot">Create a New Spot</NavLink>
-      </button>
-      )}
+      ))}
     </div>
   );
 }
