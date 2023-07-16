@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { updateSpot, getOneSpot } from "../../store/spots"; 
-
+import '../CreateSpots/CreateSpotForm.css';
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 function UpdateSpotForm() {
+
+    
   const dispatch = useDispatch();
   const history = useHistory();
   const { id } = useParams();
   const spot = useSelector(state => state.spots.spotDetails);
-  
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
@@ -18,7 +22,9 @@ function UpdateSpotForm() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState("");
+  const [imageUrls, setImageUrls] = useState(["", "", "", "", ""]);
   const [errors, setErrors] = useState([]);
+
 
   useEffect(() => {
     if (spot) {
@@ -37,46 +43,21 @@ function UpdateSpotForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Reset errors
-    setErrors([]);
-
-    let validationErrors = [];
-
-    if (!address) {
-      validationErrors.push("Address field must not be empty");
-    }
-
-    if (!city) {
-      validationErrors.push("City field must not be empty");
-    }
-
-    if (!state) {
-      validationErrors.push("State field must not be empty");
-    }
-
-    if (!country) {
-      validationErrors.push("Country field must not be empty");
-    }
-
-    if (!name) {
-      validationErrors.push("Name field must not be empty");
-    }
-
-    if (!description) {
-      validationErrors.push("Description field must not be empty");
-    } else if (description.length < 30) {
-      validationErrors.push("Description needs 30 or more characters");
-    }
-
-    if (!price) {
-      validationErrors.push("Price field must not be empty");
-    }
-
-    if (validationErrors.length > 0) {
+    const validationErrors =[];
+  
+    if (!address || !city || !state || !country || !name || !description || !price) {
+      if(!address){
+        validationErrors.push('Address field must not be empty')
+      }
       setErrors(validationErrors);
       return;
     }
-
+  
+    if (description.length < 30) {
+      setErrors(prevErrors => [...prevErrors, "Description needs 30 or more characters"]);
+      return;
+    }
+  
     const updatedSpot = await dispatch(updateSpot({
       id: spot.id, // Add the id of the spot to be updated
       address,
@@ -87,14 +68,14 @@ function UpdateSpotForm() {
       lng:+lng,
       name,
       description,
-      price
+      price,
+      images: imageUrls.filter(url => url !== "")
     }));
   
     if (updatedSpot) {
-      await dispatch(getOneSpot(updatedSpot.id));
       history.push(`/spots/${updatedSpot.id}`);
     } else {
-      setErrors(["An error occurred while updating the spot"]);
+      setErrors(prevErrors => [...prevErrors, "An error occurred while updating the spot"]);
     }
   };
   
