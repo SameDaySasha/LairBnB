@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { createSpot } from "../../store/spots"; 
-import './CreateSpotForm.css';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { createSpot } from '../../store/spots';
 
-function CreateSpotForm() {
+const CreateSpotForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -12,42 +11,63 @@ function CreateSpotForm() {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);  
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [imageUrls, setImageUrls] = useState(["", "", "", "", ""]);
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
+
   const [errors, setErrors] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const spot = {
-        images: imageUrls.filter(url => url !== ""),
-      };
 
-   const validationErrors =[];
+    // Reset errors
+    setErrors([]);
 
-    if (!address || !city || !state || !country || !name || !description || !price) {
-      if(!address){
-        validationErrors.push('Address field must not be empty')
-      }
+    let validationErrors = [];
+
+    if (!address) {
+      validationErrors.push("Address field must not be empty");
+    }
+
+    if (!city) {
+      validationErrors.push("City field must not be empty");
+    }
+
+    if (!state) {
+      validationErrors.push("State field must not be empty");
+    }
+
+    if (!country) {
+      validationErrors.push("Country field must not be empty");
+    }
+
+    if (!name) {
+      validationErrors.push("Name field must not be empty");
+    }
+
+    if (!description) {
+      validationErrors.push("Description field must not be empty");
+    } else if (description.length < 30) {
+      validationErrors.push("Description needs 30 or more characters");
+    }
+
+    if (!price) {
+      validationErrors.push("Price field must not be empty");
+    }
+
+    const validImageUrls = imageUrls.filter(url => url.length >= 2);
+    if (validImageUrls.length === 0) {
+      validationErrors.push("At least one image URL must be provided");
+    }
+
+    if (validationErrors.length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    if (description.length < 30) {
-      setErrors(prevErrors => [...prevErrors, "Description needs 30 or more characters"]);
-      return;
-    }
- // Check if at least one image URL is provided and it contains at least two characters
- const validImageUrls = imageUrls.filter(url => url.length >= 2);
- if (validImageUrls.length === 0) {
-   setErrors(prevErrors => [...prevErrors, "At least one image URL must be provided"]);
-   return;
- }
-
-    
     const newSpot = await dispatch(createSpot({
       address,
       city,
@@ -64,7 +84,7 @@ function CreateSpotForm() {
     if (newSpot) {
       history.push(`/spots/${newSpot.id}`);
     } else {
-      setErrors(prevErrors => [...prevErrors, "An error occurred while creating the spot"]);
+      setErrors(["An error occurred while creating the spot"]);
     }
   };
 
