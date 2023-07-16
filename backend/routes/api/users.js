@@ -269,7 +269,7 @@ router.get('/spots', requireAuth, async (req, res) => {
 
     // Check if any spots were found
     if (spots.length === 0) {
-      return res.status(404).json({
+      return res.status(200).json({
         message: 'No spots found for this user'
       });
     }
