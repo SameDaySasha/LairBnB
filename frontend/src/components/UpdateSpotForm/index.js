@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 import { updateSpot, getOneSpot } from "../../store/spots"; 
 import '../CreateSpots/CreateSpotForm.css';
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+
 function UpdateSpotForm() {
   
   const dispatch = useDispatch();
@@ -23,7 +21,6 @@ function UpdateSpotForm() {
   const [price, setPrice] = useState("");
   const [imageUrls, setImageUrls] = useState(["", "", "", "", ""]);
   const [errors, setErrors] = useState([]);
-
 
   useEffect(() => {
     if (spot) {
@@ -72,6 +69,7 @@ function UpdateSpotForm() {
     }));
   
     if (updatedSpot) {
+      await dispatch(getOneSpot(updatedSpot.id));
       history.push(`/spots/${updatedSpot.id}`);
     } else {
       setErrors(prevErrors => [...prevErrors, "An error occurred while updating the spot"]);
