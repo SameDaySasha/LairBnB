@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useHistory } from 'react-router-dom';
-import { fetchUserSpots, deleteSpot, getOneSpot } from '../../store/spots';
+import { fetchUserSpots, deleteSpot } from '../../store/spots';
 import { useModal } from '../../context/Modal';
 import ConfirmDeleteModal from '../ConfirmDeleteModal/index';
 import './ManageSpots.css';
@@ -28,8 +28,7 @@ function ManageSpots() {
     dispatch(fetchUserSpots());
   }, [dispatch]);
 
-  const handleUpdateClick = async id => {
-    await dispatch(getOneSpot(id));
+  const handleUpdateClick = id => {
     history.push(`/spots/update/${id}`);
   };
 
@@ -42,12 +41,13 @@ function ManageSpots() {
             <NavLink to={`/spots/${spot.id}`}>
               <img className="previewImage" src={spot.previewImage} alt="" />
               <div className='spotDetailContainer'>
-                <div className="spotTitleAndRating">
-                  <p>{spot.city}, {spot.state}</p>
-                  <p>★ {spot.avgRating.toFixed(2)|| 'New!'}</p>
-                </div>
-                <p className="spotPrice">${spot.price} per night</p>
-              </div>
+  <div className="spotTitleAndRating">
+    <p>{spot.city}, {spot.state}</p>
+    <p>★ {spot.avgRating.toFixed(2)|| 'New!'}</p>
+  
+  </div>
+   <p className="spotPrice">${spot.price} per night</p>
+</div>
             </NavLink>
             <div className="button-container">
               <button className="update-button" onClick={() => handleUpdateClick(spot.id)}>Update</button>

@@ -7,8 +7,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 function UpdateSpotForm() {
-
-    
+  
   const dispatch = useDispatch();
   const history = useHistory();
   const { id } = useParams();
