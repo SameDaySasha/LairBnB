@@ -43,7 +43,7 @@ function ManageSpots() {
               <div className='spotDetailContainer'>
   <div className="spotTitleAndRating">
     <p>{spot.city}, {spot.state}</p>
-    <p>★ {spot.avgRating.toFixed(2) || 'New!'}</p>
+    <p>★ {spot.avgRating.toFixed(2)|| 'New!'}</p>
   
   </div>
    <p className="spotPrice">${spot.price} per night</p>
