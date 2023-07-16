@@ -93,12 +93,7 @@ const SpotDetails = () => {
                    dispatch(fetchReviewsForSpot(spot.id));
                    dispatch(getOneSpot(id));
                    closeModal(); // close the modal after the review is posted
-                 }}
-               />
-             }
-             buttonText="Post Your Review"
-           />
-                                                 )}
+                 }}  />  } buttonText="Post Your Review" /> )}
       <div className="reviews-summary"> {/* New review summary section */}
         <div className="average-rating"> ★: {spot.avgStarRating ? spot.avgStarRating.toFixed(2) : "New!"}</div>
         {spot.numReviews > 0 && (
