@@ -23,17 +23,17 @@ function UpdateSpotForm() {
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    if (spot) {
-      setAddress(spot.address);
-      setCity(spot.city);
-      setState(spot.state);
-      setCountry(spot.country);
-      setName(spot.name);
-      setDescription(spot.description);
-      setPrice(spot.price);
-    } else {
-      dispatch(getOneSpot(id));
-    }
+    dispatch(getOneSpot(id)).then(() => {
+      if (spot) {
+        setAddress(spot.address);
+        setCity(spot.city);
+        setState(spot.state);
+        setCountry(spot.country);
+        setName(spot.name);
+        setDescription(spot.description);
+        setPrice(spot.price);
+      }
+    });
   }, [dispatch, id, spot]);
 
   const handleSubmit = async (e) => {
