@@ -34,7 +34,7 @@ function UpdateSpotForm() {
         setPrice(spot.price);
       }
     });
-  }, [dispatch, id, spot]);
+  }, [dispatch, id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
