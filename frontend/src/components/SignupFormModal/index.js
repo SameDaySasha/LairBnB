@@ -16,9 +16,7 @@ function SignupFormModal() {
   const { closeModal, isOpen } = useModal();
 
   useEffect(() => {
-    // Check if the modal has been closed
     if (!isOpen) {
-      // Reset all form fields and errors
       setEmail("");
       setUsername("");
       setFirstName("");
@@ -58,74 +56,80 @@ function SignupFormModal() {
   const isFormEmpty = !email || !username || !firstName || !lastName || !password || !confirmPassword;
 
   return (
-    <>
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className="signup-form-modal">
+      <h1 className="signup-form-modal__title">Sign Up</h1>
+      <form className="signup-form-modal__form" onSubmit={handleSubmit}>
+        <label className="signup-form-modal__label">
           Email
           <input
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            className="signup-form-modal__input"
           />
         </label>
-        {errors.email && <p>{errors.email}</p>}
-        <label>
+        {errors.email && <p className="signup-form-modal__error">{errors.email}</p>}
+        <label className="signup-form-modal__label">
           Username
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            className="signup-form-modal__input"
           />
         </label>
-        {errors.username && <p>{errors.username}</p>}
-        <label>
+        {errors.username && <p className="signup-form-modal__error">{errors.username}</p>}
+        <label className="signup-form-modal__label">
           First Name
           <input
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             required
+            className="signup-form-modal__input"
           />
         </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
-        <label>
+        {errors.firstName && <p className="signup-form-modal__error">{errors.firstName}</p>}
+        <label className="signup-form-modal__label">
           Last Name
           <input
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             required
+            className="signup-form-modal__input"
           />
         </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
-        <label>
+        {errors.lastName && <p className="signup-form-modal__error">{errors.lastName}</p>}
+        <label className="signup-form-modal__label">
           Password
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="signup-form-modal__input"
           />
         </label>
-        {errors.password && <p>{errors.password}</p>}
-        <label>
+        {errors.password && <p className="signup-form-modal__error">{errors.password}</p>}
+        <label className="signup-form-modal__label">
           Confirm Password
           <input
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
+            className="signup-form-modal__input"
           />
         </label>
         {errors.confirmPassword && (
-          <p>{errors.confirmPassword}</p>
+          <p className="signup-form-modal__error">{errors.confirmPassword}</p>
         )}
-        <button type="submit" disabled={isFormEmpty || username.length < 4 || password.length < 6}>Sign Up</button>
+        <button type="submit" className="signup-form-modal__button" disabled={isFormEmpty || username.length < 4 || password.length < 6}>Sign Up</button>
       </form>
-    </>
+    </div>
   );
 }
 

@@ -23,3 +23,8 @@
   background-color: #000; /* Or any color you prefer */
   margin-top: 20px;
 }
+
+.sidebar{
+  background: rgba(255, 165, 0, 0.5);
+  border: 1px solid #ccc;
+}

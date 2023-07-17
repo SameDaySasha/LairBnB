@@ -24,10 +24,9 @@ function LoginFormModal() {
       });
   };
 
-  // Function to handle demo login
   const handleDemoLogin = (e) => {
     e.preventDefault();
-    return dispatch(sessionActions.login({ credential: "Smaug", password: "password" })) // Replace with your demo account's credentials
+    return dispatch(sessionActions.login({ credential: "Smaug", password: "password" }))
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
@@ -38,35 +37,36 @@ function LoginFormModal() {
   };
 
   return (
-    <>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className="login-form-modal">
+      <h1 className="login-form-modal__title">Log In</h1>
+      <form className="login-form-modal__form" onSubmit={handleSubmit}>
+        <label className="login-form-modal__label">
           Username or Email
           <input
             type="text"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             required
+            className="login-form-modal__input"
           />
         </label>
-        <label>
+        <label className="login-form-modal__label">
           Password
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="login-form-modal__input"
           />
         </label>
         {errors.credential && (
-          <p>{errors.credential}</p>
+          <p className="login-form-modal__error">{errors.credential}</p>
         )}
-        <button type="submit" disabled={credential.length < 4 || password.length < 6}>Log In</button>
-        {/* Add demo login button */}
-        <button onClick={handleDemoLogin}>Log in as Demo User</button>
+        <button type="submit" className="login-form-modal__button" disabled={credential.length < 4 || password.length < 6}>Log In</button>
+        <button onClick={handleDemoLogin} className="login-form-modal__button login-form-modal__button--demo">Log in as Demo User</button>
       </form>
-    </>
+    </div>
   );
 }
 

@@ -45,6 +45,14 @@ module.exports = {
         indexType: 'Spot',
        
       },
+      {
+      
+        url: 'https://cdn.mage.space/generate/c32e30c92b1c40d08b60d3aa10c8b71b.png',
+        previewImage: true,
+        // type: 'png',
+        indexId: 5,
+        indexType: 'Spot',
+      },
     ], {});
   },
 
