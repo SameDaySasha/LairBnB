@@ -105,7 +105,7 @@ export const getOneSpot = (id) => async (dispatch) => {
   const response = await fetch(`/api/spots/${id}`);
   const details = await response.json();
   dispatch(setSpotDetails(details));
-  return response;
+  return details;
 };
 
 export const createSpot = (spot) => async (dispatch) => {

@@ -23,18 +23,29 @@ function UpdateSpotForm() {
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    dispatch(getOneSpot(id)).then(() => {
-      if (spot) {
-        setAddress(spot.address);
+    if(!spot || spot.id != id ){
+
+dispatch(getOneSpot(id)).then((fetchedSpot) => {
+      if (fetchedSpot) {
+        setAddress(fetchedSpot.address);
+        setCity(fetchedSpot.city);
+        setState(fetchedSpot.state);
+        setCountry(fetchedSpot.country);
+        setName(fetchedSpot.name);
+        setDescription(fetchedSpot.description);
+        setPrice(fetchedSpot.price);
+      }})}
+     else if(spot.id == id){
+      setAddress(spot.address);
         setCity(spot.city);
         setState(spot.state);
         setCountry(spot.country);
         setName(spot.name);
         setDescription(spot.description);
         setPrice(spot.price);
-      }
-    });
-  }, [dispatch, id]);
+     }
+    ;
+  }, [dispatch, id, spot]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,7 +78,8 @@ function UpdateSpotForm() {
       price,
       images: imageUrls.filter(url => url !== "")
     }));
-  
+  // const [hasUpdated,setHasUpdated] = useState(false)
+  // useEffect(()=> {setHasUpdated(true)},[spot])
     if (updatedSpot) {
       await dispatch(getOneSpot(updatedSpot.id));
       history.push(`/spots/${updatedSpot.id}`);
